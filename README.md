@@ -1,6 +1,9 @@
 # TitanBoxLibx
 Titanbox library plugin
+
 [![](https://jitpack.io/v/freethemice/TitanBoxLibs.svg)](https://jitpack.io/#freethemice/TitanBoxLibs)
+
+
 	<repositories>
 		<repository>
 		    <id>jitpack.io</id>
