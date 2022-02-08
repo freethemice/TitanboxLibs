@@ -10,5 +10,5 @@ Titanbox library plugin
 	<dependency>
 	    <groupId>com.github.freethemice</groupId>
 	    <artifactId>TitanBoxLibs</artifactId>
-	    <version>af664fb835</version>
+	    <version>6cbf8d3121</version>
 	</dependency>
