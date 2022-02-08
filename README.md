@@ -1,1 +1,2 @@
-# TitanboxLibs
+# TitanBoxLibx
+Titanbox library plugin

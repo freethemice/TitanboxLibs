@@ -1,0 +1,9 @@
+name: TitanBoxLibs
+version: '${project.version}'
+main: src.com.firesoftitan.play.titanbox.libs.TitanBoxLibs
+api-version: 1.18
+authors: [ freethemice ]
+description: Libary for titan plugins
+website: www.firesoftitan.com
+softdepend:
+  - Vault
