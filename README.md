@@ -12,3 +12,5 @@ Titanbox library plugin
 	    <artifactId>TitanBoxLibs</artifactId>
 	    <version>6cbf8d3121</version>
 	</dependency>
+	
+	[![](https://jitpack.io/v/freethemice/TitanBoxLibs.svg)](https://jitpack.io/#freethemice/TitanBoxLibs)
