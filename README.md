@@ -13,8 +13,8 @@ Titanbox library plugin
 	</repositories>
 	<dependency>
 	    <groupId>com.github.freethemice</groupId>
-	    <artifactId>TitanBoxLibs</artifactId>
-	    <version>6cbf8d3121</version>
+	    <artifactId>TitanboxLibs</artifactId>
+	    <version>2.1.0</version>
 	</dependency>
 	
 	
