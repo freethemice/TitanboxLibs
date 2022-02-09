@@ -1,9 +1,9 @@
-name: TitanBoxLibs
+name: ${project.artifactId}
 version: '${project.version}'
-main: src.com.firesoftitan.play.titanbox.libs.TitanBoxLibs
-api-version: 1.18
+main: ${project.groupId}.${project.artifactId}
+api-version: ${minecraft.api-version}
 authors: [ freethemice ]
-description: Libary for titan plugins
-website: www.firesoftitan.com
+description: ${project.description}
+website: ${project.url}
 softdepend:
   - Vault
