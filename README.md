@@ -2,7 +2,7 @@
 # TitanBoxLibx
 Titanbox library plugin
 
-[![](https://jitpack.io/v/freethemice/TitanBoxLibs.svg)](https://jitpack.io/#freethemice/TitanBoxLibs)
+[![](https://jitpack.io/v/freethemice/TitanboxLibs.svg)](https://jitpack.io/#freethemice/TitanboxLibs)
 
 
 	<repositories>
