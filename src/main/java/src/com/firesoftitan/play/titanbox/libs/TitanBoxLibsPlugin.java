@@ -24,8 +24,10 @@ public class TitanBoxLibsPlugin extends JavaPlugin {
     public static TitanBoxLibsPlugin instants;
     public MainListener mainListener;
     protected ConfigManager configManager;
+    public static LibsMessageTool messageTool;
     public void onEnable() {
         TitanBoxLibsPlugin.instants = this;
+        TitanBoxLibsPlugin.messageTool = new LibsMessageTool(this);
         mainListener = new MainListener();
         LibsVaultTool.setup();
         LibsMiscTool.workerManager = new WorkerManager();
@@ -34,7 +36,7 @@ public class TitanBoxLibsPlugin extends JavaPlugin {
         getPlayers.schedule(new TimerTask() {
             @Override
             public void run() {
-                LibsMessageTool.sendMessageSystem(TitanBoxLibsPlugin.instants, "Loading players textures on the server.");
+                messageTool.sendMessageSystem( "Loading players textures on the server.");
                 for(OfflinePlayer player1: Bukkit.getOfflinePlayers())
                 {
                     try {
@@ -43,7 +45,7 @@ public class TitanBoxLibsPlugin extends JavaPlugin {
                         e.printStackTrace();
                     }
                 }
-                LibsMessageTool.sendMessageSystem(TitanBoxLibsPlugin.instants, "All players textures loaded.");
+                messageTool.sendMessageSystem("All players textures loaded.");
 
             }
         }, 10);
@@ -68,7 +70,7 @@ public class TitanBoxLibsPlugin extends JavaPlugin {
         {
             commandHelp.add(ChatColor.GOLD + "/tb " + ChatColor.AQUA + key + ChatColor.GREEN + " help");
         }
-        LibsMessageTool.sendMessagePlayer(this, (Player) player, commandHelp);
+        messageTool.sendMessagePlayer( (Player) player, commandHelp);
     }
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, String label, String[] args) {
            if (label.equalsIgnoreCase("titanbox") || label.equalsIgnoreCase("tb")) {

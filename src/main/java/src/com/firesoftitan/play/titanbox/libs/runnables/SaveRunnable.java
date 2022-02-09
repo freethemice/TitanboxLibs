@@ -9,6 +9,7 @@ import java.util.List;
 
 public class SaveRunnable implements Runnable {
 
+    private LibsMessageTool messageTool = LibsMessageTool.getMessageTool(TitanBoxLibsPlugin.instants);
     private final List<TitanSaverRunnable> caller = new ArrayList<>();
 
     public void addSaveRunnable(TitanSaverRunnable saver)
@@ -18,21 +19,22 @@ public class SaveRunnable implements Runnable {
 
     @Override
     public void run() {
-        LibsMessageTool.sendMessageSystem(TitanBoxLibsPlugin.instants, "-------" + "Starting Save" + "-------");
+        messageTool.sendMessageSystem("-------" + "Starting Save" + "-------");
         long startTime = System.currentTimeMillis();
-        LibsMessageTool.sendMessageSystem(TitanBoxLibsPlugin.instants, "Core Save took: " + LibsFormattingTool.formatTime(System.currentTimeMillis() - startTime));
+        messageTool.sendMessageSystem("Core Save took: " + LibsFormattingTool.formatTime(System.currentTimeMillis() - startTime));
         for(TitanSaverRunnable call: caller)
         {
             try {
                 long subStartTime = System.currentTimeMillis();
                 call.run();
-                LibsMessageTool.sendMessageSystem(call.getPlugin(), " Save took: " + LibsFormattingTool.formatTime(System.currentTimeMillis() - subStartTime));
+                LibsMessageTool messageTool = LibsMessageTool.getMessageTool(call.getPlugin());
+                messageTool.sendMessageSystem(" Save took: " + LibsFormattingTool.formatTime(System.currentTimeMillis() - subStartTime));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        LibsMessageTool.sendMessageSystem(TitanBoxLibsPlugin.instants, "Total Save took: " + LibsFormattingTool.formatTime(System.currentTimeMillis() - startTime));
-        LibsMessageTool.sendMessageSystem(TitanBoxLibsPlugin.instants, "-------" + "Save Finished" + "-------");
+        messageTool.sendMessageSystem( "Total Save took: " + LibsFormattingTool.formatTime(System.currentTimeMillis() - startTime));
+        messageTool.sendMessageSystem( "-------" + "Save Finished" + "-------");
     }
 
 }

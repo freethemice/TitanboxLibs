@@ -37,7 +37,7 @@ public class MainListener  implements Listener {
         if ((deviceEnum != BarcodeDeviceEnum.NONE) || (id != null && id.equals("upgrade_device")) || !placeable)
         {
             event.setCancelled(true);
-            LibsMessageTool.sendMessagePlayer(TitanBoxLibsPlugin.instants, event.getPlayer(), ChatColor.RED + "Can't place this block!");
+            TitanBoxLibsPlugin.messageTool.sendMessagePlayer(event.getPlayer(), ChatColor.RED + "Can't place this block!");
         }
         return false;
     }
