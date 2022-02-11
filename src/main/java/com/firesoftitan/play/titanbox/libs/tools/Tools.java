@@ -75,6 +75,7 @@ public class Tools {
         this.SerializeTool = new LibsSerializeTool(this);
         this.SkullTool = new LibsSkullTool(this);
         this.VaultTool = new LibsVaultTool(this);
+        allTools.put(plugin,this);
     }
 
     public JavaPlugin getPlugin() {
