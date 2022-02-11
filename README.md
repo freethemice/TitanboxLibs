@@ -17,7 +17,7 @@ Titanbox library plugin
     <dependency>
       <groupId>src.com.firesoftitan.play.titanbox.libs</groupId>
       <artifactId>TitanBoxLibs</artifactId>
-      <version>2.1.0</version>
+      <version>2.3.2</version>
       <scope>provided</scope>
     </dependency>`
 	
