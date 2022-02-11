@@ -25,13 +25,15 @@ public class TitanBoxLibs extends JavaPlugin {
     public MainListener mainListener;
     protected ConfigManager configManager;
     public static Tools tools;
+    public static BarcodeManager barcodeManager;
+    public static WorkerManager workerManager;
     public void onEnable() {
         TitanBoxLibs.instants = this;
         TitanBoxLibs.tools = new Tools(this);
+        TitanBoxLibs.workerManager = new WorkerManager();
+        TitanBoxLibs.barcodeManager = new BarcodeManager();
         mainListener = new MainListener();
-         TitanBoxLibs.tools.getVaultTool().setup();
-         TitanBoxLibs.tools.getMiscTool().workerManager = new WorkerManager();
-         TitanBoxLibs.tools.getMiscTool().barcodeManager = new BarcodeManager();
+
         Timer getPlayers = new Timer();
         getPlayers.schedule(new TimerTask() {
             @Override
@@ -56,7 +58,7 @@ public class TitanBoxLibs extends JavaPlugin {
         new BukkitRunnable() {
             @Override
             public void run() {
-                 TitanBoxLibs.tools.getMiscTool().workerManager.loadAll();
+                TitanBoxLibs.workerManager.loadAll();
             }
         }.runTaskLater(this, 1);
 

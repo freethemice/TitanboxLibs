@@ -4,7 +4,7 @@ Titanbox library plugin
 
 
 
-  <repository>
+`  <repository>
     <id>freethemice-TitanBox</id>
     <url>https://packagecloud.io/freethemice/TitanBox/maven2</url>
     <releases>
@@ -18,6 +18,7 @@ Titanbox library plugin
       <groupId>src.com.firesoftitan.play.titanbox.libs</groupId>
       <artifactId>TitanBoxLibs</artifactId>
       <version>2.1.0</version>
-    </dependency>
+      <scope>provided</scope>
+    </dependency>`
 	
 	

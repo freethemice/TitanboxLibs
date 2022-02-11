@@ -13,6 +13,7 @@ public class LibsVaultTool {
 
     public LibsVaultTool(Tools parent) {
         this.parent = parent;
+        this.setup();
     }
 
     private Economy econ = null;
@@ -21,7 +22,7 @@ public class LibsVaultTool {
 
     public void setup()
     {
-        if ( TitanBoxLibs.tools.getVaultTool().isVaultInstalled()) {
+        if ( this.isVaultInstalled()) {
             RegisteredServiceProvider<Economy> rspV = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
             if (rspV != null) {
                 econ = rspV.getProvider();

@@ -12,8 +12,8 @@ public class MySaveRunnable extends TitanSaverRunnable{
 
     @Override
     public void run() {
-         TitanBoxLibs.tools.getMiscTool().barcodeManager.save();
-         TitanBoxLibs.tools.getMiscTool().workerManager.saveAll();
+         TitanBoxLibs.barcodeManager.save();
+         TitanBoxLibs.workerManager.saveAll();
     }
 
 }

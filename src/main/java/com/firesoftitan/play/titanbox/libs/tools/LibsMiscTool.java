@@ -25,12 +25,12 @@ public class LibsMiscTool {
 
     public LibsMiscTool(Tools parent) {
         this.parent = parent;
+
     }
 
     public HashMap<String, CommandInterface> commandInterfaces = new HashMap<>();
     public SaveRunnable saver = new SaveRunnable();
-    public BarcodeManager barcodeManager;
-    public WorkerManager workerManager;
+
 
     public boolean chance(int max, int percentage) {
         if (max < 1) return false;
@@ -167,14 +167,14 @@ public class LibsMiscTool {
         ItemStack placeMe =  TitanBoxLibs.tools.getSkullTool().getSkull(Texture, "player_heart_quarter", false);
         placeMe =  TitanBoxLibs.tools.getItemStackTool().changeName(placeMe, ChatColor.RED + "Player Heart Quarter");
         placeMe =  TitanBoxLibs.tools.getItemStackTool().addLore(placeMe,  ChatColor.AQUA + "Collect four and get 1 heart added to your health!", ChatColor.AQUA + "Hold in main hand and right-click to use.");
-        placeMe =  TitanBoxLibs.tools.getMiscTool().barcodeManager.getNewBarcode(placeMe);
+        placeMe =  TitanBoxLibs.barcodeManager.getNewBarcode(placeMe);
         return  placeMe.clone();
 
     }
     public void markHeartPartUsed(Player player, ItemStack item )
     {
         if (isHeartPart(item).isGood()) {
-            TitanBoxLibs.tools.getMiscTool().barcodeManager.setBarcodeTrue(item, player);
+            TitanBoxLibs.barcodeManager.setBarcodeTrue(item, player);
         }
     }
     public BarcodeDeviceEnum isHeartPart(ItemStack item )
@@ -183,12 +183,12 @@ public class LibsMiscTool {
             String titanID = TitanBoxLibs.tools.getSkullTool().getSkullTitanID(item);
             if (titanID != null && titanID.length() > 0) {
                 if (titanID.equals("player_heart_quarter")) {
-                    if (!TitanBoxLibs.tools.getMiscTool().barcodeManager.hasBarcode(item))
+                    if (!TitanBoxLibs.barcodeManager.hasBarcode(item))
                     {
                         //"This is an invalid device! Most likely an old one.");
                         return BarcodeDeviceEnum.INVALID;
                     }
-                    String barcode = TitanBoxLibs.tools.getMiscTool().barcodeManager.scanBarcode(item);
+                    String barcode = TitanBoxLibs.barcodeManager.scanBarcode(item);
                     if (barcode == null)
                     {
                         // "This is an invalid device! Most likely an old one.");
@@ -213,7 +213,7 @@ public class LibsMiscTool {
         ItemStack placeMe = TitanBoxLibs.tools.getSkullTool().getSkull(Texture, "upgrade_device", false);
         placeMe = TitanBoxLibs.tools.getItemStackTool().changeName(placeMe, ChatColor.YELLOW + "Upgrade Device");
         placeMe = TitanBoxLibs.tools.getItemStackTool().addLore(placeMe,  "Used On: " + ChatColor.WHITE + "Storage Unit, and Routers", ChatColor.WHITE + "Hold in main hand and click block thats placed!");
-        placeMe =  TitanBoxLibs.tools.getMiscTool().barcodeManager.getNewBarcode(placeMe);
+        placeMe =  TitanBoxLibs.barcodeManager.getNewBarcode(placeMe);
         placeMe = TitanBoxLibs.tools.getItemStackTool().addLore(placeMe, ChatColor.YELLOW  + "Made By: " + ChatColor.WHITE + player.getName());
         return  placeMe.clone();
 
@@ -221,7 +221,7 @@ public class LibsMiscTool {
     public void markUpgradeDeviceUsed(Player player, ItemStack item )
     {
         if (isUpgradeDevice(item).isGood()) {
-             TitanBoxLibs.tools.getMiscTool().barcodeManager.setBarcodeTrue(item, player);
+             TitanBoxLibs.barcodeManager.setBarcodeTrue(item, player);
         }
     }
     public BarcodeDeviceEnum isUpgradeDevice(ItemStack item )
@@ -230,12 +230,12 @@ public class LibsMiscTool {
             if (item.hasItemMeta()) {
                 if (item.getItemMeta() != null && item.getItemMeta().hasDisplayName()) {
                     if (item.getItemMeta().getDisplayName().startsWith(ChatColor.YELLOW + "Upgrade Device")) {
-                        if (!  TitanBoxLibs.tools.getMiscTool().barcodeManager.hasBarcode(item))
+                        if (!  TitanBoxLibs.barcodeManager.hasBarcode(item))
                         {
                             //"This is an invalid device! Most likely an old one.");
                             return BarcodeDeviceEnum.INVALID;
                         }
-                        String barcode =   TitanBoxLibs.tools.getMiscTool().barcodeManager.scanBarcode(item);
+                        String barcode =   TitanBoxLibs.barcodeManager.scanBarcode(item);
                         if (barcode == null)
                         {
                             // "This is an invalid device! Most likely an old one.");

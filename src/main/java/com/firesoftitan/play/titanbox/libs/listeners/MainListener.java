@@ -47,7 +47,7 @@ public class MainListener  implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                 TitanBoxLibs.tools.getMiscTool().workerManager.hideWorker(player);
+                 TitanBoxLibs.workerManager.hideWorker(player);
             }
         }.runTaskLater(TitanBoxLibs.instants, 20);
     }
