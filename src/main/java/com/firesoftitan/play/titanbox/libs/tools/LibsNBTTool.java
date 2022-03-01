@@ -48,7 +48,7 @@ public class LibsNBTTool {
     }
     public ItemStack removeNBTTag(ItemStack itemStack, String key)
     {
-        NBTTagCompound nbtTagCompound =  TitanBoxLibs.tools.getNBTTool().getNBTTag(itemStack);
+        NBTTagCompound nbtTagCompound =  Tools.tools.getNBTTool().getNBTTag(itemStack);
         if (nbtTagCompound != null) {
             if (nbtTagCompound.e(key)) {
                 if (nbtTagCompound.d().size() == 1) {

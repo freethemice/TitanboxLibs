@@ -1,5 +1,6 @@
 package com.firesoftitan.play.titanbox.libs.tools;
 
+import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -46,7 +47,9 @@ public class Tools {
     public static LibsFloatingTextTool getFloatingTextTool(JavaPlugin plugin) {
         return allTools.get(plugin).FloatingTextTool;
     }
-
+    public static LibsAdvancedRecipeTool getRecipeTool(JavaPlugin plugin) {
+        return allTools.get(plugin).RecipeTool;
+    }
     private JavaPlugin plugin;
     private LibsFormattingTool FormattingTool;
     private LibsBlockTool BlockTool;
@@ -60,8 +63,11 @@ public class Tools {
     private LibsVaultTool VaultTool;
     private LibsPlayerTool PlayerTool;
     private LibsFloatingTextTool FloatingTextTool;
+    private LibsAdvancedRecipeTool RecipeTool;
+    protected static Tools tools;
 
     public Tools(JavaPlugin plugin) {
+
         this.plugin = plugin;
         this.BlockTool = new LibsBlockTool(this);
         this.FloatingTextTool = new LibsFloatingTextTool(this);
@@ -75,11 +81,20 @@ public class Tools {
         this.SerializeTool = new LibsSerializeTool(this);
         this.SkullTool = new LibsSkullTool(this);
         this.VaultTool = new LibsVaultTool(this);
+        this.RecipeTool = new LibsAdvancedRecipeTool(this);
         allTools.put(plugin,this);
+        if (tools == null && plugin.getName().equals(TitanBoxLibs.instants.getName()))
+        {
+            tools = this;
+        }
     }
 
     public JavaPlugin getPlugin() {
         return plugin;
+    }
+
+    public LibsAdvancedRecipeTool getRecipeTool() {
+        return RecipeTool;
     }
 
     public LibsFormattingTool getFormattingTool() {

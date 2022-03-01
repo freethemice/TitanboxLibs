@@ -21,7 +21,7 @@ public class LibsSerializeTool {
     }
 
     public String serializeLocation(Location l) {
-        return  TitanBoxLibs.tools.getLocationTool().getWorldName(l) + ";" + l.getBlockX() + ";" + l.getBlockY() + ";" + l.getBlockZ();
+        return  Tools.tools.getLocationTool().getWorldName(l) + ";" + l.getBlockX() + ";" + l.getBlockY() + ";" + l.getBlockZ();
     }
     public Location deserializeLocation(String l) {
         try {
@@ -37,7 +37,7 @@ public class LibsSerializeTool {
         ItemStack out;
         if (parts.length > 2)
         {
-            out =  TitanBoxLibs.tools.getSkullTool().getSkull(parts[2]);
+            out =  Tools.tools.getSkullTool().getSkull(parts[2]);
         }
         else {
             out = new ItemStack(Material.valueOf(parts[0]));
@@ -69,14 +69,14 @@ public class LibsSerializeTool {
             ItemMeta a = itemStackA.getItemMeta();
             if (a instanceof SkullMeta && !complete && itemStackA.getType() == Material.PLAYER_HEAD) {
                 key = key + "SkullMeta" + ";";
-                if ( TitanBoxLibs.tools.getSkullTool().getSkullTexture(itemStackA) != null) {
-                    key = key +  TitanBoxLibs.tools.getSkullTool().getSkullTexture(itemStackA);
+                if ( Tools.tools.getSkullTool().getSkullTexture(itemStackA) != null) {
+                    key = key +  Tools.tools.getSkullTool().getSkullTexture(itemStackA);
                 }
             }
         }
         if (complete) {
-            NBTTagCompound compound =  TitanBoxLibs.tools.getNBTTool().getNBTTag(itemStackA);
-            List<String> data =  TitanBoxLibs.tools.getNBTTool().getKeys(compound); // always get right order
+            NBTTagCompound compound =  Tools.tools.getNBTTool().getNBTTag(itemStackA);
+            List<String> data =  Tools.tools.getNBTTool().getKeys(compound); // always get right order
             for(String s: data)
             {
                 //noinspection StringConcatenationInLoop

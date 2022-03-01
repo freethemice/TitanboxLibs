@@ -26,11 +26,11 @@ public class LibsSkullTool {
     public String getSkullTexture(ItemStack item)
     {
         try {
-            if ( TitanBoxLibs.tools.getItemStackTool().isEmpty(item)) return null;
+            if ( Tools.tools.getItemStackTool().isEmpty(item)) return null;
             if (!(item.getItemMeta() instanceof SkullMeta)) {
                 return null;
             }
-            NBTTagCompound tag =  TitanBoxLibs.tools.getNBTTool().getNBTTag(item);
+            NBTTagCompound tag =  Tools.tools.getNBTTool().getNBTTag(item);
 
             return tag.p("SkullOwner").p("Properties").c("textures", 10).a(0).l("Value");
         } catch (Exception e) {
@@ -41,7 +41,7 @@ public class LibsSkullTool {
     {
         try {
             if (block.getType() != Material.PLAYER_HEAD  && block.getType() != Material.PLAYER_WALL_HEAD) return null;
-            NBTTagCompound tag =  TitanBoxLibs.tools.getNBTTool().getNBTTag(block);
+            NBTTagCompound tag =  Tools.tools.getNBTTool().getNBTTag(block);
             if (tag == null) return null;
             NBTTagCompound skullOwner = tag.p("SkullOwner");
             if (skullOwner == null) return null;
@@ -53,11 +53,11 @@ public class LibsSkullTool {
     public String getSkullOwner(ItemStack item)
     {
         try {
-            if ( TitanBoxLibs.tools.getItemStackTool().isEmpty(item)) return null;
+            if ( Tools.tools.getItemStackTool().isEmpty(item)) return null;
             if (!(item.getItemMeta() instanceof SkullMeta)) {
                 return null;
             }
-            NBTTagCompound tag =  TitanBoxLibs.tools.getNBTTool().getNBTTag(item);
+            NBTTagCompound tag =  Tools.tools.getNBTTool().getNBTTag(item);
 
             return tag.p("SkullOwner").l("Name");
         } catch (Exception e) {
@@ -67,11 +67,11 @@ public class LibsSkullTool {
     public String getSkullID(ItemStack item)
     {
         try {
-            if ( TitanBoxLibs.tools.getItemStackTool().isEmpty(item)) return null;
+            if ( Tools.tools.getItemStackTool().isEmpty(item)) return null;
             if (!(item.getItemMeta() instanceof SkullMeta)) {
                 return null;
             }
-            NBTTagCompound tag =  TitanBoxLibs.tools.getNBTTool().getNBTTag(item);
+            NBTTagCompound tag =  Tools.tools.getNBTTool().getNBTTag(item);
 
             return tag.p("SkullOwner").l("Id");
         } catch (Exception e) {
@@ -116,7 +116,7 @@ public class LibsSkullTool {
     }
 
     public String getSkullTexture(Block block) {
-        NBTTagCompound nbtTagCompound =  TitanBoxLibs.tools.getNBTTool().getNBTTag(block);
+        NBTTagCompound nbtTagCompound =  Tools.tools.getNBTTool().getNBTTag(block);
         if (nbtTagCompound == null) return null;
         return nbtTagCompound.p("SkullOwner").p("Properties").c("textures", 10).a(0).l("Value");
     }
@@ -151,9 +151,9 @@ public class LibsSkullTool {
     }
 
     public boolean isSkullPlaceable(ItemStack itemStack) {
-        if (! TitanBoxLibs.tools.getItemStackTool().isEmpty(itemStack)) {
+        if (! Tools.tools.getItemStackTool().isEmpty(itemStack)) {
             if (itemStack.getType() == Material.PLAYER_HEAD || itemStack.getType() == Material.PLAYER_WALL_HEAD) {
-                String owner =  TitanBoxLibs.tools.getSkullTool().getSkullOwner(itemStack);
+                String owner =  Tools.tools.getSkullTool().getSkullOwner(itemStack);
                 if (owner == null) return true;
                 if (owner.startsWith("TitanCore:")) {
                     String[] spliter = owner.split(":");
@@ -167,9 +167,9 @@ public class LibsSkullTool {
     }
 
     public String getSkullTitanID(ItemStack itemStack) {
-        if (! TitanBoxLibs.tools.getItemStackTool().isEmpty(itemStack)) {
+        if (! Tools.tools.getItemStackTool().isEmpty(itemStack)) {
             if (itemStack.getType() == Material.PLAYER_HEAD || itemStack.getType() == Material.PLAYER_WALL_HEAD) {
-                String owner =  TitanBoxLibs.tools.getSkullTool().getSkullOwner(itemStack);
+                String owner =  Tools.tools.getSkullTool().getSkullOwner(itemStack);
                 if (owner != null && owner.startsWith("TitanCore:")) {
                     String[] spliter = owner.split(":");
                     if (spliter.length > 1) {
@@ -184,7 +184,7 @@ public class LibsSkullTool {
     public String getSkullTitanID(Block block) {
         if (block != null) {
             if (block.getType() == Material.PLAYER_HEAD || block.getType() == Material.PLAYER_WALL_HEAD) {
-                String owner =  TitanBoxLibs.tools.getSkullTool().getSkullOwner(block);
+                String owner =  Tools.tools.getSkullTool().getSkullOwner(block);
                 if (owner == null) return null;
                 if (owner.startsWith("TitanCore:")) {
                     String[] spliter = owner.split(":");

@@ -90,11 +90,11 @@ public class LibsBlockTool {
 
     public boolean isItemInInventory(Inventory inventory, ItemStack itemStack)
     {
-        if (! TitanBoxLibs.tools.getItemStackTool().isEmpty(itemStack)) {
+        if (! Tools.tools.getItemStackTool().isEmpty(itemStack)) {
             for (int slot = 0; slot < inventory.getSize(); slot++) {
                 ItemStack slotItemStack = inventory.getItem(slot);
-                if (! TitanBoxLibs.tools.getItemStackTool().isEmpty(slotItemStack)) {
-                    if( TitanBoxLibs.tools.getItemStackTool().isItemEqual(itemStack, slotItemStack))
+                if (! Tools.tools.getItemStackTool().isEmpty(slotItemStack)) {
+                    if( Tools.tools.getItemStackTool().isItemEqual(itemStack, slotItemStack))
                     {
                         return true;
                     }

@@ -2,6 +2,7 @@ package com.firesoftitan.play.titanbox.libs.managers;
 
 //import com.mojang.authlib.GameProfile;
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
+import com.firesoftitan.play.titanbox.libs.tools.Tools;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.network.protocol.game.PacketPlayOutPlayerInfo;
 import net.minecraft.server.MinecraftServer;
@@ -91,7 +92,7 @@ public class WorkerManager {
                 if (!e.isDead()) {
                     if (e.getType() == EntityType.DROPPED_ITEM) { ;
                         ItemStack dropped = ((Item) e).getItemStack().clone();
-                        String check =  TitanBoxLibs.tools.getItemStackTool().getName(dropped,true);
+                        String check =  Tools.getItemStackTool(TitanBoxLibs.instants).getName(dropped,true);
                         if (check.toLowerCase().startsWith("altar probe")) return null; //slimefun item ignore it
                         if (mat == null)
                         {

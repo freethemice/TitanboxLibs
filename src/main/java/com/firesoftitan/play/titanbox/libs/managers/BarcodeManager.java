@@ -1,6 +1,7 @@
 package com.firesoftitan.play.titanbox.libs.managers;
 
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
+import com.firesoftitan.play.titanbox.libs.tools.Tools;
 import net.minecraft.nbt.NBTTagCompound;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -14,9 +15,11 @@ import java.util.Random;
 public class BarcodeManager
 {
     private final SaveManager barcodes = new SaveManager(  "barcodes");
-
+    private static LibsItemStackTool itemStackTool;
+    private static LibsNBTTool nbtTool;
     public BarcodeManager() {
-
+        itemStackTool = Tools.getItemStackTool(TitanBoxLibs.instants);
+        nbtTool = Tools.getNBTTool(TitanBoxLibs.instants);
     }
 
     public void save()
@@ -26,11 +29,11 @@ public class BarcodeManager
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean hasBarcode(ItemStack toBarcode)
     {
-        if (! TitanBoxLibs.tools.getItemStackTool().isEmpty(toBarcode)) {
+        if (! itemStackTool.isEmpty(toBarcode)) {
             if (toBarcode.hasItemMeta()) {
                 //noinspection ConstantConditions
                 if (toBarcode.getItemMeta().hasLore()) {
-                    String name =  TitanBoxLibs.tools.getItemStackTool().getName(toBarcode);
+                    String name =  itemStackTool.getName(toBarcode);
                     String barcode = this.getBarcode(toBarcode);
                     return barcodes.contains(name + "." + barcode);
                 }
@@ -41,11 +44,11 @@ public class BarcodeManager
     public void setBarcodeTrue(ItemStack toBarcode, Player player)
     {
 
-        if (! TitanBoxLibs.tools.getItemStackTool().isEmpty(toBarcode)) {
+        if (! itemStackTool.isEmpty(toBarcode)) {
             if (toBarcode.hasItemMeta()) {
                 //noinspection ConstantConditions
                 if (toBarcode.getItemMeta().hasLore()) {
-                    String name =  TitanBoxLibs.tools.getItemStackTool().getName(toBarcode);
+                    String name =  itemStackTool.getName(toBarcode);
                     String barcode = this.getBarcode(toBarcode);
                     List<String> check = toBarcode.getItemMeta().getLore();
                     int line = 0;
@@ -67,14 +70,14 @@ public class BarcodeManager
     }
     public String getBarcode(ItemStack toBarcode)
     {
-        if (! TitanBoxLibs.tools.getItemStackTool().isEmpty(toBarcode)) {
+        if (! itemStackTool.isEmpty(toBarcode)) {
             if (toBarcode.hasItemMeta()) {
                 //noinspection ConstantConditions
                 if (toBarcode.getItemMeta().hasLore()) {
-                    String name =  TitanBoxLibs.tools.getItemStackTool().getName(toBarcode);
-                    if( TitanBoxLibs.tools.getNBTTool().hasNBTTag(toBarcode, "barcode"))
+                    String name =  itemStackTool.getName(toBarcode);
+                    if( nbtTool.hasNBTTag(toBarcode, "barcode"))
                     {
-                        NBTTagCompound nbtTagCompound =   TitanBoxLibs.tools.getNBTTool().getNBTTag(toBarcode);
+                        NBTTagCompound nbtTagCompound =   nbtTool.getNBTTag(toBarcode);
                         return nbtTagCompound.l("barcode"); //getString
                     }
 
@@ -93,11 +96,11 @@ public class BarcodeManager
     }
     public String scanBarcode(ItemStack toBarcode)
     {
-        if (! TitanBoxLibs.tools.getItemStackTool().isEmpty(toBarcode)) {
+        if (! itemStackTool.isEmpty(toBarcode)) {
             if (toBarcode.hasItemMeta()) {
                 //noinspection ConstantConditions
                 if (toBarcode.getItemMeta().hasLore()) {
-                    String name =  TitanBoxLibs.tools.getItemStackTool().getName(toBarcode);
+                    String name =  itemStackTool.getName(toBarcode);
                     String barcode = getBarcode(toBarcode);
                     if (barcodes.contains(name + "." + barcode)) {
                         return barcodes.getBoolean(name + "." + barcode) + "";
@@ -109,7 +112,7 @@ public class BarcodeManager
     }
     public ItemStack getNewBarcode(ItemStack toBarcode)
     {
-        if (! TitanBoxLibs.tools.getItemStackTool().isEmpty(toBarcode)) {
+        if (! itemStackTool.isEmpty(toBarcode)) {
             String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
             StringBuilder salt = new StringBuilder();
             Random rnd = new Random(System.currentTimeMillis());
@@ -119,14 +122,14 @@ public class BarcodeManager
             }
             String saltStr = salt.toString();
 
-            String name =  TitanBoxLibs.tools.getItemStackTool().getName(toBarcode);
+            String name =  itemStackTool.getName(toBarcode);
             if (barcodes.contains(name + "." + saltStr)) {
                 return getNewBarcode(toBarcode);
             }
             barcodes.set(name + "." + saltStr, false);
-            NBTTagCompound nbtTagCompound =  TitanBoxLibs.tools.getNBTTool().getNBTTag(toBarcode);
+            NBTTagCompound nbtTagCompound =  nbtTool.getNBTTag(toBarcode);
             nbtTagCompound.a("barcode", saltStr); //setString
-            toBarcode =  TitanBoxLibs.tools.getNBTTool().setNBTTag(toBarcode, nbtTagCompound);
+            toBarcode =  nbtTool.setNBTTag(toBarcode, nbtTagCompound);
         }
         return toBarcode;
     }

@@ -24,7 +24,7 @@ public class TitanBoxLibs extends JavaPlugin {
     public static TitanBoxLibs instants;
     public MainListener mainListener;
     protected ConfigManager configManager;
-    public static Tools tools;
+    protected static Tools tools;
     public static BarcodeManager barcodeManager;
     public static WorkerManager workerManager;
     public void onEnable() {

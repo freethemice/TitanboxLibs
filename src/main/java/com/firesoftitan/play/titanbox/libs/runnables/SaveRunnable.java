@@ -21,19 +21,20 @@ public class SaveRunnable implements Runnable {
     public void run() {
         Tools.getTools(TitanBoxLibs.instants).getMessageTool().sendMessageSystem("-------" + "Starting Save" + "-------");
         long startTime = System.currentTimeMillis();
-        Tools.getTools(TitanBoxLibs.instants).getMessageTool().sendMessageSystem("Core Save took: " +  TitanBoxLibs.tools.getFormattingTool().formatTime(System.currentTimeMillis() - startTime));
+        LibsFormattingTool formattingTool = Tools.getFormattingTool(TitanBoxLibs.instants);
+        Tools.getTools(TitanBoxLibs.instants).getMessageTool().sendMessageSystem("Core Save took: " +  formattingTool.formatTime(System.currentTimeMillis() - startTime));
         for(TitanSaverRunnable call: caller)
         {
             try {
                 long subStartTime = System.currentTimeMillis();
                 call.run();
                 LibsMessageTool messageTool =Tools.getTools(TitanBoxLibs.instants).getMessageTool();
-                messageTool.sendMessageSystem(" Save took: " +  TitanBoxLibs.tools.getFormattingTool().formatTime(System.currentTimeMillis() - subStartTime));
+                messageTool.sendMessageSystem(" Save took: " +  formattingTool.formatTime(System.currentTimeMillis() - subStartTime));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        Tools.getTools(TitanBoxLibs.instants).getMessageTool().sendMessageSystem( "Total Save took: " +  TitanBoxLibs.tools.getFormattingTool().formatTime(System.currentTimeMillis() - startTime));
+        Tools.getTools(TitanBoxLibs.instants).getMessageTool().sendMessageSystem( "Total Save took: " +  formattingTool.formatTime(System.currentTimeMillis() - startTime));
         Tools.getTools(TitanBoxLibs.instants).getMessageTool().sendMessageSystem( "-------" + "Save Finished" + "-------");
     }
 

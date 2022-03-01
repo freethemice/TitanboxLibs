@@ -67,6 +67,36 @@ public class LibsItemStackTool {
         toAdd.setItemMeta(ITM.clone());
         return toAdd;
     }
+    public String getTitanItemID(ItemStack itemStack)
+    {
+        if (Tools.tools.getItemStackTool().isEmpty(itemStack)) return null;
+        NBTTagCompound nbtTagCompound = Tools.tools.getNBTTool().getNBTTag(itemStack);
+        String id = nbtTagCompound.l("TitanItemID");
+        return id;
+    }
+    public ItemStack setTitanItemID(ItemStack itemStack, String titanItemID)
+    {
+        ItemStack clone = itemStack.clone();
+        NBTTagCompound nbtTagCompound = Tools.tools.getNBTTool().getNBTTag(clone);
+        nbtTagCompound.a("TitanItemID" , titanItemID);
+        clone = Tools.tools.getNBTTool().setNBTTag(clone, nbtTagCompound);
+        return clone;
+    }
+    public boolean isPlaceable(ItemStack itemStack)
+    {
+        if (Tools.tools.getItemStackTool().isEmpty(itemStack)) return true;
+        NBTTagCompound nbtTagCompound = Tools.tools.getNBTTool().getNBTTag(itemStack);
+        boolean placeable = nbtTagCompound.q("TitanItemPlaceable");
+        return placeable;
+    }
+    public ItemStack setPlaceable(ItemStack itemStack, boolean placeable)
+    {
+        ItemStack clone = itemStack.clone();
+        NBTTagCompound nbtTagCompound = Tools.tools.getNBTTool().getNBTTag(clone);
+        nbtTagCompound.a("TitanItemPlaceable" , placeable);
+        clone = Tools.tools.getNBTTool().setNBTTag(clone, nbtTagCompound);
+        return clone;
+    }
     @SuppressWarnings("ConstantConditions")
     public ItemStack addLore(boolean clear, ItemStack toAdd, List<String> lore)
     {
@@ -127,7 +157,7 @@ public class LibsItemStackTool {
 
     public Map<Enchantment, Integer> getEnchants(ItemStack toAdd)
     {
-        ItemMeta itemMeta =  TitanBoxLibs.tools.getItemStackTool().getItemMeta(toAdd);
+        ItemMeta itemMeta =  Tools.tools.getItemStackTool().getItemMeta(toAdd);
         if (!itemMeta.hasEnchants()) return new HashMap<>();
         return itemMeta.getEnchants();
 
@@ -226,8 +256,8 @@ public class LibsItemStackTool {
 
 
         if (itemStackA.getType() == itemStackB.getType()) {//&& itemStackA.getAmount() >= itemStackB.getAmount()
-            NBTTagCompound ar =  TitanBoxLibs.tools.getNBTTool().getNBTTag(itemStackA);
-            NBTTagCompound br =  TitanBoxLibs.tools.getNBTTool().getNBTTag(itemStackB);
+            NBTTagCompound ar =  Tools.tools.getNBTTool().getNBTTag(itemStackA);
+            NBTTagCompound br =  Tools.tools.getNBTTool().getNBTTag(itemStackB);
             if (checkDamage) {
                 if (ar.e("Damage") && br.e("Damage"))
                     if (ar.h("Damage") != br.h("Damage")) return false;
@@ -259,8 +289,8 @@ public class LibsItemStackTool {
                 if (a instanceof SkullMeta && b instanceof SkullMeta)
                 {
                     if (itemStackA.getType() == Material.PLAYER_HEAD) {
-                        if ( TitanBoxLibs.tools.getSkullTool().getSkullTexture(itemStackA) != null &&  TitanBoxLibs.tools.getSkullTool().getSkullTexture(itemStackB) != null) {
-                            if (! TitanBoxLibs.tools.getSkullTool().getSkullTexture(itemStackA).equals( TitanBoxLibs.tools.getSkullTool().getSkullTexture(itemStackB)))
+                        if ( Tools.tools.getSkullTool().getSkullTexture(itemStackA) != null &&  Tools.tools.getSkullTool().getSkullTexture(itemStackB) != null) {
+                            if (! Tools.tools.getSkullTool().getSkullTexture(itemStackA).equals( Tools.tools.getSkullTool().getSkullTexture(itemStackB)))
                                 return false;
                         }
                     }
@@ -420,7 +450,7 @@ public class LibsItemStackTool {
         checkList.add(Material.HONEY_BOTTLE);
 
         for(Material m: checkList) {
-            if ( TitanBoxLibs.tools.getItemStackTool().isItemEqual(new ItemStack(m), itemStack)) {
+            if ( Tools.tools.getItemStackTool().isItemEqual(new ItemStack(m), itemStack)) {
                 return true;
             }
         }
@@ -428,7 +458,7 @@ public class LibsItemStackTool {
     }
     public boolean isPotion(ItemStack itemStack)
     {
-        if (! TitanBoxLibs.tools.getItemStackTool().isEmpty(itemStack)) {
+        if (! Tools.tools.getItemStackTool().isEmpty(itemStack)) {
             if (itemStack.hasItemMeta())
             {
                 ItemMeta a= itemStack.getItemMeta();
@@ -443,7 +473,7 @@ public class LibsItemStackTool {
     }
     public boolean isBook(ItemStack itemStack)
     {
-        if (! TitanBoxLibs.tools.getItemStackTool().isEmpty(itemStack)) {
+        if (! Tools.tools.getItemStackTool().isEmpty(itemStack)) {
             return itemStack.getType() == Material.BOOK || itemStack.getType() == Material.ENCHANTED_BOOK || itemStack.getType() == Material.WRITABLE_BOOK
                     || itemStack.getType() == Material.WRITTEN_BOOK || itemStack.getType() == Material.BOOKSHELF;
         }
@@ -451,7 +481,7 @@ public class LibsItemStackTool {
     }
     public boolean isStone(ItemStack itemStack)
     {
-        if (! TitanBoxLibs.tools.getItemStackTool().isEmpty(itemStack))
+        if (! Tools.tools.getItemStackTool().isEmpty(itemStack))
         {
             String name = itemStack.getType().name().toUpperCase();
             if (name.contains("COBBLESTONE") || name.contains("SANDSTONE")
@@ -470,7 +500,7 @@ public class LibsItemStackTool {
     }
     public boolean isWood(ItemStack itemStack)
     {
-        if (! TitanBoxLibs.tools.getItemStackTool().isEmpty(itemStack))
+        if (! Tools.tools.getItemStackTool().isEmpty(itemStack))
         {
             String name = itemStack.getType().name().toUpperCase();
             if (name.contains("LOG") || name.contains("OAK")
@@ -557,7 +587,7 @@ public class LibsItemStackTool {
     }
     public boolean isSpawnEgg(ItemStack itemStack)
     {
-        if (! TitanBoxLibs.tools.getItemStackTool().isEmpty(itemStack)) {
+        if (! Tools.tools.getItemStackTool().isEmpty(itemStack)) {
             return itemStack.getType().toString().toUpperCase().contains("_SPAWN_EGG");
         }
         return false;
@@ -638,14 +668,14 @@ public class LibsItemStackTool {
         return toAdd.clone();
     }
     public ItemStack changeName(ItemStack toAdd, String Name) {
-        ItemMeta IM =  TitanBoxLibs.tools.getItemStackTool().getItemMeta(toAdd);
+        ItemMeta IM =  Tools.tools.getItemStackTool().getItemMeta(toAdd);
         IM.setDisplayName(Name);
         toAdd.setItemMeta(IM);
         return toAdd.clone();
     }
     public boolean hasLore(ItemStack toAdd)
     {
-        ItemMeta ITM =  TitanBoxLibs.tools.getItemStackTool().getItemMeta(toAdd);
+        ItemMeta ITM =  Tools.tools.getItemStackTool().getItemMeta(toAdd);
         if (ITM != null) {
             return ITM.hasLore();
         }

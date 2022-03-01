@@ -42,14 +42,14 @@ public class LibsPlayerTool {
         Inventory playersInv = player.getInventory();
         for (int i = 0; i < 36; i++) {
             ItemStack checkItem = playersInv.getItem(i);
-            if ( TitanBoxLibs.tools.getItemStackTool().isEmpty(checkItem))
+            if ( Tools.tools.getItemStackTool().isEmpty(checkItem))
             {
                 emptySlos.add(i); //this slot is empty lets keep that in mind for later
             }
             else
             {
                 checkItem = checkItem.clone();
-                if ( TitanBoxLibs.tools.getItemStackTool().isItemEqual(checkItem, placing))// is this the same thing
+                if ( Tools.tools.getItemStackTool().isItemEqual(checkItem, placing))// is this the same thing
                 {
                     if (checkItem.getAmount() < checkItem.getMaxStackSize()) //is there room in this stack for more
                     {
@@ -95,7 +95,7 @@ public class LibsPlayerTool {
                     player.sendMessage(ChatColor.RED + "Hold Item In Main Hand in... " + time + " Seconds");
                 time--;
                 if (time == 0) {
-                    if (! TitanBoxLibs.tools.getItemStackTool().isEmpty(player.getInventory().getItemInMainHand())) {
+                    if (! Tools.tools.getItemStackTool().isEmpty(player.getInventory().getItemInMainHand())) {
                         bukkitRunnable.runTask(TitanBoxLibs.instants);
                     }
                     else
@@ -178,7 +178,7 @@ public class LibsPlayerTool {
     }
     public boolean isItemInInventory(Inventory inventory, ItemStack itemStack)
     {
-        return  TitanBoxLibs.tools.getBlockTool().isItemInInventory(inventory, itemStack);
+        return  Tools.tools.getBlockTool().isItemInInventory(inventory, itemStack);
     }
     public boolean isPlayerTextureLoaded(OfflinePlayer player) {
         return isPlayerTextureLoaded(player.getUniqueId());

@@ -61,7 +61,7 @@ public class LibsFormattingTool
     public String formatLocation(Location location)
     {
         if (location == null) return null;
-        return "(World: " + TitanBoxLibs.tools.getLocationTool().getWorldName(location) + ") " + location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ();
+        return "(World: " + Tools.tools.getLocationTool().getWorldName(location) + ") " + location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ();
     }
     public String formatTime(long lastping)
     {

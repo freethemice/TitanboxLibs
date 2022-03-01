@@ -74,7 +74,7 @@ public class LibsMiscTool {
             command = command.replace("<x>", location.getBlockX() + "");
             command = command.replace("<y>", location.getBlockY() + "");
             command = command.replace("<z>", location.getBlockZ() + "");
-            command = command.replace("<world>", TitanBoxLibs.tools.getLocationTool().getWorldName(location));
+            command = command.replace("<world>", Tools.tools.getLocationTool().getWorldName(location));
         }
         command = command.replace("<amount>", amount +"");
         command = ChatColor.translateAlternateColorCodes('&', command);
@@ -139,8 +139,8 @@ public class LibsMiscTool {
     public boolean runCommandListener(CommandSender sender, Command cmd, String label, String[] args)
     {
         if (cmd.getLabel().length() > 0) {
-            if (TitanBoxLibs.tools.getMiscTool().commandInterfaces.containsKey(cmd.getLabel())) {
-                CommandInterface commandInterface = TitanBoxLibs.tools.getMiscTool().commandInterfaces.get(cmd.getLabel());
+            if (Tools.tools.getMiscTool().commandInterfaces.containsKey(cmd.getLabel())) {
+                CommandInterface commandInterface = Tools.tools.getMiscTool().commandInterfaces.get(cmd.getLabel());
                 boolean ranCommand = commandInterface.onCommand(sender, cmd, args);
                 if (!ranCommand) commandInterface.help(sender);
                 return true;
@@ -155,7 +155,7 @@ public class LibsMiscTool {
 
     public void addSaveRunnable(TitanSaverRunnable saver)
     {
-         TitanBoxLibs.tools.getMiscTool().saver.addSaveRunnable(saver);
+         Tools.tools.getMiscTool().saver.addSaveRunnable(saver);
     }
 
 
@@ -164,9 +164,9 @@ public class LibsMiscTool {
     public ItemStack getHeartPart()
     {
         String Texture = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmM4ZmI2MzdkNmUxYTdiYThmYTk3ZWU5ZDI5MTVlODQzZThlYzc5MGQ4YjdiZjYwNDhiZTYyMWVlNGQ1OWZiYSJ9fX0=";
-        ItemStack placeMe =  TitanBoxLibs.tools.getSkullTool().getSkull(Texture, "player_heart_quarter", false);
-        placeMe =  TitanBoxLibs.tools.getItemStackTool().changeName(placeMe, ChatColor.RED + "Player Heart Quarter");
-        placeMe =  TitanBoxLibs.tools.getItemStackTool().addLore(placeMe,  ChatColor.AQUA + "Collect four and get 1 heart added to your health!", ChatColor.AQUA + "Hold in main hand and right-click to use.");
+        ItemStack placeMe =  Tools.tools.getSkullTool().getSkull(Texture, "player_heart_quarter", false);
+        placeMe =  Tools.tools.getItemStackTool().changeName(placeMe, ChatColor.RED + "Player Heart Quarter");
+        placeMe =  Tools.tools.getItemStackTool().addLore(placeMe,  ChatColor.AQUA + "Collect four and get 1 heart added to your health!", ChatColor.AQUA + "Hold in main hand and right-click to use.");
         placeMe =  TitanBoxLibs.barcodeManager.getNewBarcode(placeMe);
         return  placeMe.clone();
 
@@ -180,7 +180,7 @@ public class LibsMiscTool {
     public BarcodeDeviceEnum isHeartPart(ItemStack item )
     {
         if (item != null) {
-            String titanID = TitanBoxLibs.tools.getSkullTool().getSkullTitanID(item);
+            String titanID = Tools.tools.getSkullTool().getSkullTitanID(item);
             if (titanID != null && titanID.length() > 0) {
                 if (titanID.equals("player_heart_quarter")) {
                     if (!TitanBoxLibs.barcodeManager.hasBarcode(item))
@@ -210,11 +210,11 @@ public class LibsMiscTool {
     public ItemStack getUpgradeDevice(Player player)
     {
         String Texture = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTc4MzQ3NzUzMzZhMmY1Mzg2NzM5OTFiZTA3NmM4NzRjN2ZhZDExYjdiN2Y0ZjMyMTQzYjYzM2UwNDMxMjEifX19";
-        ItemStack placeMe = TitanBoxLibs.tools.getSkullTool().getSkull(Texture, "upgrade_device", false);
-        placeMe = TitanBoxLibs.tools.getItemStackTool().changeName(placeMe, ChatColor.YELLOW + "Upgrade Device");
-        placeMe = TitanBoxLibs.tools.getItemStackTool().addLore(placeMe,  "Used On: " + ChatColor.WHITE + "Storage Unit, and Routers", ChatColor.WHITE + "Hold in main hand and click block thats placed!");
+        ItemStack placeMe = Tools.tools.getSkullTool().getSkull(Texture, "upgrade_device", false);
+        placeMe = Tools.tools.getItemStackTool().changeName(placeMe, ChatColor.YELLOW + "Upgrade Device");
+        placeMe = Tools.tools.getItemStackTool().addLore(placeMe,  "Used On: " + ChatColor.WHITE + "Storage Unit, and Routers", ChatColor.WHITE + "Hold in main hand and click block thats placed!");
         placeMe =  TitanBoxLibs.barcodeManager.getNewBarcode(placeMe);
-        placeMe = TitanBoxLibs.tools.getItemStackTool().addLore(placeMe, ChatColor.YELLOW  + "Made By: " + ChatColor.WHITE + player.getName());
+        placeMe = Tools.tools.getItemStackTool().addLore(placeMe, ChatColor.YELLOW  + "Made By: " + ChatColor.WHITE + player.getName());
         return  placeMe.clone();
 
     }
