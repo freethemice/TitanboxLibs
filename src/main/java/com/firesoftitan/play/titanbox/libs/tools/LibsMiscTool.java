@@ -29,7 +29,7 @@ public class LibsMiscTool {
     }
 
     public HashMap<String, CommandInterface> commandInterfaces = new HashMap<>();
-    public SaveRunnable saver = new SaveRunnable();
+
 
 
     public boolean chance(int max, int percentage) {
@@ -153,10 +153,6 @@ public class LibsMiscTool {
         commandInterfaces.put(name, yours);
     }
 
-    public void addSaveRunnable(TitanSaverRunnable saver)
-    {
-         Tools.tools.getMiscTool().saver.addSaveRunnable(saver);
-    }
 
 
 

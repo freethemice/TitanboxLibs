@@ -1,6 +1,9 @@
 package com.firesoftitan.play.titanbox.libs.tools;
 
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
+import com.firesoftitan.play.titanbox.libs.runnables.SaveRunnable;
+import com.firesoftitan.play.titanbox.libs.runnables.TitanSaverRunnable;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -64,11 +67,13 @@ public class Tools {
     private LibsPlayerTool PlayerTool;
     private LibsFloatingTextTool FloatingTextTool;
     private LibsAdvancedRecipeTool RecipeTool;
+    private static SaveRunnable saver = new SaveRunnable();
     protected static Tools tools;
 
-    public Tools(JavaPlugin plugin) {
+    public Tools(JavaPlugin plugin, TitanSaverRunnable titanSaverRunnable) {
 
         this.plugin = plugin;
+
         this.BlockTool = new LibsBlockTool(this);
         this.FloatingTextTool = new LibsFloatingTextTool(this);
         this.FormattingTool = new LibsFormattingTool(this);
@@ -86,9 +91,16 @@ public class Tools {
         if (tools == null && plugin.getName().equals(TitanBoxLibs.instants.getName()))
         {
             tools = this;
+            saver.addSaveRunnable(titanSaverRunnable);
+            Bukkit.getScheduler().scheduleSyncRepeatingTask(TitanBoxLibs.instants,  saver, TitanBoxLibs.instants.configManager.getSave_frequancy(), TitanBoxLibs.instants.configManager.getSave_frequancy());
         }
-    }
 
+
+    }
+    public static void disablePlugin()
+    {
+        saver.run();
+    }
     public JavaPlugin getPlugin() {
         return plugin;
     }

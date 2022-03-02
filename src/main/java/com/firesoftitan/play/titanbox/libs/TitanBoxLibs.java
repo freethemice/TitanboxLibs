@@ -23,13 +23,13 @@ import java.util.*;
 public class TitanBoxLibs extends JavaPlugin {
     public static TitanBoxLibs instants;
     public MainListener mainListener;
-    protected ConfigManager configManager;
+    public ConfigManager configManager;
     protected static Tools tools;
     public static BarcodeManager barcodeManager;
     public static WorkerManager workerManager;
     public void onEnable() {
         TitanBoxLibs.instants = this;
-        TitanBoxLibs.tools = new Tools(this);
+        TitanBoxLibs.tools = new Tools(this, new MySaveRunnable(this));
         TitanBoxLibs.workerManager = new WorkerManager();
         TitanBoxLibs.barcodeManager = new BarcodeManager();
         mainListener = new MainListener();
@@ -53,7 +53,6 @@ public class TitanBoxLibs extends JavaPlugin {
         }, 10);
 
         configManager = new ConfigManager();
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(TitanBoxLibs.instants,  TitanBoxLibs.tools.getMiscTool().saver, configManager.getSave_frequancy(), configManager.getSave_frequancy());
 
         new BukkitRunnable() {
             @Override
@@ -62,7 +61,6 @@ public class TitanBoxLibs extends JavaPlugin {
             }
         }.runTaskLater(this, 1);
 
-         TitanBoxLibs.tools.getMiscTool().addSaveRunnable(new MySaveRunnable(this));
 
     }
     public void help(CommandSender player)
@@ -78,9 +76,9 @@ public class TitanBoxLibs extends JavaPlugin {
            if (label.equalsIgnoreCase("titanbox") || label.equalsIgnoreCase("tb")) {
             if (args.length > 0) {
                 String name  = args[0];
-                if (  TitanBoxLibs.tools.getMiscTool().commandInterfaces.containsKey(name))
+                if (TitanBoxLibs.tools.getMiscTool().commandInterfaces.containsKey(name))
                 {
-                    CommandInterface commandInterface =   TitanBoxLibs.tools.getMiscTool().commandInterfaces.get(name);
+                    CommandInterface commandInterface = TitanBoxLibs.tools.getMiscTool().commandInterfaces.get(name);
                     if (args.length == 1) {
                         commandInterface.help(sender);
                         return true;
@@ -101,6 +99,6 @@ public class TitanBoxLibs extends JavaPlugin {
     }
     public void saveALL()
     {
-         TitanBoxLibs.tools.getMiscTool().saver.run();
+         Tools.disablePlugin();
     }
 }
