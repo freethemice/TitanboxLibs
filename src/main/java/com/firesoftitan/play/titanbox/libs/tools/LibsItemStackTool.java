@@ -86,6 +86,7 @@ public class LibsItemStackTool {
     {
         if (Tools.tools.getItemStackTool().isEmpty(itemStack)) return true;
         NBTTagCompound nbtTagCompound = Tools.tools.getNBTTool().getNBTTag(itemStack);
+        if (!nbtTagCompound.e("TitanItemPlaceable")) return true;
         boolean placeable = nbtTagCompound.q("TitanItemPlaceable");
         return placeable;
     }
