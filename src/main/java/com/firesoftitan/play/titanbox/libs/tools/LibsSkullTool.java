@@ -30,7 +30,7 @@ public class LibsSkullTool {
             if (!(item.getItemMeta() instanceof SkullMeta)) {
                 return null;
             }
-            NBTTagCompound tag =  Tools.tools.getNBTTool().getNBTTag(item);
+            NBTTagCompound tag =  Tools.tools.getNBTTool().getNBT(item);
 
             return tag.p("SkullOwner").p("Properties").c("textures", 10).a(0).l("Value");
         } catch (Exception e) {
@@ -41,7 +41,7 @@ public class LibsSkullTool {
     {
         try {
             if (block.getType() != Material.PLAYER_HEAD  && block.getType() != Material.PLAYER_WALL_HEAD) return null;
-            NBTTagCompound tag =  Tools.tools.getNBTTool().getNBTTag(block);
+            NBTTagCompound tag =  Tools.tools.getNBTTool().getNBT(block);
             if (tag == null) return null;
             NBTTagCompound skullOwner = tag.p("SkullOwner");
             if (skullOwner == null) return null;
@@ -57,7 +57,7 @@ public class LibsSkullTool {
             if (!(item.getItemMeta() instanceof SkullMeta)) {
                 return null;
             }
-            NBTTagCompound tag =  Tools.tools.getNBTTool().getNBTTag(item);
+            NBTTagCompound tag =  Tools.tools.getNBTTool().getNBT(item);
 
             return tag.p("SkullOwner").l("Name");
         } catch (Exception e) {
@@ -71,7 +71,7 @@ public class LibsSkullTool {
             if (!(item.getItemMeta() instanceof SkullMeta)) {
                 return null;
             }
-            NBTTagCompound tag =  Tools.tools.getNBTTool().getNBTTag(item);
+            NBTTagCompound tag =  Tools.tools.getNBTTool().getNBT(item);
 
             return tag.p("SkullOwner").l("Id");
         } catch (Exception e) {
@@ -116,7 +116,7 @@ public class LibsSkullTool {
     }
 
     public String getSkullTexture(Block block) {
-        NBTTagCompound nbtTagCompound =  Tools.tools.getNBTTool().getNBTTag(block);
+        NBTTagCompound nbtTagCompound =  Tools.tools.getNBTTool().getNBT(block);
         if (nbtTagCompound == null) return null;
         return nbtTagCompound.p("SkullOwner").p("Properties").c("textures", 10).a(0).l("Value");
     }

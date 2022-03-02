@@ -75,8 +75,7 @@ public class LibsSerializeTool {
             }
         }
         if (complete) {
-            NBTTagCompound compound =  Tools.tools.getNBTTool().getNBTTag(itemStackA);
-            List<String> data =  Tools.tools.getNBTTool().getKeys(compound); // always get right order
+            List<String> data =  Tools.tools.getNBTTool().getKeys(itemStackA); // always get right order
             for(String s: data)
             {
                 //noinspection StringConcatenationInLoop

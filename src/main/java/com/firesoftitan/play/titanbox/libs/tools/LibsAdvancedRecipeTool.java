@@ -23,15 +23,13 @@ public class LibsAdvancedRecipeTool {
     public RecipeManager getAdvancedRecipe(ItemStack itemStack)
     {
         if (Tools.tools.getItemStackTool().isEmpty(itemStack)) return null;
-        NBTTagCompound nbtTagCompound = Tools.tools.getNBTTool().getNBTTag(itemStack);
-        String id = nbtTagCompound.l("TitanItemID");
+        String id = Tools.tools.getNBTTool().getString(itemStack,"TitanItemID");
         return recipeChecks.get(id);
     }
     public boolean isAdvancedRecipe(ItemStack itemStack)
     {
         if (Tools.tools.getItemStackTool().isEmpty(itemStack)) return false;
-        NBTTagCompound nbtTagCompound = Tools.tools.getNBTTool().getNBTTag(itemStack);
-        String id = nbtTagCompound.l("TitanItemID");
+        String id = Tools.tools.getNBTTool().getString(itemStack,"TitanItemID");
         return recipeChecks.containsKey(id);
     }
     @NotNull

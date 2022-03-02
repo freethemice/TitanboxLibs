@@ -70,33 +70,21 @@ public class LibsItemStackTool {
     public String getTitanItemID(ItemStack itemStack)
     {
         if (Tools.tools.getItemStackTool().isEmpty(itemStack)) return null;
-        NBTTagCompound nbtTagCompound = Tools.tools.getNBTTool().getNBTTag(itemStack);
-        String id = nbtTagCompound.l("TitanItemID");
-        return id;
+        return Tools.tools.getNBTTool().getString(itemStack, "TitanItemID");
     }
     public ItemStack setTitanItemID(ItemStack itemStack, String titanItemID)
     {
-        ItemStack clone = itemStack.clone();
-        NBTTagCompound nbtTagCompound = Tools.tools.getNBTTool().getNBTTag(clone);
-        nbtTagCompound.a("TitanItemID" , titanItemID);
-        clone = Tools.tools.getNBTTool().setNBTTag(clone, nbtTagCompound);
-        return clone;
+        return Tools.tools.getNBTTool().set(itemStack, "TitanItemID" , titanItemID);
     }
     public boolean isPlaceable(ItemStack itemStack)
     {
         if (Tools.tools.getItemStackTool().isEmpty(itemStack)) return true;
-        NBTTagCompound nbtTagCompound = Tools.tools.getNBTTool().getNBTTag(itemStack);
-        if (!nbtTagCompound.e("TitanItemPlaceable")) return true;
-        boolean placeable = nbtTagCompound.q("TitanItemPlaceable");
-        return placeable;
+        if (!Tools.tools.getNBTTool().containsKey(itemStack, "TitanItemPlaceable")) return true;
+        return Tools.tools.getNBTTool().getBoolean(itemStack, "TitanItemPlaceable");
     }
     public ItemStack setPlaceable(ItemStack itemStack, boolean placeable)
     {
-        ItemStack clone = itemStack.clone();
-        NBTTagCompound nbtTagCompound = Tools.tools.getNBTTool().getNBTTag(clone);
-        nbtTagCompound.a("TitanItemPlaceable" , placeable);
-        clone = Tools.tools.getNBTTool().setNBTTag(clone, nbtTagCompound);
-        return clone;
+        return Tools.tools.getNBTTool().set(itemStack, "TitanItemPlaceable" , placeable);
     }
     @SuppressWarnings("ConstantConditions")
     public ItemStack addLore(boolean clear, ItemStack toAdd, List<String> lore)
@@ -257,14 +245,16 @@ public class LibsItemStackTool {
 
 
         if (itemStackA.getType() == itemStackB.getType()) {//&& itemStackA.getAmount() >= itemStackB.getAmount()
-            NBTTagCompound ar =  Tools.tools.getNBTTool().getNBTTag(itemStackA);
-            NBTTagCompound br =  Tools.tools.getNBTTool().getNBTTag(itemStackB);
             if (checkDamage) {
-                if (ar.e("Damage") && br.e("Damage"))
-                    if (ar.h("Damage") != br.h("Damage")) return false;
+                boolean aContains = Tools.tools.getNBTTool().containsKey(itemStackA, "Damage");
+                boolean bContains = Tools.tools.getNBTTool().containsKey(itemStackB, "Damage");
+                int aDamage = Tools.tools.getNBTTool().getInteger(itemStackA, "Damage");
+                int bDamage = Tools.tools.getNBTTool().getInteger(itemStackB, "Damage");
+                if (aContains && bContains)
+                    if (aDamage != bDamage) return false;
 
-                if (ar.e("Damage") && !br.e("Damage")) return false;
-                if (!ar.e("Damage") && br.e("Damage")) return false;
+                if (aContains && !bContains) return false;
+                if (!aContains && bContains) return false;
             }
 
             if (checkEnchants) {

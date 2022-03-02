@@ -75,10 +75,9 @@ public class BarcodeManager
                 //noinspection ConstantConditions
                 if (toBarcode.getItemMeta().hasLore()) {
                     String name =  itemStackTool.getName(toBarcode);
-                    if( nbtTool.hasNBTTag(toBarcode, "barcode"))
+                    if( nbtTool.containsKey(toBarcode, "barcode"))
                     {
-                        NBTTagCompound nbtTagCompound =   nbtTool.getNBTTag(toBarcode);
-                        return nbtTagCompound.l("barcode"); //getString
+                        return nbtTool.getString(toBarcode, "barcode"); //getString
                     }
 
                     List<String> check = toBarcode.getItemMeta().getLore();
@@ -127,9 +126,7 @@ public class BarcodeManager
                 return getNewBarcode(toBarcode);
             }
             barcodes.set(name + "." + saltStr, false);
-            NBTTagCompound nbtTagCompound =  nbtTool.getNBTTag(toBarcode);
-            nbtTagCompound.a("barcode", saltStr); //setString
-            toBarcode =  nbtTool.setNBTTag(toBarcode, nbtTagCompound);
+            toBarcode = nbtTool.set(toBarcode, "barcode", saltStr);
         }
         return toBarcode;
     }

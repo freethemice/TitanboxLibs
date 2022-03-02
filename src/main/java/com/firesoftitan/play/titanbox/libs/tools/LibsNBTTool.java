@@ -1,26 +1,318 @@
 package com.firesoftitan.play.titanbox.libs.tools;
 
-import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
+import com.firesoftitan.play.titanbox.libs.managers.EncodeDecodeManager;
 import net.minecraft.core.BlockPosition;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.level.block.entity.TileEntity;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class LibsNBTTool {
-    private Tools parent;
+    private final Tools parent;
 
     public LibsNBTTool(Tools parent) {
         this.parent = parent;
     }
 
+    public ItemStack set(ItemStack itemStack, String key, byte value)
+    {
+        if (key == null || itemStack == null) return itemStack.clone();
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        nbtTagCompound.a(key, value);
+        ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
+        return itemStack1.clone();
+    }
+    public ItemStack set(ItemStack itemStack, String key, short value)
+    {
+        if (key == null || itemStack == null) return itemStack.clone();
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        nbtTagCompound.a(key, value);
+        ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
+        return itemStack1.clone();
+    }
+    public ItemStack set(ItemStack itemStack, String key, int value)
+    {
+        if (key == null || itemStack == null) return itemStack.clone();
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        nbtTagCompound.a(key, value);
+        ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
+        return itemStack1.clone();
+    }
+    public ItemStack set(ItemStack itemStack, String key, long value)
+    {
+        if (key == null || itemStack == null) return itemStack.clone();
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        nbtTagCompound.a(key, value);
+        ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
+        return itemStack1.clone();
+    }
+    public ItemStack set(ItemStack itemStack, String key, UUID value)
+    {
+        if (value == null || key == null || itemStack == null) return itemStack.clone();
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        nbtTagCompound.a(key, value);
+        ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
+        return itemStack1.clone();
+    }
+    public ItemStack set(ItemStack itemStack, String key, float value)
+    {
+        if (key == null || itemStack == null) return itemStack.clone();
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        nbtTagCompound.a(key, value);
+        ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
+        return itemStack1.clone();
+    }
+    public ItemStack set(ItemStack itemStack, String key, double value)
+    {
+        if (key == null || itemStack == null) return itemStack.clone();
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        nbtTagCompound.a(key, value);
+        ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
+        return itemStack1.clone();
+    }
+    public ItemStack set(ItemStack itemStack, String key, String value)
+    {
+        if (value == null || key == null || itemStack == null) return itemStack.clone();
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        nbtTagCompound.a(key, value);
+        ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
+        return itemStack1.clone();
+    }
+    public ItemStack set(ItemStack itemStack, String key, Location value)
+    {
+        if (value == null || key == null || itemStack == null) return itemStack.clone();
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        nbtTagCompound.a(key, EncodeDecodeManager.encode(value));
+        ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
+        return itemStack1.clone();
+    }
+    public ItemStack set(ItemStack itemStack, String key, byte[] value)
+    {
+        if (value == null || key == null || itemStack == null) return itemStack.clone();
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        nbtTagCompound.a(key, value);
+        ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
+        return itemStack1.clone();
+    }
+    public ItemStack set(ItemStack itemStack, String key, int[] value)
+    {
+        if (value == null || key == null || itemStack == null) return itemStack.clone();
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        nbtTagCompound.a(key, value);
+        ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
+        return itemStack1.clone();
+    }
+    public ItemStack set(ItemStack itemStack, String key, long[] value)
+    {
+        if (value == null || key == null || itemStack == null) return itemStack.clone();
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        nbtTagCompound.a(key, value);
+        ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
+        return itemStack1.clone();
+    }
+    public ItemStack set(ItemStack itemStack, String key, ItemStack[] value)
+    {
+        List<ItemStack> itemStacks = new ArrayList<ItemStack>(List.of(value));
+        return set(itemStack, key, itemStacks);
+    }
+    public ItemStack set(ItemStack itemStack, String key, Location[] value)
+    {
+        List<Location> itemStacks = new ArrayList<Location>(List.of(value));
+        return set(itemStack, key, itemStacks);
+    }
+    public ItemStack set(ItemStack itemStack, String key, UUID[] value)
+    {
+        List<UUID> itemStacks = new ArrayList<UUID>(List.of(value));
+        return set(itemStack, key, itemStacks);
+    }
+    public ItemStack set(ItemStack itemStack, String key, EntityType[] value)
+    {
+        List<EntityType> itemStacks = new ArrayList<EntityType>(List.of(value));
+        return set(itemStack, key, itemStacks);
+    }
+    public ItemStack set(ItemStack itemStack, String key, boolean value)
+    {
+        if (key == null || itemStack == null) return itemStack.clone();
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        nbtTagCompound.a(key, value);
+        ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
+        return itemStack1.clone();
+    }
+    public ItemStack set(ItemStack itemStack, String key, NBTBase value)
+    {
+        if (value == null || key == null || itemStack == null) return itemStack.clone();
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        nbtTagCompound.a(key, value);
+        ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
+        return itemStack1.clone();
+    }
+
+    /**
+     * supported {@link List<Integer>}
+     * supported {@link List<Byte>}
+     * supported {@link List<Long>}
+     * supported {@link List<String>}
+     * supported {@link List<ItemStack>}
+     * supported {@link List<Location>}
+     * supported {@link List<UUID>}
+     * supported {@link List<EntityType>}
+     * @param value {@link List} to save
+     * @return ItemStack
+     */
+    public ItemStack set(ItemStack itemStack, String key, List value)
+    {
+        if (value == null || key == null || itemStack == null) return itemStack.clone();
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        nbtTagCompound.a(key, EncodeDecodeManager.encode(value));
+        ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
+        return itemStack1.clone();
+    }
+    public byte getByte(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return nbtTagCompound.d(key);
+    }
+    public short getShort(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return nbtTagCompound.g(key);
+    }
+    public Integer getInteger(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return nbtTagCompound.h(key);
+    }
+    public Long getLong(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return nbtTagCompound.i(key);
+    }
+    public UUID getUUID(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return nbtTagCompound.a(key);
+    }
+    public float getFloat(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return nbtTagCompound.j(key);
+    }
+    public double getDouble(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return nbtTagCompound.k(key);
+    }
+    public String getString(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return nbtTagCompound.l(key);
+    }
+    public byte[] getArrayByte(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return nbtTagCompound.m(key);
+    }
+    public int[] getArrayInteger(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return nbtTagCompound.n(key);
+    }
+    public long[] getArrayLong(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return nbtTagCompound.o(key);
+    }
+    public ItemStack[] getArrayItemStack(ItemStack itemStack, String key)
+    {
+        List<ItemStack> list = this.getListItemStack(itemStack, key);
+        return Arrays.copyOf(list.toArray(), list.size(), ItemStack[].class);
+    }
+    public Location[] getArrayLocation(ItemStack itemStack, String key)
+    {
+        List<Location> list = this.getListLocation(itemStack, key);
+        return Arrays.copyOf(list.toArray(), list.size(), Location[].class);
+    }
+    public UUID[] getArrayUUID(ItemStack itemStack, String key)
+    {
+        List<UUID> list = this.getListUUID(itemStack, key);
+        return Arrays.copyOf(list.toArray(), list.size(), UUID[].class);
+    }
+    public EntityType[] getArrayEntityType(ItemStack itemStack, String key)
+    {
+        List<EntityType> list = this.getListEntityType(itemStack, key);
+        return Arrays.copyOf(list.toArray(), list.size(), EntityType[].class);
+    }
+    public boolean getBoolean(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return nbtTagCompound.q(key);
+    }
+    public NBTBase getNBTBase(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return nbtTagCompound.c(key);
+    }
+    public Location getLocation(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return EncodeDecodeManager.decodeLocation(nbtTagCompound.l(key));
+    }
+    public boolean containsKey(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = getNBT(itemStack);
+        if (nbtTagCompound != null) {
+            return nbtTagCompound.e(key);
+        }
+        return false;
+    }
+    public List<Byte> getListByte(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return EncodeDecodeManager.decodeByteList(nbtTagCompound.l(key));
+    }
+    public List<Long> getListLong(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return EncodeDecodeManager.decodeLongList(nbtTagCompound.l(key));
+    }
+    public List<Integer> getListInteger(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return EncodeDecodeManager.decodeIntList(nbtTagCompound.l(key));
+    }
+    public List<String> getListString(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return EncodeDecodeManager.decodeStringList(nbtTagCompound.l(key));
+    }
+    public List<ItemStack> getListItemStack(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return EncodeDecodeManager.decodeItemList(nbtTagCompound.l(key));
+    }
+    public List<UUID> getListUUID(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return EncodeDecodeManager.decodeUUIDList(nbtTagCompound.l(key));
+    }
+    public List<Location> getListLocation(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return EncodeDecodeManager.decodeLocationList(nbtTagCompound.l(key));
+    }
+    public List<EntityType> getListEntityType(ItemStack itemStack, String key)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return EncodeDecodeManager.decodeEntityTypeList(nbtTagCompound.l(key));
+    }
     public List<String> getNBTKeyTree(NBTTagCompound nbtTagCompound) {
         return getNBTKeyTree(nbtTagCompound, new ArrayList<>(), "");
     }
@@ -38,30 +330,22 @@ public class LibsNBTTool {
         }
         return pass;
     }
-    public boolean hasNBTTag(ItemStack itemStack, String key)
+    public ItemStack removeKey(ItemStack itemStack, String key)
     {
-        NBTTagCompound nbtTagCompound = getNBTTag(itemStack);
-        if (nbtTagCompound != null) {
-            return nbtTagCompound.e(key);
-        }
-        return false;
-    }
-    public ItemStack removeNBTTag(ItemStack itemStack, String key)
-    {
-        NBTTagCompound nbtTagCompound =  Tools.tools.getNBTTool().getNBTTag(itemStack);
+        NBTTagCompound nbtTagCompound =  Tools.tools.getNBTTool().getNBT(itemStack);
         if (nbtTagCompound != null) {
             if (nbtTagCompound.e(key)) {
                 if (nbtTagCompound.d().size() == 1) {
-                    return clearNBTTag(itemStack);
+                    return clear(itemStack);
                 } else {
                     nbtTagCompound.a(key, (String)null);
-                    return setNBTTag(itemStack, nbtTagCompound);
+                    return setNBT(itemStack, nbtTagCompound);
                 }
             }
         }
         return itemStack;
     }
-    public ItemStack clearNBTTag(ItemStack itemStack)
+    public ItemStack clear(ItemStack itemStack)
     {
         try {
 
@@ -75,7 +359,7 @@ public class LibsNBTTool {
             return null;
         }
     }
-    public ItemStack setNBTTag(ItemStack itemStack, NBTTagCompound nbtTagCompound)
+    public ItemStack setNBT(ItemStack itemStack, NBTTagCompound nbtTagCompound)
     {
         try {
             net.minecraft.world.item.ItemStack itemStack1 = CraftItemStack.asNMSCopy(itemStack);
@@ -89,8 +373,7 @@ public class LibsNBTTool {
             return null;
         }
     }
-
-    public NBTTagCompound getNBTTag(Block block)
+    public NBTTagCompound getNBT(Block block)
     {
 
         WorldServer w = ((CraftWorld) block.getWorld()).getHandle();
@@ -100,7 +383,7 @@ public class LibsNBTTool {
         tile.a(nbt);
         return nbt;
     }
-    public NBTTagCompound getNBTTag(ItemStack itemStack)
+    public NBTTagCompound getNBT(ItemStack itemStack)
     {
         try {
 
@@ -118,7 +401,14 @@ public class LibsNBTTool {
     }
 
 
-
+    public List<String> getKeys(ItemStack itemStackA)
+    {
+        NBTTagCompound compound =  this.getNBT(itemStackA);
+        List<String> data = new ArrayList<>();
+        getKeys(compound, "", data);
+        Collections.sort(data);
+        return data;
+    }
     public List<String> getKeys(NBTTagCompound nbtTagCompound)
     {
         List<String> data = new ArrayList<>();
