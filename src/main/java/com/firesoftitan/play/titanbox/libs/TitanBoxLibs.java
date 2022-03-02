@@ -1,6 +1,7 @@
 package com.firesoftitan.play.titanbox.libs;
 
 import com.firesoftitan.play.titanbox.libs.listeners.MainListener;
+import com.firesoftitan.play.titanbox.libs.managers.AutoUpdateManager;
 import com.firesoftitan.play.titanbox.libs.managers.BarcodeManager;
 import com.firesoftitan.play.titanbox.libs.managers.ConfigManager;
 import com.firesoftitan.play.titanbox.libs.managers.WorkerManager;
@@ -27,9 +28,11 @@ public class TitanBoxLibs extends JavaPlugin {
     protected static Tools tools;
     public static BarcodeManager barcodeManager;
     public static WorkerManager workerManager;
+    public static AutoUpdateManager autoUpdateManager;
     public void onEnable() {
         TitanBoxLibs.instants = this;
-        TitanBoxLibs.tools = new Tools(this, new MySaveRunnable(this));
+        configManager = new ConfigManager();
+        TitanBoxLibs.tools = new Tools(this, new MySaveRunnable(this), -1);
         TitanBoxLibs.workerManager = new WorkerManager();
         TitanBoxLibs.barcodeManager = new BarcodeManager();
         mainListener = new MainListener();
@@ -52,7 +55,7 @@ public class TitanBoxLibs extends JavaPlugin {
             }
         }, 10);
 
-        configManager = new ConfigManager();
+
 
         new BukkitRunnable() {
             @Override
@@ -61,6 +64,7 @@ public class TitanBoxLibs extends JavaPlugin {
             }
         }.runTaskLater(this, 1);
 
+        autoUpdateManager = new AutoUpdateManager();
 
     }
     public void help(CommandSender player)

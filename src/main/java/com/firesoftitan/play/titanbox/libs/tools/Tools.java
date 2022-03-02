@@ -54,6 +54,7 @@ public class Tools {
         return allTools.get(plugin).RecipeTool;
     }
     private JavaPlugin plugin;
+    private int spigotID;
     private LibsFormattingTool FormattingTool;
     private LibsBlockTool BlockTool;
     private LibsMiscTool MiscTool;
@@ -70,10 +71,10 @@ public class Tools {
     private static SaveRunnable saver = new SaveRunnable();
     protected static Tools tools;
 
-    public Tools(JavaPlugin plugin, TitanSaverRunnable titanSaverRunnable) {
+    public Tools(JavaPlugin plugin, TitanSaverRunnable titanSaverRunnable, int spigotID) {
 
         this.plugin = plugin;
-
+        this.spigotID = spigotID;
         this.BlockTool = new LibsBlockTool(this);
         this.FloatingTextTool = new LibsFloatingTextTool(this);
         this.FormattingTool = new LibsFormattingTool(this);
@@ -94,7 +95,7 @@ public class Tools {
             saver.addSaveRunnable(titanSaverRunnable);
             Bukkit.getScheduler().scheduleSyncRepeatingTask(TitanBoxLibs.instants,  saver, TitanBoxLibs.instants.configManager.getSave_frequancy(), TitanBoxLibs.instants.configManager.getSave_frequancy());
         }
-
+        if (spigotID > 0) TitanBoxLibs.autoUpdateManager.addPlugin(spigotID, plugin);
 
     }
     public static void disablePlugin()

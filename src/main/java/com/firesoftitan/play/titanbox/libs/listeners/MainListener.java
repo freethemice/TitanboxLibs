@@ -123,5 +123,6 @@ public class MainListener  implements Listener {
                  workerManager.hideWorker(player);
             }
         }.runTaskLater(instants, 20);
+        TitanBoxLibs.autoUpdateManager.checkAll(player);
     }
 }
