@@ -22,14 +22,13 @@ public class SaveRunnable implements Runnable {
         Tools.getTools(TitanBoxLibs.instants).getMessageTool().sendMessageSystem("-------" + "Starting Save" + "-------");
         long startTime = System.currentTimeMillis();
         LibsFormattingTool formattingTool = Tools.getFormattingTool(TitanBoxLibs.instants);
-        Tools.getTools(TitanBoxLibs.instants).getMessageTool().sendMessageSystem("Core Save took: " +  formattingTool.formatTime(System.currentTimeMillis() - startTime));
+        LibsMessageTool messageTool =Tools.getTools(TitanBoxLibs.instants).getMessageTool();
         for(TitanSaverRunnable call: caller)
         {
             try {
                 long subStartTime = System.currentTimeMillis();
                 call.run();
-                LibsMessageTool messageTool =Tools.getTools(TitanBoxLibs.instants).getMessageTool();
-                messageTool.sendMessageSystem(" Save took: " +  formattingTool.formatTime(System.currentTimeMillis() - subStartTime));
+                messageTool.sendMessageSystem(call.getPluginName() + " Save took: " +  formattingTool.formatTime(System.currentTimeMillis() - subStartTime));
             } catch (Exception e) {
                 e.printStackTrace();
             }

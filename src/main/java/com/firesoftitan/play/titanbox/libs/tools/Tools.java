@@ -89,10 +89,10 @@ public class Tools {
         this.VaultTool = new LibsVaultTool(this);
         this.RecipeTool = new LibsAdvancedRecipeTool(this);
         allTools.put(plugin,this);
+        saver.addSaveRunnable(titanSaverRunnable);
         if (tools == null && plugin.getName().equals(TitanBoxLibs.instants.getName()))
         {
             tools = this;
-            saver.addSaveRunnable(titanSaverRunnable);
             Bukkit.getScheduler().scheduleSyncRepeatingTask(TitanBoxLibs.instants,  saver, TitanBoxLibs.instants.configManager.getSave_frequancy(), TitanBoxLibs.instants.configManager.getSave_frequancy());
         }
         if (spigotID > 0) TitanBoxLibs.autoUpdateManager.addPlugin(spigotID, plugin);
