@@ -47,8 +47,8 @@ public class Tools {
     public static LibsPlayerTool getPlayerTool(JavaPlugin plugin) {
         return allTools.get(plugin).PlayerTool;
     }
-    public static LibsFloatingTextTool getFloatingTextTool(JavaPlugin plugin) {
-        return allTools.get(plugin).FloatingTextTool;
+    public static LibsHologramTool getHologramTool(JavaPlugin plugin) {
+        return allTools.get(plugin).hologramTool;
     }
     public static LibsAdvancedRecipeTool getRecipeTool(JavaPlugin plugin) {
         return allTools.get(plugin).RecipeTool;
@@ -66,7 +66,7 @@ public class Tools {
     private LibsSkullTool SkullTool;
     private LibsVaultTool VaultTool;
     private LibsPlayerTool PlayerTool;
-    private LibsFloatingTextTool FloatingTextTool;
+    private LibsHologramTool hologramTool;
     private LibsAdvancedRecipeTool RecipeTool;
     private static SaveRunnable saver = new SaveRunnable();
     protected static Tools tools;
@@ -76,7 +76,7 @@ public class Tools {
         this.plugin = plugin;
         this.spigotID = spigotID;
         this.BlockTool = new LibsBlockTool(this);
-        this.FloatingTextTool = new LibsFloatingTextTool(this);
+        this.hologramTool = new LibsHologramTool(this);
         this.FormattingTool = new LibsFormattingTool(this);
         this.ItemStackTool = new LibsItemStackTool(this);
         this.LocationTool = new LibsLocationTool(this);
@@ -154,7 +154,7 @@ public class Tools {
         return PlayerTool;
     }
 
-    public LibsFloatingTextTool getFloatingTextTool() {
-        return FloatingTextTool;
+    public LibsHologramTool getHologramTool() {
+        return hologramTool;
     }
 }

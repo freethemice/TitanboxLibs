@@ -6,12 +6,15 @@ import com.firesoftitan.play.titanbox.libs.managers.RecipeManager;
 import com.firesoftitan.play.titanbox.libs.tools.Tools;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
@@ -96,9 +99,8 @@ public class MainListener  implements Listener {
             }
         }
     }
-
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
-    public boolean onBlockPlaceEvent(BlockPlaceEvent event) {
+    public void onBlockPlaceEvent(BlockPlaceEvent event) {
         Block placed = event.getBlockPlaced();
         String id = tools.getSkullTool().getSkullTitanID(placed);
         ItemStack item = event.getItemInHand();
@@ -112,7 +114,6 @@ public class MainListener  implements Listener {
 
         ItemStack itemInHand = event.getItemInHand();
         if (!tools.getItemStackTool().isPlaceable(itemInHand)) event.setCancelled(true);
-        return false;
     }
     @EventHandler
     public void onPlayerLoginEvent(PlayerLoginEvent event) {

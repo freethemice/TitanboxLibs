@@ -1,7 +1,7 @@
 package com.firesoftitan.play.titanbox.libs.runnables;
 
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
-import com.firesoftitan.play.titanbox.libs.tools.LibsMiscTool;
+import com.firesoftitan.play.titanbox.libs.tools.LibsHologramTool;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MySaveRunnable extends TitanSaverRunnable{
@@ -14,6 +14,7 @@ public class MySaveRunnable extends TitanSaverRunnable{
     public void run() {
          TitanBoxLibs.barcodeManager.save();
          TitanBoxLibs.workerManager.saveAll();
+        LibsHologramTool.save();
     }
 
 }
