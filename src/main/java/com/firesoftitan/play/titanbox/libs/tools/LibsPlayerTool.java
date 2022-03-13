@@ -261,7 +261,7 @@ public class LibsPlayerTool {
         String uuid = player.toString();
         String fulluuid = player.toString();
         if (uuid == null) {
-            throw new NullPointerException("name is marked non-null but is null");
+            throw new NullPointerException("UUID is marked non-null but is null");
         } else {
             if (players.containsKey(uuid))
             {
@@ -278,6 +278,7 @@ public class LibsPlayerTool {
                 allInput = allInput + inputLine;
             in.close();
             String[] NotTheRightWay = allInput.split("value\" : \"");
+            if (NotTheRightWay.length < 2) throw new NullPointerException("UUID: " + uuid.toString() +"\n Index out of bounds");
             NotTheRightWay =  NotTheRightWay[1].split("\",");
             players.put(fulluuid, NotTheRightWay[0]);
             return NotTheRightWay[0];
