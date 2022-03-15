@@ -7,3 +7,13 @@ description: ${project.description}
 website: ${project.url}
 softdepend:
   - Vault
+commands:
+  titanguide:
+    description: titanguide
+    usage: /<command>
+  tguide:
+    description: titanguide
+    usage: /<command>
+  titan:
+    description: titanguide
+    usage: /<command>

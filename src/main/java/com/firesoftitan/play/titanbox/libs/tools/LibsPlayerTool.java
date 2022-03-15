@@ -257,6 +257,37 @@ public class LibsPlayerTool {
         return getPlayersTexture(player.getUniqueId());
     }
 
+    public boolean doesPlayersHaveTexture(UUID player){
+        String uuid = player.toString();
+        String fulluuid = player.toString();
+        if (uuid == null) {
+            return false;
+        } else {
+            try {
+                if (players.containsKey(uuid))
+                {
+                    return true;
+                }
+                uuid = uuid.replace("-", "");
+                URL url_1 = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false");
+                InputStreamReader reader_1 = new InputStreamReader(url_1.openStream());
+                BufferedReader in = new BufferedReader(reader_1);
+                String inputLine;
+                String allInput = "";
+                while ((inputLine = in.readLine()) != null)
+                    //noinspection StringConcatenationInLoop
+                    allInput = allInput + inputLine;
+                in.close();
+                String[] NotTheRightWay = allInput.split("value\" : \"");
+                if (NotTheRightWay.length < 2) return false;
+                NotTheRightWay =  NotTheRightWay[1].split("\",");
+                players.put(fulluuid, NotTheRightWay[0]);
+                return true;
+            } catch (IOException e) {
+                return false;
+            }
+        }
+    }
     public String getPlayersTexture(UUID player) throws IOException {
         String uuid = player.toString();
         String fulluuid = player.toString();

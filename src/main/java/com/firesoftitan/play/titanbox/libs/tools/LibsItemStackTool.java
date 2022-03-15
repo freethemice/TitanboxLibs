@@ -238,6 +238,19 @@ public class LibsItemStackTool {
     public boolean isItemEqual(ItemStack itemStackA, ItemStack itemStackB, boolean checkEnchants) {
         return isItemEqual(itemStackA, itemStackB, checkEnchants, true);
     }
+    public ItemStack getCustomModel(int id) {
+        return getCustomModel(Material.COARSE_DIRT, id);
+    }
+    public ItemStack getCustomModel(Material material, int id) {
+        ItemStack button = new ItemStack(material);
+        button = this.changeName(button, " ");
+        ItemMeta itemMeta;
+        itemMeta = button.getItemMeta();
+        itemMeta.setCustomModelData(id);
+        button.setItemMeta(itemMeta);
+        return button.clone();
+    }
+
     @SuppressWarnings("ConstantConditions")
     public boolean isItemEqual(ItemStack itemStackA, ItemStack itemStackB, boolean checkEnchants, boolean checkDamage) {
         if (itemStackA == null) return itemStackB == null;

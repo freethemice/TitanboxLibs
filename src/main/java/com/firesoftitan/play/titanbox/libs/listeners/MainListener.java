@@ -2,28 +2,35 @@ package com.firesoftitan.play.titanbox.libs.listeners;
 
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
 import com.firesoftitan.play.titanbox.libs.enums.BarcodeDeviceEnum;
+import com.firesoftitan.play.titanbox.libs.guis.CraftingBookGui;
 import com.firesoftitan.play.titanbox.libs.managers.RecipeManager;
-import com.firesoftitan.play.titanbox.libs.tools.Tools;
+import com.firesoftitan.play.titanbox.libs.tools.*;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.inventory.CraftingInventory;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
-import com.firesoftitan.play.titanbox.libs.tools.LibsMiscTool;
-import com.firesoftitan.play.titanbox.libs.tools.LibsSkullTool;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import static com.firesoftitan.play.titanbox.libs.TitanBoxLibs.*;
@@ -32,6 +39,8 @@ public class MainListener  implements Listener {
 
 
     private Tools tools;
+    private LibsItemStackTool itemStackTool = Tools.getItemStackTool(instants);
+    private LibsNBTTool nbtTool = Tools.getNBTTool(instants);
     public MainListener(){
         registerEvents();
         tools = Tools.getTools(instants);
@@ -100,6 +109,47 @@ public class MainListener  implements Listener {
         }
     }
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    public void onInventoryClickEvent(InventoryClickEvent event) {
+        HumanEntity whoClicked = event.getWhoClicked();
+        InventoryView openInventory = whoClicked.getOpenInventory();
+        Inventory clickedInventory = event.getClickedInventory();
+        CraftBookGuiClicked(event, whoClicked, openInventory, clickedInventory);
+    }
+    private void CraftBookGuiClicked(InventoryClickEvent event, HumanEntity whoClicked, InventoryView openInventory, Inventory clickedInventory) {
+
+        if (openInventory.getTitle().equals(CraftingBookGui.guiName)) {
+            CraftingBookGui bookGui = CraftingBookGui.getGui((Player) whoClicked);
+            if (bookGui != null) {
+                if (event.getSlot() > -1 && event.getSlot() < CraftingBookGui.getSize()) {
+                    ItemStack clicked = clickedInventory.getItem(event.getSlot());
+                    if (!itemStackTool.isEmpty(clicked)) {
+                        String action = nbtTool.getString(clicked, "buttonaction");
+                        if (action != null && action.length() > 1) {
+                            event.setCancelled(true);
+                            switch (action.toLowerCase()) {
+                                case "none":
+
+                                    break;
+                                case "down":
+                                    bookGui.setScrolling(bookGui.getScrolling() + 1);
+                                    bookGui.showGUI();
+                                    break;
+                                case "up":
+                                    bookGui.setScrolling(bookGui.getScrolling() - 1);
+                                    bookGui.showGUI();
+                                    break;
+                                default:
+                                    bookGui.setShowing(action);
+                                    bookGui.showGUI();
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     public void onBlockPlaceEvent(BlockPlaceEvent event) {
         Block placed = event.getBlockPlaced();
         String id = tools.getSkullTool().getSkullTitanID(placed);
@@ -110,10 +160,21 @@ public class MainListener  implements Listener {
             event.setCancelled(true);
             tools.getMessageTool().sendMessagePlayer(event.getPlayer(), ChatColor.RED + "Can't place this block!");
         }
-
-
         ItemStack itemInHand = event.getItemInHand();
         if (!tools.getItemStackTool().isPlaceable(itemInHand)) event.setCancelled(true);
+    }
+    @EventHandler
+    public void  onPlayerInteractEvent(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR) {
+            ItemStack itemInMainHand = event.getPlayer().getInventory().getItemInMainHand();
+            String titanID = itemStackTool.getTitanItemID(itemInMainHand);
+            if (titanID != null && titanID.equals("CRAFTING_BOOK")) {
+                CraftingBookGui craftingBookGui = CraftingBookGui.getGui(player);
+                if (craftingBookGui == null) craftingBookGui = new CraftingBookGui(player);
+                craftingBookGui.showGUI();
+            }
+        }
     }
     @EventHandler
     public void onPlayerLoginEvent(PlayerLoginEvent event) {
@@ -125,5 +186,8 @@ public class MainListener  implements Listener {
             }
         }.runTaskLater(instants, 20);
         TitanBoxLibs.autoUpdateManager.checkAll(player);
+
+
+
     }
 }
