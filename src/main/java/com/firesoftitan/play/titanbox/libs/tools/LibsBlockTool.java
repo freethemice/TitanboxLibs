@@ -5,7 +5,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.DoubleChest;
-import org.bukkit.craftbukkit.v1_18_R2.block.CraftBlockState;
+import org.bukkit.craftbukkit.v1_19_R1.block.CraftBlockState;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;

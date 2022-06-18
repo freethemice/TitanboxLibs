@@ -8,8 +8,8 @@ import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.level.block.entity.TileEntity;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
@@ -388,11 +388,11 @@ public class LibsNBTTool {
         try {
 
             net.minecraft.world.item.ItemStack itemStack1 = CraftItemStack.asNMSCopy(itemStack);
-            if (itemStack1.t() == null)
+            if (itemStack1.u() == null)
             {
                 return new NBTTagCompound();
             }
-            return itemStack1.t() ;
+            return itemStack1.u() ;
         }
         catch (Exception E)
         {

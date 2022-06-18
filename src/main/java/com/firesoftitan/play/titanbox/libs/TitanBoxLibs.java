@@ -8,6 +8,16 @@ import com.firesoftitan.play.titanbox.libs.managers.WorkerManager;
 import com.firesoftitan.play.titanbox.libs.runnables.MySaveRunnable;
 import com.firesoftitan.play.titanbox.libs.tools.*;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import com.firesoftitan.play.titanbox.libs.interfaces.CommandInterface;
@@ -145,9 +155,58 @@ public class TitanBoxLibs extends JavaPlugin {
             }
             return true;
         }
-           if (label.equalsIgnoreCase("titanbox") || label.equalsIgnoreCase("tb")) {
+        if (label.equalsIgnoreCase("titankill"))
+        {
+            if (sender instanceof ConsoleCommandSender) {
+                if (args.length > 1) {
+                    try {
+                        int BR = Integer.parseInt(args[1]);
+                        Player player = Bukkit.getPlayer(args[0]);
+                        if (BR > 0 && player != null && player.isOnline()) {
+                            List<Entity> nearbyEntities = player.getNearbyEntities(BR, BR, BR);
+                            for (Entity entity : nearbyEntities) {
+                                if (entity instanceof LivingEntity && !(entity instanceof Player)) {
+                                    //EntityDamageEvent entityDamageEvent = new EntityDamageEvent(entity, EntityDamageEvent.DamageCause.FALL, 100000000);
+                                    EntityDamageByEntityEvent entityEvent = new EntityDamageByEntityEvent(player, entity , EntityDamageEvent.DamageCause.CUSTOM, 100000000);
+                                    Bukkit.getPluginManager().callEvent(entityEvent);
+                                }
+                            }
+                        }
+                        return true;
+                    } catch (NumberFormatException e) {
+                        //e.printStackTrace();
+                    }
+
+                }
+            }
+        }
+        if (label.equalsIgnoreCase("titanbox") || label.equalsIgnoreCase("tb")) {
             if (args.length > 0) {
                 String name  = args[0];
+                if (name.toLowerCase().equalsIgnoreCase("kill"))
+                {
+                    if (args.length > 2)
+                    {
+                        try {
+                            int BR = Integer.parseInt(args[1]);
+                            Player player = Bukkit.getPlayer(args[2]);
+                            if (BR > 0 && player != null && player.isOnline())
+                            {
+                                List<Entity> nearbyEntities = player.getNearbyEntities(BR, BR, BR);
+                                for(Entity entity: nearbyEntities)
+                                {
+                                    EntityDamageEvent entityDamageEvent = new EntityDamageEvent(entity, EntityDamageEvent.DamageCause.FALL, 100000000);
+                                    Bukkit.getPluginManager().callEvent(entityDamageEvent);
+                                }
+                            }
+                            return true;
+                        } catch (NumberFormatException e) {
+                            //e.printStackTrace();
+                        }
+
+                    }
+                }
+
                 if (TitanBoxLibs.tools.getMiscTool().commandInterfaces.containsKey(name))
                 {
                     CommandInterface commandInterface = TitanBoxLibs.tools.getMiscTool().commandInterfaces.get(name);

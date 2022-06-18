@@ -8,9 +8,10 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.server.network.PlayerConnection;
+import net.minecraft.world.entity.player.ProfilePublicKey;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -323,7 +324,7 @@ public class LibsPlayerTool {
         WorldServer nmsWorld = ((CraftWorld)world).getHandle();
         if (name.length() > 16) name = name.substring(0, 16);
         GameProfile gameProfile = new GameProfile(uuid, name);
-        EntityPlayer entityPlayer = new EntityPlayer(nmsServer, nmsWorld, gameProfile);
+        EntityPlayer entityPlayer = new EntityPlayer(nmsServer, nmsWorld, gameProfile, null);
         entityPlayer.b = new PlayerConnection(nmsServer, new NetworkManager(EnumProtocolDirection.a), entityPlayer);
     }
     public Player loadOfflinePlayer(OfflinePlayer offline)
@@ -341,7 +342,7 @@ public class LibsPlayerTool {
 
         WorldServer worldServer = server.a(net.minecraft.world.level.World.f);
         if (worldServer == null) return null;
-        EntityPlayer entity = new EntityPlayer(server, worldServer, profile);
+        EntityPlayer entity = new EntityPlayer(server, worldServer, profile, null);
         Player target = entity.getBukkitEntity();
         if (target != null)
         {

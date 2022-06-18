@@ -8,6 +8,9 @@ website: ${project.url}
 softdepend:
   - Vault
 commands:
+  titankill:
+    description: titankill
+    usage: /<command>
   titanguide:
     description: titanguide
     usage: /<command>
