@@ -75,7 +75,7 @@ public class LibsSerializeTool {
             }
         }
         if (complete) {
-            List<String> data =  Tools.tools.getNBTTool().getKeys(itemStackA); // always get right order
+            List<String> data =  Tools.tools.getNBTTool().getKeysItemStack(itemStackA); // always get right order
             for(String s: data)
             {
                 //noinspection StringConcatenationInLoop

@@ -146,14 +146,14 @@ public class LibsNBTTool {
         ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
         return itemStack1.clone();
     }
-    public ItemStack set(ItemStack itemStack, String key, NBTBase value)
+/*    public ItemStack setBase(ItemStack itemStack, String key, NBTBase value)
     {
         if (value == null || key == null || itemStack == null) return itemStack.clone();
         NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
         nbtTagCompound.a(key, value);
         ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
         return itemStack1.clone();
-    }
+    }*/
 
     /**
      * supported {@link List<Integer>}
@@ -255,11 +255,6 @@ public class LibsNBTTool {
         NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
         return nbtTagCompound.q(key);
     }
-    public NBTBase getNBTBase(ItemStack itemStack, String key)
-    {
-        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
-        return nbtTagCompound.c(key);
-    }
     public Location getLocation(ItemStack itemStack, String key)
     {
         NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
@@ -313,10 +308,10 @@ public class LibsNBTTool {
         NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
         return EncodeDecodeManager.decodeEntityTypeList(nbtTagCompound.l(key));
     }
-    public List<String> getNBTKeyTree(NBTTagCompound nbtTagCompound) {
+    protected List<String> getNBTKeyTree(NBTTagCompound nbtTagCompound) {
         return getNBTKeyTree(nbtTagCompound, new ArrayList<>(), "");
     }
-    private List<String> getNBTKeyTree(NBTTagCompound nbtTagCompound, List<String> pass, String pre) {
+    protected List<String> getNBTKeyTree(NBTTagCompound nbtTagCompound, List<String> pass, String pre) {
         for(String key: nbtTagCompound.d())
         {
             NBTTagCompound compound = nbtTagCompound.p(key);
@@ -359,7 +354,7 @@ public class LibsNBTTool {
             return null;
         }
     }
-    public ItemStack setNBT(ItemStack itemStack, NBTTagCompound nbtTagCompound)
+    protected ItemStack setNBT(ItemStack itemStack, NBTTagCompound nbtTagCompound)
     {
         try {
             net.minecraft.world.item.ItemStack itemStack1 = CraftItemStack.asNMSCopy(itemStack);
@@ -373,7 +368,7 @@ public class LibsNBTTool {
             return null;
         }
     }
-    public NBTTagCompound getNBT(Block block)
+    protected NBTTagCompound getNBT(Block block)
     {
 
         WorldServer w = ((CraftWorld) block.getWorld()).getHandle();
@@ -383,7 +378,7 @@ public class LibsNBTTool {
         tile.a(nbt);
         return nbt;
     }
-    public NBTTagCompound getNBT(ItemStack itemStack)
+    protected NBTTagCompound getNBT(ItemStack itemStack)
     {
         try {
 
@@ -400,8 +395,7 @@ public class LibsNBTTool {
         }
     }
 
-
-    public List<String> getKeys(ItemStack itemStackA)
+    public List<String> getKeysItemStack(ItemStack itemStackA)
     {
         NBTTagCompound compound =  this.getNBT(itemStackA);
         List<String> data = new ArrayList<>();
@@ -409,14 +403,15 @@ public class LibsNBTTool {
         Collections.sort(data);
         return data;
     }
-    public List<String> getKeys(NBTTagCompound nbtTagCompound)
+
+    protected List<String> getKeysNBT(NBTTagCompound nbtTagCompound)
     {
         List<String> data = new ArrayList<>();
         getKeys(nbtTagCompound, "", data);
         Collections.sort(data);
         return data;
     }
-    private void getKeys(NBTTagCompound nbtTagCompound, String key, List<String> data)
+    protected void getKeys(NBTTagCompound nbtTagCompound, String key, List<String> data)
     {
         for(String s: nbtTagCompound.d())
         {

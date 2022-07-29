@@ -51,18 +51,20 @@ public class WorkerManager {
         addWorker(world, UUID.randomUUID());
     }
     private void addWorker(World world, UUID uuid) {
-        MinecraftServer nmsServer = ((CraftServer) Bukkit.getServer()).getServer();
-        WorldServer nmsWorld = ((CraftWorld)world).getHandle();
-        GameProfile gameProfile =  new GameProfile(uuid, "TB_NPC_" + world.getName());
-        EntityPlayer npc = new EntityPlayer(nmsServer, nmsWorld, gameProfile, null);
-        npc.a(world.getSpawnLocation().getX(), world.getSpawnLocation().getY(), world.getSpawnLocation().getZ(), 0, 0);
-        CraftPlayer opCr = npc.getBukkitEntity();
-        opCr.setGameMode(GameMode.SURVIVAL);
-        opCr.getPlayer().setGameMode(GameMode.SURVIVAL);
-        opCr.getHandle().d.a(EnumGamemode.a);
-        opCr.setOp(true);
+        if (world != null && uuid != null) {
+            MinecraftServer nmsServer = ((CraftServer) Bukkit.getServer()).getServer();
+            WorldServer nmsWorld = ((CraftWorld) world).getHandle();
+            GameProfile gameProfile = new GameProfile(uuid, "TB_NPC_" + world.getName());
+            EntityPlayer npc = new EntityPlayer(nmsServer, nmsWorld, gameProfile, null);
+            npc.a(world.getSpawnLocation().getX(), world.getSpawnLocation().getY(), world.getSpawnLocation().getZ(), 0, 0);
+            CraftPlayer opCr = npc.getBukkitEntity();
+            opCr.setGameMode(GameMode.SURVIVAL);
+            opCr.getPlayer().setGameMode(GameMode.SURVIVAL);
+            opCr.getHandle().d.a(EnumGamemode.a);
+            opCr.setOp(true);
 
-        npcWorkers.put(world.getName(), npc);
+            npcWorkers.put(world.getName(), npc);
+        }
     }
 
     public void saveAll()
