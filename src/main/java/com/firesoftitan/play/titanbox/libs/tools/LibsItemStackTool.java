@@ -1,7 +1,5 @@
 package com.firesoftitan.play.titanbox.libs.tools;
 
-import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
-import net.minecraft.nbt.NBTTagCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -404,9 +402,32 @@ public class LibsItemStackTool {
         }
         return false;
     }
+    public boolean isContainer(ItemStack itemStack)
+    {
+        Material type = itemStack.getType();
+        if (type == Material.CHEST || type == Material.TRAPPED_CHEST || type == Material.BARREL || type == Material.FURNACE || type == Material.DROPPER
+                || type == Material.DISPENSER || type == Material.BLAST_FURNACE || type == Material.SMOKER || type == Material.HOPPER
+                || type == Material.BREWING_STAND) return true;
+        if  (type == Material.SHULKER_BOX || type == Material.BLACK_SHULKER_BOX || type == Material.BLUE_SHULKER_BOX || type == Material.BROWN_SHULKER_BOX
+                || type == Material.CYAN_SHULKER_BOX || type == Material.GRAY_SHULKER_BOX || type == Material.GREEN_SHULKER_BOX
+                || type == Material.LIGHT_BLUE_SHULKER_BOX || type == Material.LIGHT_GRAY_SHULKER_BOX || type == Material.LIME_SHULKER_BOX
+                || type == Material.ORANGE_SHULKER_BOX || type == Material.PINK_SHULKER_BOX || type == Material.PURPLE_SHULKER_BOX
+                || type == Material.RED_SHULKER_BOX || type == Material.WHITE_SHULKER_BOX || type == Material.YELLOW_SHULKER_BOX) return  true;
+        return false;
+    }
     public boolean isVanillaResource(ItemStack itemStack)
     {
         List<Material> checkList = new ArrayList<>();
+        for(Material copper: Material.values())
+        {
+            if (copper.name().toUpperCase().contains("COPPER")) checkList.add(copper);
+        }
+        checkList.add(Material.RAW_IRON);
+        checkList.add(Material.RAW_IRON_BLOCK);
+        checkList.add(Material.RAW_GOLD);
+        checkList.add(Material.RAW_GOLD_BLOCK);
+        checkList.add(Material.COPPER_INGOT);
+        checkList.add(Material.COPPER_BLOCK);
         checkList.add(Material.ANCIENT_DEBRIS);
         checkList.add(Material.NETHERITE_SCRAP);
         checkList.add(Material.NETHERITE_INGOT);
@@ -420,10 +441,15 @@ public class LibsItemStackTool {
         checkList.add(Material.IRON_BLOCK);
         checkList.add(Material.REDSTONE_BLOCK);
         checkList.add(Material.GOLD_BLOCK);
+        checkList.add(Material.DEEPSLATE_DIAMOND_ORE);
         checkList.add(Material.DIAMOND_ORE);
         checkList.add(Material.EMERALD_ORE);
+        checkList.add(Material.NETHER_GOLD_ORE);
         checkList.add(Material.IRON_ORE);
+        checkList.add(Material.DEEPSLATE_IRON_ORE);
         checkList.add(Material.REDSTONE_ORE);
+        checkList.add(Material.DEEPSLATE_REDSTONE_ORE);
+        checkList.add(Material.DEEPSLATE_GOLD_ORE);
         checkList.add(Material.GOLD_ORE);
         checkList.add(Material.ENDER_EYE);
         checkList.add(Material.ENDER_PEARL);
@@ -432,10 +458,12 @@ public class LibsItemStackTool {
         checkList.add(Material.BONE_BLOCK);
         checkList.add(Material.LAPIS_LAZULI);
         checkList.add(Material.LAPIS_BLOCK);
+        checkList.add(Material.DEEPSLATE_LAPIS_ORE);
         checkList.add(Material.LAPIS_ORE);
         checkList.add(Material.LAVA_BUCKET);
         checkList.add(Material.WATER_BUCKET);
         checkList.add(Material.COAL);
+        checkList.add(Material.DEEPSLATE_COAL_ORE);
         checkList.add(Material.COAL_ORE);
         checkList.add(Material.COAL_BLOCK);
         checkList.add(Material.CHARCOAL);
@@ -509,7 +537,7 @@ public class LibsItemStackTool {
             String name = itemStack.getType().name().toUpperCase();
             if (name.contains("LOG") || name.contains("OAK")
                     || name.contains("SPRUCE") || name.contains("BIRCH")  || name.contains("JUNGLE")
-                    || name.contains("ACACIA") || name.contains("WARPED") || name.contains("CRIMSON"))
+                    || name.contains("ACACIA") || name.contains("WARPED") || name.contains("CRIMSON") || name.contains("MANGROVE"))
             {
                 return !name.contains("SAPLING") && !name.contains("ROOTS") && !name.contains("LEAVES") && !name.contains("FUNGUS") && !name.contains("NYLIUM");
             }

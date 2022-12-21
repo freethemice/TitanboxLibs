@@ -5,20 +5,16 @@ import com.firesoftitan.play.titanbox.libs.enums.BarcodeDeviceEnum;
 import com.firesoftitan.play.titanbox.libs.guis.CraftingBookGui;
 import com.firesoftitan.play.titanbox.libs.managers.RecipeManager;
 import com.firesoftitan.play.titanbox.libs.tools.*;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
@@ -32,6 +28,8 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.Random;
 
 import static com.firesoftitan.play.titanbox.libs.TitanBoxLibs.*;
 

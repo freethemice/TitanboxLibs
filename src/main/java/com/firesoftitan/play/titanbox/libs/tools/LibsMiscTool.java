@@ -116,6 +116,7 @@ public class LibsMiscTool {
             case VEX:
             case VINDICATOR:
             case WITCH:
+            case WARDEN:
             case WITHER_SKELETON:
             case ZOGLIN:
             case ZOMBIE:

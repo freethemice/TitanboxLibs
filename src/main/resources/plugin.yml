@@ -20,3 +20,9 @@ commands:
   titan:
     description: titanguide
     usage: /<command>
+  tb:
+    description: tb
+    usage: /<command>
+  titanbox:
+    description: titanbox
+    usage: /<command>

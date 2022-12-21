@@ -4,15 +4,15 @@ package com.firesoftitan.play.titanbox.libs.managers;
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
 import com.firesoftitan.play.titanbox.libs.tools.Tools;
 import com.mojang.authlib.GameProfile;
-import net.minecraft.network.protocol.game.PacketPlayOutPlayerInfo;
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.level.EnumGamemode;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_19_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_19_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R2.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -43,7 +43,7 @@ public class WorkerManager {
         for(String key: npcWorkers.keySet())
         {
             EntityPlayer worker = npcWorkers.get(key);
-            ((CraftPlayer)player).getHandle().b.a(new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.e  ,worker)); //ADD_PLAYER
+            ((CraftPlayer)player).getHandle().b.a(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.a.e  ,worker)); //ADD_PLAYER
         }
 
     }
@@ -55,7 +55,7 @@ public class WorkerManager {
             MinecraftServer nmsServer = ((CraftServer) Bukkit.getServer()).getServer();
             WorldServer nmsWorld = ((CraftWorld) world).getHandle();
             GameProfile gameProfile = new GameProfile(uuid, "TB_NPC_" + world.getName());
-            EntityPlayer npc = new EntityPlayer(nmsServer, nmsWorld, gameProfile, null);
+            EntityPlayer npc = new EntityPlayer(nmsServer, nmsWorld, gameProfile);
             npc.a(world.getSpawnLocation().getX(), world.getSpawnLocation().getY(), world.getSpawnLocation().getZ(), 0, 0);
             CraftPlayer opCr = npc.getBukkitEntity();
             opCr.setGameMode(GameMode.SURVIVAL);

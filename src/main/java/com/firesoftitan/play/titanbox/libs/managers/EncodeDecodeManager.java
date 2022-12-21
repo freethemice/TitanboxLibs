@@ -8,7 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R2.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
@@ -275,7 +275,7 @@ public class EncodeDecodeManager {
         YamlConfiguration config;
         NBTTagCompound item = CraftItemStack.asNMSCopy(itemStack).b(new NBTTagCompound());
         config = new YamlConfiguration();
-        config.set("x", item.e_());
+        config.set("x", item.f_());
         configString = config.saveToString();
         byte[] configBytes = configString.getBytes(StandardCharsets.UTF_8);
 

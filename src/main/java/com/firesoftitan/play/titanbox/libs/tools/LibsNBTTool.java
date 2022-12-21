@@ -8,8 +8,8 @@ import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.level.block.entity.TileEntity;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R2.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
@@ -312,7 +312,7 @@ public class LibsNBTTool {
         return getNBTKeyTree(nbtTagCompound, new ArrayList<>(), "");
     }
     protected List<String> getNBTKeyTree(NBTTagCompound nbtTagCompound, List<String> pass, String pre) {
-        for(String key: nbtTagCompound.d())
+        for(String key: nbtTagCompound.e())
         {
             NBTTagCompound compound = nbtTagCompound.p(key);
             if (pre.length() < 1) {
@@ -330,7 +330,7 @@ public class LibsNBTTool {
         NBTTagCompound nbtTagCompound =  Tools.tools.getNBTTool().getNBT(itemStack);
         if (nbtTagCompound != null) {
             if (nbtTagCompound.e(key)) {
-                if (nbtTagCompound.d().size() == 1) {
+                if (nbtTagCompound.e().size() == 1) {
                     return clear(itemStack);
                 } else {
                     nbtTagCompound.a(key, (String)null);
@@ -413,7 +413,7 @@ public class LibsNBTTool {
     }
     protected void getKeys(NBTTagCompound nbtTagCompound, String key, List<String> data)
     {
-        for(String s: nbtTagCompound.d())
+        for(String s: nbtTagCompound.e())
         {
             String pass = s;
             if (key.length() > 1) {

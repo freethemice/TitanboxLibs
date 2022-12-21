@@ -1,29 +1,23 @@
 package com.firesoftitan.play.titanbox.libs;
 
 import com.firesoftitan.play.titanbox.libs.listeners.MainListener;
+import com.firesoftitan.play.titanbox.libs.listeners.PluginListener;
 import com.firesoftitan.play.titanbox.libs.managers.AutoUpdateManager;
 import com.firesoftitan.play.titanbox.libs.managers.BarcodeManager;
 import com.firesoftitan.play.titanbox.libs.managers.ConfigManager;
 import com.firesoftitan.play.titanbox.libs.managers.WorkerManager;
 import com.firesoftitan.play.titanbox.libs.runnables.MySaveRunnable;
+import com.firesoftitan.play.titanbox.libs.runnables.WildTeleportRunnable;
 import com.firesoftitan.play.titanbox.libs.tools.*;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
+import org.bukkit.*;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import com.firesoftitan.play.titanbox.libs.interfaces.CommandInterface;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -36,6 +30,7 @@ import java.util.*;
 public class TitanBoxLibs extends JavaPlugin {
     public static TitanBoxLibs instants;
     public MainListener mainListener;
+    public PluginListener pluginListener;
     public ConfigManager configManager;
     protected static Tools tools;
     public static BarcodeManager barcodeManager;
@@ -49,7 +44,7 @@ public class TitanBoxLibs extends JavaPlugin {
         TitanBoxLibs.workerManager = new WorkerManager();
         TitanBoxLibs.barcodeManager = new BarcodeManager();
         mainListener = new MainListener();
-
+        pluginListener = new PluginListener();
         Timer getPlayers = new Timer();
         getPlayers.schedule(new TimerTask() {
             @Override
@@ -87,6 +82,7 @@ public class TitanBoxLibs extends JavaPlugin {
                 addCraftingBook();
             }
         }.runTaskLater(TitanBoxLibs.instants, 1);
+
 
 
     }
@@ -183,9 +179,19 @@ public class TitanBoxLibs extends JavaPlugin {
         if (label.equalsIgnoreCase("titanbox") || label.equalsIgnoreCase("tb")) {
             if (args.length > 0) {
                 String name  = args[0];
+                if (name.toLowerCase().equalsIgnoreCase("wild"))
+                {
+                    if (sender instanceof  Player) {
+                        Player player = (Player) sender;
+                        WildTeleportRunnable wildTeleportRunnable = new WildTeleportRunnable(player, TitanBoxLibs.tools);
+                        wildTeleportRunnable.runTaskTimer(this, 1, 10);
+                        return true;
+                    }
+
+                }
                 if (name.toLowerCase().equalsIgnoreCase("kill"))
                 {
-                    if (args.length > 2)
+/*                    if (args.length > 2)
                     {
                         try {
                             int BR = Integer.parseInt(args[1]);
@@ -204,7 +210,7 @@ public class TitanBoxLibs extends JavaPlugin {
                             //e.printStackTrace();
                         }
 
-                    }
+                    }*/
                 }
 
                 if (TitanBoxLibs.tools.getMiscTool().commandInterfaces.containsKey(name))
