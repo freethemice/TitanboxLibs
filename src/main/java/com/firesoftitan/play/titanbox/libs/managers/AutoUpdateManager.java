@@ -40,7 +40,10 @@ public class AutoUpdateManager {
             for (int spigotID : pluginHashMap.keySet()) {
                 JavaPlugin plugin = pluginHashMap.get(spigotID);
                 getVersion(spigotID, plugin, version -> {
-                    if (!plugin.getDescription().getVersion().equalsIgnoreCase(version)) {
+                    String version1 = plugin.getDescription().getVersion();
+                    version1 = version1.trim().replace(" ", "").replace("'", "");
+                    version = version.trim().replace(" ", "").replace("'", "");
+                    if (!version1.equalsIgnoreCase(version)) {
                         Tools.getMessageTool(plugin).sendMessagePlayer(player, "There is a new update available.");
                         Tools.getMessageTool(plugin).sendMessagePlayer(player, "https://www.spigotmc.org/resources/" + spigotID);
                     }

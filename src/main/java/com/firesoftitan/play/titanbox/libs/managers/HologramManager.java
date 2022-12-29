@@ -5,6 +5,8 @@ import com.firesoftitan.play.titanbox.libs.tools.Tools;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -12,6 +14,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class HologramManager {
@@ -40,10 +44,25 @@ public class HologramManager {
             deleting = true;
             LibsHologramTool hologramTool = Tools.getHologramTool(plugin);
             if (hologramTool.getHologram(this.getUUID()) != null) hologramTool.removeHologram(this);
+            List<Entity> nearbyEntities = armorStand.getNearbyEntities(3, 3, 3);
+            List<ArmorStand> armorStands = new ArrayList<ArmorStand>();
+            for(Entity entity: nearbyEntities)
+            {
+                if (entity.getType() == EntityType.ARMOR_STAND)
+                {
+                    ArmorStand armor = (ArmorStand) entity;
+                    if (hologramTool.isHologramEqual(armorStand, armor)) armorStands.add(armor);
+                }
+            }
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     armorStand.remove();
+                    for(int i = 0; i < armorStands.size(); i++)
+                    {
+                        ArmorStand armorStand = armorStands.get(i);
+                        armorStand.remove();
+                    }
                 }
             }.runTaskLater(this.getPlugin(), 1);
         }
@@ -59,6 +78,10 @@ public class HologramManager {
     public Location getLocation()
     {
         return armorStand.getLocation().clone();
+    }
+    public ArmorStand getArmorStand()
+    {
+        return armorStand;
     }
     public UUID getUUID()
     {

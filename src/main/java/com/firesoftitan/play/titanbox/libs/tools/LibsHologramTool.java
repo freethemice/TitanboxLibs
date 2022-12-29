@@ -10,6 +10,7 @@ import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -49,11 +50,28 @@ public class LibsHologramTool {
         HologramManager hologramManager = getHologram(location);
         if (hologramManager != null) removeHologram(hologramManager);
     }
+    public boolean isHologramEqual(ArmorStand armorStandA, ArmorStand armorStandB)
+    {
+        if (!Tools.tools.getLocationTool().isLocationsEqual(armorStandA.getLocation(), armorStandB.getLocation())) return false;
+        if (armorStandA.getCustomName() == null && armorStandB.getCustomName() != null) return false;
+        if (armorStandA.getCustomName() != null && armorStandB.getCustomName() == null) return false;
+        if (armorStandA.getCustomName() != null && armorStandB.getCustomName() !=null && !armorStandA.getCustomName().equals(armorStandB)) return false;
+
+        EntityEquipment equipmentA = armorStandA.getEquipment();
+        EntityEquipment equipmentB = armorStandB.getEquipment();
+        if (!Tools.tools.getItemStackTool().isItemEqual(equipmentA.getHelmet(), equipmentB.getHelmet())) return false;
+        if (!Tools.tools.getItemStackTool().isItemEqual(equipmentA.getChestplate(), equipmentB.getChestplate())) return false;
+        if (!Tools.tools.getItemStackTool().isItemEqual(equipmentA.getLeggings(), equipmentB.getLeggings())) return false;
+        if (!Tools.tools.getItemStackTool().isItemEqual(equipmentA.getBoots(), equipmentB.getBoots())) return false;
+        if (!Tools.tools.getItemStackTool().isItemEqual(equipmentA.getItemInMainHand(), equipmentB.getItemInMainHand())) return false;
+        if (!Tools.tools.getItemStackTool().isItemEqual(equipmentA.getItemInOffHand(), equipmentB.getItemInOffHand())) return false;
+        return true;
+    }
     public void removeHologram(HologramManager hologramManager)
     {
         hologramList.remove(hologramManager);
         updateList();
-        hologramManager.delete();
+        if (hologramManager != null) hologramManager.delete();
     }
     public HologramManager addHologram(Location location)
     {
