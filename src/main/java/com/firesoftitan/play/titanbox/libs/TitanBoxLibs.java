@@ -2,20 +2,33 @@ package com.firesoftitan.play.titanbox.libs;
 
 import com.firesoftitan.play.titanbox.libs.listeners.MainListener;
 import com.firesoftitan.play.titanbox.libs.listeners.PluginListener;
-import com.firesoftitan.play.titanbox.libs.managers.AutoUpdateManager;
-import com.firesoftitan.play.titanbox.libs.managers.BarcodeManager;
-import com.firesoftitan.play.titanbox.libs.managers.ConfigManager;
-import com.firesoftitan.play.titanbox.libs.managers.WorkerManager;
+import com.firesoftitan.play.titanbox.libs.managers.*;
 import com.firesoftitan.play.titanbox.libs.runnables.MySaveRunnable;
 import com.firesoftitan.play.titanbox.libs.runnables.WildTeleportRunnable;
 import com.firesoftitan.play.titanbox.libs.tools.*;
+import net.minecraft.core.BlockPosition;
+import net.minecraft.nbt.NBTCompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.StreamTagVisitor;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.WorldServer;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStructure;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import org.bukkit.*;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.craftbukkit.v1_19_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_19_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R2.block.CraftBlock;
+import org.bukkit.craftbukkit.v1_19_R2.util.CraftMagicNumbers;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Villager;
+import org.bukkit.event.EventException;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.RegisteredListener;
 import org.jetbrains.annotations.NotNull;
 import com.firesoftitan.play.titanbox.libs.interfaces.CommandInterface;
 import org.bukkit.command.Command;
@@ -24,7 +37,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 
 public class TitanBoxLibs extends JavaPlugin {
@@ -32,11 +49,12 @@ public class TitanBoxLibs extends JavaPlugin {
     public MainListener mainListener;
     public PluginListener pluginListener;
     public ConfigManager configManager;
-    protected static Tools tools;
+    public static Tools tools;
     public static BarcodeManager barcodeManager;
     public static WorkerManager workerManager;
     public static AutoUpdateManager autoUpdateManager;
     public void onEnable() {
+
         TitanBoxLibs.instants = this;
         configManager = new ConfigManager();
         TitanBoxLibs.tools = new Tools(this, new MySaveRunnable(this), -1);
@@ -83,10 +101,16 @@ public class TitanBoxLibs extends JavaPlugin {
             }
         }.runTaskLater(TitanBoxLibs.instants, 1);
 
-
+        SettingsManager config = new SettingsManager(TitanBoxLibs.instants.getName(), "wild_config");
+        if (!config.contains("wild.use_worldborder"))
+        {
+            config.set("wild.use_worldborder", true);
+            config.set("wild.x", 10000);
+            config.set("wild.z", 10000);
+            config.save();
+        }
 
     }
-
     private void addCraftingBook() {
         ItemStack[] matrix = new ItemStack[9];
         matrix[0] = new ItemStack(Material.LEATHER);
@@ -161,10 +185,18 @@ public class TitanBoxLibs extends JavaPlugin {
                         if (BR > 0 && player != null && player.isOnline()) {
                             List<Entity> nearbyEntities = player.getNearbyEntities(BR, BR, BR);
                             for (Entity entity : nearbyEntities) {
-                                if (entity instanceof LivingEntity && !(entity instanceof Player)) {
-                                    //EntityDamageEvent entityDamageEvent = new EntityDamageEvent(entity, EntityDamageEvent.DamageCause.FALL, 100000000);
-                                    EntityDamageByEntityEvent entityEvent = new EntityDamageByEntityEvent(player, entity , EntityDamageEvent.DamageCause.CUSTOM, 100000000);
-                                    Bukkit.getPluginManager().callEvent(entityEvent);
+                                if (entity instanceof LivingEntity && !(entity instanceof Villager) && !(entity instanceof Player)) {
+
+                                    new BukkitRunnable() {
+                                        int i =0;
+                                        @Override
+                                        public void run() {
+                                            if (!entity.isDead()) ((LivingEntity) entity).damage(1000000, player);
+                                            if (entity.isDead()) i++;
+                                            if (i > 50) this.cancel();
+                                        }
+                                    }.runTaskTimer(TitanBoxLibs.instants, 1,1);
+
                                 }
                             }
                         }

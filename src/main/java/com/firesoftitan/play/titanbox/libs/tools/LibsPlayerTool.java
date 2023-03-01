@@ -177,9 +177,13 @@ public class LibsPlayerTool {
             world.dropItemNaturally(location, itemStack.clone());
         }
     }
-    public boolean isItemInInventory(Inventory inventory, ItemStack itemStack)
+    public boolean isItemInInventory(Player player, ItemStack itemStack)
     {
-        return  Tools.tools.getBlockTool().isItemInInventory(inventory, itemStack);
+        return  Tools.tools.getBlockTool().isItemInInventory(player.getInventory(), itemStack);
+    }
+    public ItemStack removeItemInInventory(Player player, ItemStack itemStack)
+    {
+        return  Tools.tools.getBlockTool().removeItemInInventory(player.getInventory(), itemStack);
     }
     public boolean isPlayerTextureLoaded(OfflinePlayer player) {
         return isPlayerTextureLoaded(player.getUniqueId());

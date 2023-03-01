@@ -1,5 +1,6 @@
 package com.firesoftitan.play.titanbox.libs.managers;
 
+import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -13,8 +14,8 @@ import java.util.*;
 
 @SuppressWarnings({"ResultOfMethodCallIgnored", "unchecked"})
 public class SaveManager {
-    private YamlConfiguration config;
-    private File file;
+    protected YamlConfiguration config;
+    protected File file;
     public SaveManager(String pluginname, String folder, String fileName) {
         try {
             config = new YamlConfiguration();
@@ -67,6 +68,11 @@ public class SaveManager {
             e.printStackTrace();
         }
     }
+
+    public File getFile() {
+        return new File(file.getAbsolutePath());
+    }
+
     public SaveManager(File file) {
         try {
             this.file = file;
@@ -154,8 +160,10 @@ public class SaveManager {
     }
     public void set(String key, @SuppressWarnings("rawtypes") List list)
     {
-        set(key, list, false);
+        String encode = EncodeDecodeManager.encode(list);
+        config.set(key, encode);
     }
+    @Deprecated
     public void set(String key, @SuppressWarnings("rawtypes") List list, boolean asText)
     {
         if (list == null) return;
@@ -194,6 +202,43 @@ public class SaveManager {
     public boolean contains(String key)
     {
         return config.contains(key);
+    }
+    public SaveManager clone()
+    {
+        SaveManager managerClone = new SaveManager();
+        for (String keys: this.config.getKeys(true))
+        {
+
+            Object o1 = this.config.get(keys);
+            if (o1 instanceof Integer)
+            {
+                Integer o = (Integer) this.config.get(keys);
+                managerClone.set(keys, o);
+            } else if (o1 instanceof Double)
+            {
+                Double o = (Double) this.config.get(keys);
+                managerClone.set(keys, o);
+            } else if (o1 instanceof Float)
+            {
+                Float o = (Float) this.config.get(keys);
+                managerClone.set(keys, o);
+
+            } else if (o1 instanceof Long)
+            {
+                Long o = (Long) this.config.get(keys);
+                managerClone.set(keys, o);
+
+            } else if (o1 instanceof Byte)
+            {
+                Byte o = (Byte) this.config.get(keys);
+                managerClone.set(keys, o);
+            } else
+            {
+                String o = this.config.getString(keys);
+                managerClone.set(keys, o);
+            }
+        }
+        return managerClone;
     }
     public Set<String> getKeys()
     {
@@ -311,6 +356,7 @@ public class SaveManager {
         }
 
     }
+    @Deprecated
     public List<String> getStringListFromText(String path) {
         try {
             if (config.contains(path)){

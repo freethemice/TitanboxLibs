@@ -44,7 +44,7 @@ public class HologramManager {
             deleting = true;
             LibsHologramTool hologramTool = Tools.getHologramTool(plugin);
             if (hologramTool.getHologram(this.getUUID()) != null) hologramTool.removeHologram(this);
-            List<Entity> nearbyEntities = armorStand.getNearbyEntities(3, 3, 3);
+            List<Entity> nearbyEntities = armorStand.getNearbyEntities(1, 1, 1);
             List<ArmorStand> armorStands = new ArrayList<ArmorStand>();
             for(Entity entity: nearbyEntities)
             {

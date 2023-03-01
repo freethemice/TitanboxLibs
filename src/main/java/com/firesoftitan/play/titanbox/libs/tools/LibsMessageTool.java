@@ -22,7 +22,10 @@ public class LibsMessageTool {
     }
     public void sendMessageSystem(String message, Level level)
     {
-        parent.getPlugin().getLogger().log(level,  ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', message));
+        String subName = this.parent.getPlugin().getName().replaceFirst("TitanBox", "");
+        subName = subName.replaceFirst("Titan", "");
+        parent.getPlugin().getLogger().log(level,   ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', message));
+     //   System.out.println("[SY" + subName + "]: " + ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', message));
     }
     public void sendMessagePlayer(Player player, List<String> messages)
     {
@@ -52,12 +55,18 @@ public class LibsMessageTool {
     }
     public void sendMessagePlayer(Player player, String message)
     {
+        sendMessagePlayer(player, message, true);
+    }
+    public void sendMessagePlayer(Player player, String message, boolean colorcode)
+    {
         if (player == null || !player.isOnline())
         {
             this.sendMessageSystem(message);
             return;
         }
-        String subName = this.parent.getPlugin().getName().replace("TitanBox", "");
-        player.sendMessage(ChatColor.GREEN + "[" + ChatColor.BLUE + "TitanBox" + ChatColor.GREEN + "]("+ ChatColor.AQUA + subName + ChatColor.GREEN + "): " + ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', message));
+        String subName = this.parent.getPlugin().getName().replace("TitanBox", "").replace("Titan", "");
+        String messageout = ChatColor.translateAlternateColorCodes('&', message);
+        if (!colorcode) messageout = message;
+        player.sendMessage(ChatColor.GREEN + "[" + ChatColor.BLUE + "TitanBox" + ChatColor.GREEN + "]("+ ChatColor.AQUA + subName + ChatColor.GREEN + "): " + ChatColor.RESET + messageout);
     }
 }

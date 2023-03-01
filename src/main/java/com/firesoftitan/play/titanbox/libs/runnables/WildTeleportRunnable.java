@@ -1,6 +1,7 @@
 package com.firesoftitan.play.titanbox.libs.runnables;
 
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
+import com.firesoftitan.play.titanbox.libs.managers.SettingsManager;
 import com.firesoftitan.play.titanbox.libs.tools.Tools;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -18,7 +19,7 @@ public class WildTeleportRunnable extends BukkitRunnable {
     private int attempts;
     private Player player;
     protected Tools tools;
-
+    private static SettingsManager config = new SettingsManager(TitanBoxLibs.instants.getName(), "wild_config");
     public WildTeleportRunnable(Player player, Tools tools) {
         this.player = player;
         this.tools = tools;
@@ -32,6 +33,13 @@ public class WildTeleportRunnable extends BukkitRunnable {
             tools.getMessageTool().sendMessagePlayer( (Player) player, ChatColor.AQUA + "Can't use in this world.");
             attempts = -1;
             return;
+        }
+        if (!config.contains("wild.use_worldborder"))
+        {
+            config.set("wild.use_worldborder", true);
+            config.set("wild.x", 10000);
+            config.set("wild.z", 10000);
+            config.save();
         }
         runningPlayers.add(player.getUniqueId());
         bad_blocks = new HashSet<>();
@@ -55,7 +63,14 @@ public class WildTeleportRunnable extends BukkitRunnable {
         attempts = 0;
         double size = player.getWorld().getWorldBorder().getSize();
         tools.getMessageTool().sendMessagePlayer( (Player) player, ChatColor.AQUA + "Looking for safe place to teleport, please wait...");
-        tools.getMessageTool().sendMessagePlayer( (Player) player, ChatColor.GRAY + "World Boarder Size: " + tools.getFormattingTool().formatCommas(size));
+        if (config.getBoolean("wild.use_worldborder")) {
+            tools.getMessageTool().sendMessagePlayer((Player) player, ChatColor.GRAY + "World Boarder Size: " + tools.getFormattingTool().formatCommas(size));
+        }
+        else
+        {
+            tools.getMessageTool().sendMessagePlayer((Player) player, ChatColor.GRAY + "Region Size: -+" + tools.getFormattingTool().formatCommas(config.getInt("wild.x")) + " by -+" + tools.getFormattingTool().formatCommas(config.getInt("wild.z")));
+        }
+
     }
 
     @Override
@@ -70,11 +85,18 @@ public class WildTeleportRunnable extends BukkitRunnable {
         int x = 0;
         int z = 0;
         int y = 0;
-        double size = player.getWorld().getWorldBorder().getSize() / 2;
-        if (size > 100000) size = 100000;
-        x = (int) (random.nextInt((int) (size * 2)) - size);
-        z = (int) (random.nextInt((int) (size * 2)) - size);
-        y = 150;
+        if (config.getBoolean("wild.use_worldborder")) {
+            double size = player.getWorld().getWorldBorder().getSize() / 2;
+            if (size > 100000) size = 100000;
+            x = (int) (random.nextInt((int) (size * 2)) - size);
+            z = (int) (random.nextInt((int) (size * 2)) - size);
+            y = 150;
+        }
+        else {
+            x = (int) (random.nextInt((int) (config.getInt("wild.x") * 2)) - config.getInt("wild.x"));
+            z = (int) (random.nextInt((int) (config.getInt("wild.z") * 2)) - config.getInt("wild.z"));
+            y = 150;
+        }
 
 
         Location randomLocation = new Location(player.getWorld(), x, y, z);

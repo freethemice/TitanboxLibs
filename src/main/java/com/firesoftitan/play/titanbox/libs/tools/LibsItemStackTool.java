@@ -255,7 +255,7 @@ public class LibsItemStackTool {
         if (itemStackB == null) return false;
 
 
-        if (itemStackA.getType() == itemStackB.getType()) {//&& itemStackA.getAmount() >= itemStackB.getAmount()
+        if (itemStackA.getType() == itemStackB.getType()) {
             if (checkDamage) {
                 boolean aContains = Tools.tools.getNBTTool().containsKey(itemStackA, "Damage");
                 boolean bContains = Tools.tools.getNBTTool().containsKey(itemStackB, "Damage");
@@ -274,6 +274,13 @@ public class LibsItemStackTool {
             if (itemStackA.hasItemMeta() && itemStackB.hasItemMeta()) {
                 ItemMeta a = itemStackA.getItemMeta();
                 ItemMeta b = itemStackB.getItemMeta();
+                if (a.hasCustomModelData() && b.hasCustomModelData())
+                {
+                    if (a.getCustomModelData() != b.getCustomModelData()) return false;
+                }
+                else if (a.hasCustomModelData() && !b.hasCustomModelData()) return false;
+                else if (!a.hasCustomModelData() && b.hasCustomModelData()) return false;
+
                 if (a instanceof BannerMeta && b instanceof BannerMeta)
                 {
                     if (((BannerMeta)a).numberOfPatterns() !=  ((BannerMeta)b).numberOfPatterns()) return false;

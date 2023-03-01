@@ -7,7 +7,10 @@ import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventException;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.jetbrains.annotations.NotNull;
@@ -48,7 +51,19 @@ public class PluginListener implements PluginMessageListener {
             Set<Player> set = new HashSet<Player>();
             set.add(playerTarget);
             AsyncPlayerChatEvent chatEvent = new AsyncPlayerChatEvent(false, playerTarget, chatMessage, set);
-            Bukkit.getPluginManager().callEvent(chatEvent);
+            HandlerList handlers = chatEvent.getHandlers();
+            RegisteredListener[] registeredListeners = handlers.getRegisteredListeners();
+            for(RegisteredListener listener: registeredListeners)
+            {
+                try {
+                    //This prevents other plugins from adding crap to the messages
+                    chatEvent = new AsyncPlayerChatEvent(false, playerTarget, chatMessage, set);
+                    listener.callEvent(chatEvent);
+                } catch (EventException e) {
+                    e.printStackTrace();
+                }
+            }
+            //Bukkit.getPluginManager().callEvent(chatEvent);
 
             // do things with the data
         }

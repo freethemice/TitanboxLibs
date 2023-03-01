@@ -90,5 +90,23 @@ public class LibsSerializeTool {
         //TitanBoxCore.sendMessageSystem(TitanBox.instants, key);
         return new String(key.getBytes(), StandardCharsets.UTF_8);
     }
-
+    public String serializeString(String key) {
+        String xml10pattern = "[^"
+                + "\u0009\r\n"
+                + "\u0020-\uD7FF"
+                + "\uE000-\uFFFD"
+                + "\ud800\udc00-\udbff\udfff"
+                + "]";
+        String xml11pattern = "[^"
+                + "\u0001-\uD7FF"
+                + "\uE000-\uFFFD"
+                + "\ud800\udc00-\udbff\udfff"
+                + "]+";
+        key = key.replaceAll(xml10pattern, "");
+        key = key.replaceAll(xml11pattern, "");
+        key = key.replace("\u002E", "");//replace period
+        key = key.replace(" ", "");
+        key = key.replace("'", "");
+        return key;
+    }
 }

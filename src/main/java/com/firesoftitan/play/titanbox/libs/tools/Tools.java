@@ -17,6 +17,9 @@ public class Tools {
     public static LibsFormattingTool getFormattingTool(JavaPlugin plugin) {
         return allTools.get(plugin).FormattingTool;
     }
+    public static LibsEntityTool getEntityTool(JavaPlugin plugin) {
+        return allTools.get(plugin).EntityTool;
+    }
     public static LibsBlockTool getBlockTool(JavaPlugin plugin) {
         return allTools.get(plugin).BlockTool;
     }
@@ -56,7 +59,9 @@ public class Tools {
     private JavaPlugin plugin;
     private int spigotID;
     private LibsFormattingTool FormattingTool;
+    private LibsEntityTool EntityTool;
     private LibsBlockTool BlockTool;
+    private LibsStructureTool structureTool;
     private LibsMiscTool MiscTool;
     private LibsItemStackTool ItemStackTool;
     private LibsLocationTool LocationTool;
@@ -75,6 +80,8 @@ public class Tools {
 
         this.plugin = plugin;
         this.spigotID = spigotID;
+        this.structureTool = new LibsStructureTool(this);
+        this.EntityTool = new LibsEntityTool(this);
         this.BlockTool = new LibsBlockTool(this);
         this.hologramTool = new LibsHologramTool(this);
         this.FormattingTool = new LibsFormattingTool(this);
@@ -106,12 +113,20 @@ public class Tools {
         return plugin;
     }
 
+    public LibsStructureTool getStructureTool() {
+        return structureTool;
+    }
+
     public LibsAdvancedRecipeTool getRecipeTool() {
         return RecipeTool;
     }
 
     public LibsFormattingTool getFormattingTool() {
         return FormattingTool;
+    }
+
+    public LibsEntityTool getEntityTool() {
+        return EntityTool;
     }
 
     public LibsBlockTool getBlockTool() {

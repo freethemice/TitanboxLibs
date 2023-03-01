@@ -1,16 +1,40 @@
 package com.firesoftitan.play.titanbox.libs.tools;
 
+import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
 import com.firesoftitan.play.titanbox.libs.managers.EncodeDecodeManager;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.ParseResults;
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.CommandDispatcher;
+import net.minecraft.commands.CommandListenerWrapper;
+import net.minecraft.commands.arguments.ArgumentEntity;
+import net.minecraft.commands.arguments.ArgumentNBTTag;
+import net.minecraft.commands.arguments.blocks.ArgumentBlock;
+import net.minecraft.commands.arguments.item.ArgumentItemStack;
+import net.minecraft.commands.arguments.item.ArgumentPredicateItemStack;
+import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.server.commands.CommandSummon;
+import net.minecraft.server.dedicated.DedicatedPlayerList;
 import net.minecraft.server.level.WorldServer;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.block.entity.TileEntity;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_19_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_19_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_19_R2.inventory.CraftItemStack;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -21,7 +45,36 @@ public class LibsNBTTool {
     public LibsNBTTool(Tools parent) {
         this.parent = parent;
     }
+    public String getNBTString(ItemStack itemStack)
+    {
+        NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
+        return nbtTagCompound.toString();
+    }
+    private ParseResults<CommandListenerWrapper> parseCommand(String s) {
+        DedicatedPlayerList server = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle();
+        com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> commanddispatcher = server.b().vanillaCommandDispatcher.a();
+        CommandListenerWrapper commandlistenerwrapper = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().b().aC();
+        return commanddispatcher.parse(s, commandlistenerwrapper);
+    }
+    public ItemStack getItemStack(Material material, int amount, String NBTString)
+    {
+        String string = "not set";
+        try {
+            ParseResults commandListenerWrapperParseResults = parseCommand("give @a " +  material.getKey() + NBTString + " " + amount);
+            string = commandListenerWrapperParseResults.getReader().getString();
+            CommandContext build = commandListenerWrapperParseResults.getContext().build(string);
+            ArgumentPredicateItemStack item = ArgumentItemStack.a(build, "item");
+            net.minecraft.world.item.ItemStack itemStack = item.a(1, false);
+            ItemStack itemStack1 = CraftItemStack.asBukkitCopy(itemStack);
+            itemStack1.setAmount(amount);
+            return itemStack1.clone();
 
+        } catch (Exception e) {
+            Tools.tools.getMessageTool().sendMessageSystem("Command: " + string);
+            e.printStackTrace();
+        }
+        return null;
+    }
     public ItemStack set(ItemStack itemStack, String key, byte value)
     {
         if (key == null || itemStack == null) return itemStack.clone();
@@ -280,8 +333,20 @@ public class LibsNBTTool {
     }
     public List<Integer> getListInteger(ItemStack itemStack, String key)
     {
+
         NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
         return EncodeDecodeManager.decodeIntList(nbtTagCompound.l(key));
+    }
+    public List<String> getListString(Entity entity, String key)
+    {
+        NBTTagCompound nbt = getNBT(entity);
+        NBTTagList c = nbt.c(key, 8);
+        List<String> outWords = new ArrayList<String>();
+        for (int i = 0; i < c.size(); i++)
+        {
+            outWords.add(c.get(i).f_());
+        }
+        return outWords;
     }
     public List<String> getListString(ItemStack itemStack, String key)
     {
@@ -367,6 +432,12 @@ public class LibsNBTTool {
             E.printStackTrace();
             return null;
         }
+    }
+    protected NBTTagCompound getNBT(Entity entity)
+    {
+        net.minecraft.world.entity.Entity nmsEntity = ((CraftEntity) entity).getHandle();
+        NBTTagCompound nbttagcompound = nmsEntity.f(new NBTTagCompound());
+        return nbttagcompound;
     }
     protected NBTTagCompound getNBT(Block block)
     {

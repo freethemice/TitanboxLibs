@@ -1,16 +1,31 @@
 package com.firesoftitan.play.titanbox.libs.tools;
 
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
+import net.minecraft.core.BaseBlockPosition;
+import net.minecraft.core.BlockPosition;
+import net.minecraft.server.level.WorldServer;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.EnumBlockMirror;
+import net.minecraft.world.level.block.EnumBlockRotation;
+import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStructure;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.DoubleChest;
+import org.bukkit.craftbukkit.v1_19_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R2.block.CraftBlock;
 import org.bukkit.craftbukkit.v1_19_R2.block.CraftBlockState;
+import org.bukkit.craftbukkit.v1_19_R2.structure.CraftStructure;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Minecart;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import com.firesoftitan.play.titanbox.libs.enums.InventoryTypeEnum;
+import org.bukkit.structure.Structure;
 
 public class LibsBlockTool {
     private Tools parent;
@@ -24,6 +39,7 @@ public class LibsBlockTool {
         CreatureSpawner cs = ((CreatureSpawner) block.getState());
         cs.setSpawnedType(type);
         cs.update(true, false);
+
     }
 
     /**
@@ -87,7 +103,49 @@ public class LibsBlockTool {
         return ((CraftBlockState)block.getState()).getHandle().b();
     }
 
+    public ItemStack removeItemInInventory(Inventory inventory, ItemStack itemStack)
+    {
+        if (!Tools.tools.getItemStackTool().isEmpty(itemStack)) {
+            int amountNeeded = itemStack.getAmount();
+            int amountHave = 0;
+            for (int slot = 0; slot < inventory.getSize(); slot++) {
+                ItemStack slotItemStack = inventory.getItem(slot);
+                if (! Tools.tools.getItemStackTool().isEmpty(slotItemStack)) {
+                    if( Tools.tools.getItemStackTool().isItemEqual(itemStack, slotItemStack))
+                    {
+                        if (amountNeeded > 0 && amountNeeded == slotItemStack.getAmount())
+                        {
+                            inventory.setItem(slot, null);
+                            amountNeeded = 0;
+                            amountHave =  amountHave + slotItemStack.getAmount();
+                        }
+                        if (amountNeeded > 0 && amountNeeded  < slotItemStack.getAmount())
+                        {
+                            slotItemStack.setAmount(slotItemStack.getAmount() - amountNeeded);
+                            inventory.setItem(slot, slotItemStack.clone());
+                            amountHave = amountHave + amountNeeded;
+                            amountNeeded = 0;
+                        }
+                        if (amountNeeded > 0 && itemStack.getAmount() > slotItemStack.getAmount())
+                        {
+                            amountHave = amountHave + slotItemStack.getAmount();
+                            amountNeeded = amountNeeded - slotItemStack.getAmount();
+                            inventory.setItem(slot, null);
+                        }
+                    }
+                }
+            }
+            if (amountHave > 0)
+            {
+                ItemStack cloned = itemStack.clone();
+                cloned.setAmount(amountHave);
+                return cloned;
+            }
 
+
+        }
+        return null;
+    }
     public boolean isItemInInventory(Inventory inventory, ItemStack itemStack)
     {
         if (! Tools.tools.getItemStackTool().isEmpty(itemStack)) {
