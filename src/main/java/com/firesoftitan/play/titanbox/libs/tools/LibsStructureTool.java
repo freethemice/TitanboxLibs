@@ -7,8 +7,8 @@ import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStructure;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_19_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R2.structure.CraftStructure;
+import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R3.structure.CraftStructure;
 import org.bukkit.structure.Structure;
 
 import java.io.File;
@@ -41,8 +41,7 @@ public class LibsStructureTool {
 
         WorldServer worldServer = ((CraftWorld) locationA.getWorld()).getHandle();
         structure.a(worldServer, blockPositionA, blockPositionB, true, Blocks.km);
-        CraftStructure craftStructure = new CraftStructure(structure);
-        return craftStructure;
+        return new CraftStructure(structure);
 
     }
     private int[] getDimensions(Location[] corners) {

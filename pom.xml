@@ -6,14 +6,14 @@
 
     <groupId>com.firesoftitan.play.titanbox.libs</groupId>
     <artifactId>TitanBoxLibs</artifactId>
-    <version>2.7.7</version>
+    <version>2.7.8</version>
     <packaging>jar</packaging>
     <name>TitanBoxLibs</name>
 
     <description>Library for titan plugins</description>
     <properties>
         <minecraft.api-version>1.19</minecraft.api-version>
-        <minecraft.version>1.19.3</minecraft.version>
+        <minecraft.version>1.19.4</minecraft.version>
         <java.version>16.0.1</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -79,7 +79,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.19.3-R0.1-SNAPSHOT</version>
+            <version>1.19.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

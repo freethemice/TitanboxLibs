@@ -1,5 +1,6 @@
 package com.firesoftitan.play.titanbox.libs.tools;
 
+import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.minecraft.network.NetworkManager;
@@ -8,16 +9,14 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.server.network.PlayerConnection;
-import net.minecraft.world.entity.player.ProfilePublicKey;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_19_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_19_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -314,7 +313,7 @@ public class LibsPlayerTool {
                 allInput = allInput + inputLine;
             in.close();
             String[] NotTheRightWay = allInput.split("value\" : \"");
-            if (NotTheRightWay.length < 2) throw new NullPointerException("UUID: " + uuid.toString() +"\n Index out of bounds");
+            if (NotTheRightWay.length < 2) throw new NullPointerException("UUID: " + uuid +"\n Index out of bounds");
             NotTheRightWay =  NotTheRightWay[1].split("\",");
             players.put(fulluuid, NotTheRightWay[0]);
             return NotTheRightWay[0];
@@ -344,7 +343,7 @@ public class LibsPlayerTool {
         GameProfile profile = new GameProfile(offline.getUniqueId(), offline.getName());
         MinecraftServer server = ((CraftServer)Bukkit.getServer()).getServer();
 
-        WorldServer worldServer = server.a(net.minecraft.world.level.World.f);
+        WorldServer worldServer = server.a(net.minecraft.world.level.World.h);
         if (worldServer == null) return null;
         EntityPlayer entity = new EntityPlayer(server, worldServer, profile);
         Player target = entity.getBukkitEntity();

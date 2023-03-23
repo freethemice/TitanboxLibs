@@ -1,6 +1,5 @@
 package com.firesoftitan.play.titanbox.libs.managers;
 
-import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -76,6 +75,7 @@ public class SaveManager {
     public SaveManager(File file) {
         try {
             this.file = file;
+            if (!this.file.exists()) this.file.createNewFile();
             config = new YamlConfiguration();
             config.load(this.file);
         } catch (IOException | InvalidConfigurationException e) {
@@ -203,6 +203,7 @@ public class SaveManager {
     {
         return config.contains(key);
     }
+
     public SaveManager clone()
     {
         SaveManager managerClone = new SaveManager();

@@ -1,6 +1,5 @@
 package com.firesoftitan.play.titanbox.libs.managers;
 
-//import com.mojang.authlib.GameProfile;
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
 import com.firesoftitan.play.titanbox.libs.tools.Tools;
 import com.mojang.authlib.GameProfile;
@@ -10,9 +9,9 @@ import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.level.EnumGamemode;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_19_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_19_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -92,7 +91,7 @@ public class WorkerManager {
             List<Entity> listnear = this.getNearbyEntities(checkSapling, size);
             for (Entity e : listnear) {
                 if (!e.isDead()) {
-                    if (e.getType() == EntityType.DROPPED_ITEM) { ;
+                    if (e.getType() == EntityType.DROPPED_ITEM) {
                         ItemStack dropped = ((Item) e).getItemStack().clone();
                         String check =  Tools.getItemStackTool(TitanBoxLibs.instants).getName(dropped,true);
                         if (check.toLowerCase().startsWith("altar probe")) return null; //slimefun item ignore it
@@ -127,8 +126,7 @@ public class WorkerManager {
         if (npc == null) return null;
         npc.a(loc.getX(), loc.getY(), loc.getZ(), 0, 0);
         CraftPlayer opCr = npc.getBukkitEntity();
-        List<Entity> nearEntity = opCr.getNearbyEntities(rad,rad,rad);
-        return nearEntity;
+        return opCr.getNearbyEntities(rad,rad,rad);
     }
 
     public EntityPlayer getServerWorker(Location loc)
@@ -153,8 +151,7 @@ public class WorkerManager {
         }
         if (npc == null) return null;
         npc.a(loc.getX(), loc.getY(), loc.getZ(), 0, 0);
-        CraftPlayer opCr = npc.getBukkitEntity();
-        return opCr;
+        return npc.getBukkitEntity();
     }
     public boolean isWorker(Player player)
     {
@@ -164,7 +161,7 @@ public class WorkerManager {
     {
         for(EntityPlayer entityPlayer: npcWorkers.values())
         {
-            if (uuid.equals(entityPlayer.cm()))
+            if (uuid.equals(entityPlayer.cs()))
             {
                 return true;
             }

@@ -1,47 +1,29 @@
 package com.firesoftitan.play.titanbox.libs;
 
+import com.firesoftitan.play.titanbox.libs.interfaces.CommandInterface;
 import com.firesoftitan.play.titanbox.libs.listeners.MainListener;
 import com.firesoftitan.play.titanbox.libs.listeners.PluginListener;
 import com.firesoftitan.play.titanbox.libs.managers.*;
 import com.firesoftitan.play.titanbox.libs.runnables.MySaveRunnable;
 import com.firesoftitan.play.titanbox.libs.runnables.WildTeleportRunnable;
-import com.firesoftitan.play.titanbox.libs.tools.*;
-import net.minecraft.core.BlockPosition;
-import net.minecraft.nbt.NBTCompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.StreamTagVisitor;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.WorldServer;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStructure;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
-import org.bukkit.*;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.craftbukkit.v1_19_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_19_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R2.block.CraftBlock;
-import org.bukkit.craftbukkit.v1_19_R2.util.CraftMagicNumbers;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Villager;
-import org.bukkit.event.EventException;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.RegisteredListener;
-import org.jetbrains.annotations.NotNull;
-import com.firesoftitan.play.titanbox.libs.interfaces.CommandInterface;
+import com.firesoftitan.play.titanbox.libs.tools.Tools;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.*;
 
 public class TitanBoxLibs extends JavaPlugin {
@@ -221,7 +203,7 @@ public class TitanBoxLibs extends JavaPlugin {
                     }
 
                 }
-                if (name.toLowerCase().equalsIgnoreCase("kill"))
+                if (name.equalsIgnoreCase("kill"))
                 {
 /*                    if (args.length > 2)
                     {

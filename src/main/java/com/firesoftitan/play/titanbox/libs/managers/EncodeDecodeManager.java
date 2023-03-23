@@ -8,7 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_19_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
@@ -244,8 +244,8 @@ public class EncodeDecodeManager {
         float yaw = 0;
         String stringYaw = config.getString("i.yaw");
         String stringPitch = config.getString("i.pitch");
-        if (stringYaw != null) Float.valueOf(stringYaw);
-        if (stringPitch != null) Float.valueOf(stringPitch);
+        if (stringYaw != null) yaw = Float.parseFloat(stringYaw);
+        if (stringPitch != null) pitch = Float.parseFloat(stringPitch);
 
         String worldname = config.getString("i.world");
         if (worldname == null) return null;

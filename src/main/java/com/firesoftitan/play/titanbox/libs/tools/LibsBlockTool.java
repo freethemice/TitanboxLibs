@@ -1,31 +1,15 @@
 package com.firesoftitan.play.titanbox.libs.tools;
 
-import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
-import net.minecraft.core.BaseBlockPosition;
-import net.minecraft.core.BlockPosition;
-import net.minecraft.server.level.WorldServer;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.EnumBlockMirror;
-import net.minecraft.world.level.block.EnumBlockRotation;
-import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStructure;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
+import com.firesoftitan.play.titanbox.libs.enums.InventoryTypeEnum;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.DoubleChest;
-import org.bukkit.craftbukkit.v1_19_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R2.block.CraftBlock;
-import org.bukkit.craftbukkit.v1_19_R2.block.CraftBlockState;
-import org.bukkit.craftbukkit.v1_19_R2.structure.CraftStructure;
+import org.bukkit.craftbukkit.v1_19_R3.block.CraftBlockState;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Minecart;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import com.firesoftitan.play.titanbox.libs.enums.InventoryTypeEnum;
-import org.bukkit.structure.Structure;
 
 public class LibsBlockTool {
     private Tools parent;

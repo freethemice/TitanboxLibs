@@ -2,39 +2,26 @@ package com.firesoftitan.play.titanbox.libs.tools;
 
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
 import com.firesoftitan.play.titanbox.libs.managers.EncodeDecodeManager;
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.ParseResults;
-import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.commands.CommandBuildContext;
-import net.minecraft.commands.CommandDispatcher;
 import net.minecraft.commands.CommandListenerWrapper;
-import net.minecraft.commands.arguments.ArgumentEntity;
-import net.minecraft.commands.arguments.ArgumentNBTTag;
-import net.minecraft.commands.arguments.blocks.ArgumentBlock;
 import net.minecraft.commands.arguments.item.ArgumentItemStack;
 import net.minecraft.commands.arguments.item.ArgumentPredicateItemStack;
-import net.minecraft.commands.arguments.selector.EntitySelector;
 import net.minecraft.core.BlockPosition;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.server.commands.CommandSummon;
 import net.minecraft.server.dedicated.DedicatedPlayerList;
 import net.minecraft.server.level.WorldServer;
-import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.block.entity.TileEntity;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_19_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_19_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_19_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -53,7 +40,7 @@ public class LibsNBTTool {
     private ParseResults<CommandListenerWrapper> parseCommand(String s) {
         DedicatedPlayerList server = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle();
         com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> commanddispatcher = server.b().vanillaCommandDispatcher.a();
-        CommandListenerWrapper commandlistenerwrapper = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().b().aC();
+        CommandListenerWrapper commandlistenerwrapper = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().b().aD();
         return commanddispatcher.parse(s, commandlistenerwrapper);
     }
     public ItemStack getItemStack(Material material, int amount, String NBTString)
@@ -77,7 +64,8 @@ public class LibsNBTTool {
     }
     public ItemStack set(ItemStack itemStack, String key, byte value)
     {
-        if (key == null || itemStack == null) return itemStack.clone();
+        if (itemStack == null) return null;
+        if (key == null) return itemStack.clone();
         NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
         nbtTagCompound.a(key, value);
         ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
@@ -85,7 +73,8 @@ public class LibsNBTTool {
     }
     public ItemStack set(ItemStack itemStack, String key, short value)
     {
-        if (key == null || itemStack == null) return itemStack.clone();
+        if (itemStack == null) return null;
+        if (key == null) return itemStack.clone();
         NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
         nbtTagCompound.a(key, value);
         ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
@@ -93,7 +82,8 @@ public class LibsNBTTool {
     }
     public ItemStack set(ItemStack itemStack, String key, int value)
     {
-        if (key == null || itemStack == null) return itemStack.clone();
+        if (itemStack == null) return null;
+        if (key == null) return itemStack.clone();
         NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
         nbtTagCompound.a(key, value);
         ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
@@ -101,7 +91,8 @@ public class LibsNBTTool {
     }
     public ItemStack set(ItemStack itemStack, String key, long value)
     {
-        if (key == null || itemStack == null) return itemStack.clone();
+        if (itemStack == null) return null;
+        if (key == null) return itemStack.clone();
         NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
         nbtTagCompound.a(key, value);
         ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
@@ -109,7 +100,8 @@ public class LibsNBTTool {
     }
     public ItemStack set(ItemStack itemStack, String key, UUID value)
     {
-        if (value == null || key == null || itemStack == null) return itemStack.clone();
+        if (itemStack == null) return null;
+        if (value == null || key == null ) return itemStack.clone();
         NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
         nbtTagCompound.a(key, value);
         ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
@@ -117,7 +109,9 @@ public class LibsNBTTool {
     }
     public ItemStack set(ItemStack itemStack, String key, float value)
     {
-        if (key == null || itemStack == null) return itemStack.clone();
+        if (itemStack == null) return null;
+        if (key == null) return itemStack.clone();
+
         NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
         nbtTagCompound.a(key, value);
         ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
@@ -125,7 +119,9 @@ public class LibsNBTTool {
     }
     public ItemStack set(ItemStack itemStack, String key, double value)
     {
-        if (key == null || itemStack == null) return itemStack.clone();
+        if (itemStack == null) return null;
+        if (key == null) return itemStack.clone();
+
         NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
         nbtTagCompound.a(key, value);
         ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
@@ -133,7 +129,9 @@ public class LibsNBTTool {
     }
     public ItemStack set(ItemStack itemStack, String key, String value)
     {
-        if (value == null || key == null || itemStack == null) return itemStack.clone();
+        if (itemStack == null) return null;
+        if (value == null || key == null ) return itemStack.clone();
+
         NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
         nbtTagCompound.a(key, value);
         ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
@@ -141,7 +139,8 @@ public class LibsNBTTool {
     }
     public ItemStack set(ItemStack itemStack, String key, Location value)
     {
-        if (value == null || key == null || itemStack == null) return itemStack.clone();
+        if (itemStack == null) return null;
+        if (value == null || key == null) return itemStack.clone();
         NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
         nbtTagCompound.a(key, EncodeDecodeManager.encode(value));
         ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
@@ -149,7 +148,8 @@ public class LibsNBTTool {
     }
     public ItemStack set(ItemStack itemStack, String key, byte[] value)
     {
-        if (value == null || key == null || itemStack == null) return itemStack.clone();
+        if (itemStack == null) return null;
+        if (value == null || key == null) return itemStack.clone();
         NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
         nbtTagCompound.a(key, value);
         ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
@@ -157,7 +157,8 @@ public class LibsNBTTool {
     }
     public ItemStack set(ItemStack itemStack, String key, int[] value)
     {
-        if (value == null || key == null || itemStack == null) return itemStack.clone();
+        if (itemStack == null) return null;
+        if (value == null || key == null) return itemStack.clone();
         NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
         nbtTagCompound.a(key, value);
         ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
@@ -165,7 +166,8 @@ public class LibsNBTTool {
     }
     public ItemStack set(ItemStack itemStack, String key, long[] value)
     {
-        if (value == null || key == null || itemStack == null) return itemStack.clone();
+        if (itemStack == null) return null;
+        if (value == null || key == null) return itemStack.clone();
         NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
         nbtTagCompound.a(key, value);
         ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
@@ -193,7 +195,8 @@ public class LibsNBTTool {
     }
     public ItemStack set(ItemStack itemStack, String key, boolean value)
     {
-        if (key == null || itemStack == null) return itemStack.clone();
+        if (itemStack == null) return null;
+        if (key == null ) return itemStack.clone();
         NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
         nbtTagCompound.a(key, value);
         ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
@@ -436,8 +439,7 @@ public class LibsNBTTool {
     protected NBTTagCompound getNBT(Entity entity)
     {
         net.minecraft.world.entity.Entity nmsEntity = ((CraftEntity) entity).getHandle();
-        NBTTagCompound nbttagcompound = nmsEntity.f(new NBTTagCompound());
-        return nbttagcompound;
+        return nmsEntity.f(new NBTTagCompound());
     }
     protected NBTTagCompound getNBT(Block block)
     {
