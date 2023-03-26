@@ -7,6 +7,11 @@ import com.firesoftitan.play.titanbox.libs.managers.*;
 import com.firesoftitan.play.titanbox.libs.runnables.MySaveRunnable;
 import com.firesoftitan.play.titanbox.libs.runnables.WildTeleportRunnable;
 import com.firesoftitan.play.titanbox.libs.tools.Tools;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.apache.commons.io.IOUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -22,9 +27,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import org.json.simple.JSONObject;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.*;
+import java.util.logging.Level;
 
 public class TitanBoxLibs extends JavaPlugin {
     public static TitanBoxLibs instants;
@@ -36,8 +46,16 @@ public class TitanBoxLibs extends JavaPlugin {
     public static WorkerManager workerManager;
     public static AutoUpdateManager autoUpdateManager;
     public void onEnable() {
-
         TitanBoxLibs.instants = this;
+        new BukkitRunnable() {
+            int upCount = 0;
+            @Override
+            public void run() {
+                checkUpdate();
+                upCount++;
+                if (upCount > 3) this.cancel();
+            }
+        }.runTaskTimer(TitanBoxLibs.instants, 20, 600); //30 Seconds
         configManager = new ConfigManager();
         TitanBoxLibs.tools = new Tools(this, new MySaveRunnable(this), -1);
 
@@ -92,6 +110,34 @@ public class TitanBoxLibs extends JavaPlugin {
             config.save();
         }
 
+    }
+    private void checkUpdate()
+    {
+        String gitURL = "https://api.github.com/repos/freethemice/TitanboxLibs/releases";
+        try {
+            JsonArray jsonObject = readJsonFromUrl(gitURL);
+            String tag_name = jsonObject.get(0).getAsJsonObject().get("tag_name").getAsString();
+            if (this.getDescription().getVersion().equalsIgnoreCase(tag_name))
+            {
+                this.getLogger().log(Level.INFO,   ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', "Plugin is up to date."));
+            } else {
+                this.getLogger().log(Level.WARNING,   ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', ">>>>>>>>>>>>-------------<<<<<<<<<<<<"));
+                this.getLogger().log(Level.WARNING,   ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', "There is a new update available."));
+                this.getLogger().log(Level.WARNING,   ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', jsonObject.get(0).getAsJsonObject().get("html_url").getAsString()));
+                this.getLogger().log(Level.WARNING,   ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', ">>>>>>>>>>>>-------------<<<<<<<<<<<<"));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static JsonArray readJsonFromUrl(String url) throws IOException {
+
+
+        String jsonText =  IOUtils.toString(new URL(url), Charset.defaultCharset());
+        JsonElement jsonElement = JsonParser.parseString(jsonText);
+        JsonArray asJsonArray = jsonElement.getAsJsonArray();
+        return asJsonArray;
     }
     private void addCraftingBook() {
         ItemStack[] matrix = new ItemStack[9];
