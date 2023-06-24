@@ -1,6 +1,5 @@
 package com.firesoftitan.play.titanbox.libs.tools;
 
-import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;

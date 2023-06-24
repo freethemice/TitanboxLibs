@@ -9,20 +9,24 @@ import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.commands.arguments.ArgumentEntity;
 import net.minecraft.commands.arguments.ArgumentNBTTag;
 import net.minecraft.commands.arguments.selector.EntitySelector;
+import net.minecraft.core.BlockPosition;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.dedicated.DedicatedPlayerList;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.level.block.entity.TileEntity;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_19_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftEntity;
+import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_20_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class LibsEntityTool {
@@ -86,6 +90,20 @@ public class LibsEntityTool {
             return null;
         }
     }
+    public void setTag(Entity entity, String... tags)
+    {
+        List<String> lore = new ArrayList<>(Arrays.asList(tags));
+        setTag(entity,lore);
+    }
+
+    public void setTag(Entity entity, List<String> tags)
+    {
+        net.minecraft.world.entity.Entity handle = ((CraftEntity) entity).getHandle();
+        for(String s: tags)
+        {
+            handle.a(s);
+        }
+    }
     public List<String> getTag(Entity entity, String tag)
     {
         if (entity == null) return new ArrayList<String>();
@@ -107,7 +125,6 @@ public class LibsEntityTool {
         CommandListenerWrapper commandlistenerwrapper = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().b().aD();
         return commandDispatcher.parse(s, commandlistenerwrapper);
     }
-
     public void summonEntity(World world, Entity entity)
     {
         WorldServer worldServer = ((CraftWorld) world).getHandle();
@@ -134,6 +151,13 @@ public class LibsEntityTool {
         }
         return null;
 
+    }
+    public boolean isTileEntity(Block block)
+    {
+        WorldServer w = ((CraftWorld) block.getWorld()).getHandle();
+        NBTTagCompound nbt = new NBTTagCompound();
+        TileEntity tile = w.getBlockEntity(new BlockPosition(block.getX(), block.getY(), block.getZ()), true);
+        return tile != null;
     }
 }
 

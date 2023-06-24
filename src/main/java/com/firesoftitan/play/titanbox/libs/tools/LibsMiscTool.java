@@ -1,7 +1,8 @@
 package com.firesoftitan.play.titanbox.libs.tools;
 
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
-import com.firesoftitan.play.titanbox.libs.managers.BarcodeManager;
+import com.firesoftitan.play.titanbox.libs.enums.BarcodeDeviceEnum;
+import com.firesoftitan.play.titanbox.libs.interfaces.CommandInterface;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -10,11 +11,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
-import com.firesoftitan.play.titanbox.libs.enums.BarcodeDeviceEnum;
-import com.firesoftitan.play.titanbox.libs.interfaces.CommandInterface;
-import com.firesoftitan.play.titanbox.libs.managers.WorkerManager;
-import com.firesoftitan.play.titanbox.libs.runnables.SaveRunnable;
-import com.firesoftitan.play.titanbox.libs.runnables.TitanSaverRunnable;
 
 import java.util.HashMap;
 import java.util.List;

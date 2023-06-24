@@ -8,7 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
@@ -275,32 +275,10 @@ public class EncodeDecodeManager {
         YamlConfiguration config;
         NBTTagCompound item = CraftItemStack.asNMSCopy(itemStack).b(new NBTTagCompound());
         config = new YamlConfiguration();
-        config.set("x", item.f_());
+        //String??
+        config.set("x", item.m_());
         configString = config.saveToString();
         byte[] configBytes = configString.getBytes(StandardCharsets.UTF_8);
-
-        /* "i" is old format that is buggy
-        try { //as of 1.16 this sometimes throw an error, so we have to save it a different way
-            config = new YamlConfiguration();
-            config.set("i", itemStack);
-            configString = config.saveToString();
-        } catch (Exception e) {
-            NBTTagCompound item = CraftItemStack.asNMSCopy(itemStack).save(new NBTTagCompound());
-            config = new YamlConfiguration();
-            config.set("x", item.asString());
-            configString = config.saveToString();
-        }
-            byte[] configBytes = configString.getBytes(StandardCharsets.UTF_8);
-            String out = Base64.getEncoder().encodeToString(configBytes);
-            if (decodeItemStack(out) == null)
-            {
-                NBTTagCompound item = CraftItemStack.asNMSCopy(itemStack).save(new NBTTagCompound());
-                config = new YamlConfiguration();
-                config.set("x", item.asString());
-                configString = config.saveToString();
-                configBytes = configString.getBytes(StandardCharsets.UTF_8);
-                out = Base64.getEncoder().encodeToString(configBytes);
-            }*/
             return Base64.getEncoder().encodeToString(configBytes);
 
 

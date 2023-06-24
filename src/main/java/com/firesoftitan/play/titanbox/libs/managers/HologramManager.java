@@ -2,8 +2,11 @@ package com.firesoftitan.play.titanbox.libs.managers;
 
 import com.firesoftitan.play.titanbox.libs.tools.LibsHologramTool;
 import com.firesoftitan.play.titanbox.libs.tools.Tools;
+import net.minecraft.world.entity.EntitySize;
+import net.minecraft.world.entity.decoration.EntityArmorStand;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -14,11 +17,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class HologramManager {
+
     private ArmorStand armorStand;
     private JavaPlugin plugin;
     private boolean deleting = false;
@@ -30,11 +35,14 @@ public class HologramManager {
         armorStand.setCollidable(false);
         armorStand.setMarker(true);
         armorStand.setGravity(false);
+        
     }
     public HologramManager(JavaPlugin plugin, ArmorStand armorStand) {
         this.plugin = plugin;
         this.armorStand = armorStand;
     }
+
+
     public JavaPlugin getPlugin() {
         return plugin;
     }

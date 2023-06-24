@@ -9,9 +9,9 @@ import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.level.EnumGamemode;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_19_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -42,7 +42,8 @@ public class WorkerManager {
         for(String key: npcWorkers.keySet())
         {
             EntityPlayer worker = npcWorkers.get(key);
-            ((CraftPlayer)player).getHandle().b.a(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.a.e  ,worker)); //ADD_PLAYER
+            //c = PlayerConnection
+            ((CraftPlayer)player).getHandle().c.a(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.a.e  ,worker)); //ADD_PLAYER
         }
 
     }

@@ -48,14 +48,11 @@ public class TitanBoxLibs extends JavaPlugin {
     public void onEnable() {
         TitanBoxLibs.instants = this;
         new BukkitRunnable() {
-            int upCount = 0;
             @Override
             public void run() {
                 checkUpdate();
-                upCount++;
-                if (upCount > 3) this.cancel();
             }
-        }.runTaskTimer(TitanBoxLibs.instants, 20, 600); //30 Seconds
+        }.runTaskLater(TitanBoxLibs.instants, 1200); //60 Seconds
         configManager = new ConfigManager();
         TitanBoxLibs.tools = new Tools(this, new MySaveRunnable(this), -1);
 

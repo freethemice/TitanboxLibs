@@ -16,10 +16,10 @@ import net.minecraft.world.level.block.entity.TileEntity;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_19_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -347,7 +347,7 @@ public class LibsNBTTool {
         List<String> outWords = new ArrayList<String>();
         for (int i = 0; i < c.size(); i++)
         {
-            outWords.add(c.get(i).f_());
+            outWords.add(c.get(i).m_()); //f_()
         }
         return outWords;
     }
@@ -456,11 +456,11 @@ public class LibsNBTTool {
         try {
 
             net.minecraft.world.item.ItemStack itemStack1 = CraftItemStack.asNMSCopy(itemStack);
-            if (itemStack1.u() == null)
+            if (itemStack1.v() == null)
             {
                 return new NBTTagCompound();
             }
-            return itemStack1.u() ;
+            return itemStack1.v();
         }
         catch (Exception E)
         {
