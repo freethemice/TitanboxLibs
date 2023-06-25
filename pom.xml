@@ -6,7 +6,7 @@
 
     <groupId>com.firesoftitan.play.titanbox.libs</groupId>
     <artifactId>TitanBoxLibs</artifactId>
-    <version>2.7.10</version>
+    <version>2.7.11</version>
     <packaging>jar</packaging>
     <name>TitanBoxLibs</name>
 
