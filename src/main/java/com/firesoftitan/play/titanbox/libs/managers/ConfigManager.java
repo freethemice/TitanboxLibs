@@ -6,7 +6,7 @@ public class ConfigManager {
     private long save_frequancy = 12000;
 
     public ConfigManager() {
-        SaveManager configFile = new SaveManager(TitanBoxLibs.instants.getName(), "config");
+        SaveManager configFile = new SettingsManager(TitanBoxLibs.instants.getName(), "config");
         if (!configFile.contains("settings.save.frequance"))
         {
             configFile.set("settings.save.frequance", save_frequancy);

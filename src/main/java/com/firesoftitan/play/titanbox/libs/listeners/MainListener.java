@@ -37,9 +37,9 @@ import static com.firesoftitan.play.titanbox.libs.TitanBoxLibs.*;
 public class MainListener  implements Listener {
 
 
-    private Tools tools;
-    private LibsItemStackTool itemStackTool = Tools.getItemStackTool(instants);
-    private LibsNBTTool nbtTool = Tools.getNBTTool(instants);
+    private final Tools tools;
+    private final LibsItemStackTool itemStackTool = Tools.getItemStackTool(instants);
+    private final LibsNBTTool nbtTool = Tools.getNBTTool(instants);
     public MainListener(){
         registerEvents();
         tools = Tools.getTools(instants);
@@ -181,10 +181,11 @@ public class MainListener  implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                 workerManager.hideWorker(player);
+                workerManager.hideWorker(player);
+                TitanBoxLibs.autoUpdateManager.checkAll(player);
+                if (!LibsProtectionTool.isSetup()) LibsProtectionTool.setupProtectionPlugins(player);
             }
         }.runTaskLater(instants, 20);
-        TitanBoxLibs.autoUpdateManager.checkAll(player);
 
 
 

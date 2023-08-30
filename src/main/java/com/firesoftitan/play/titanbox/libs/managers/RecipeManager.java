@@ -4,10 +4,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class RecipeManager {
-    private String id;
-    private ItemStack result;
-    private ItemStack[] matrix;
-    private JavaPlugin plugin;
+    private final String id;
+    private final ItemStack result;
+    private final ItemStack[] matrix;
+    private final JavaPlugin plugin;
 
     public RecipeManager(JavaPlugin plugin, String id, ItemStack result, ItemStack[] matrix) {
         this.plugin = plugin;

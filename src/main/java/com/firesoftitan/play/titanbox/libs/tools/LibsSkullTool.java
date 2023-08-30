@@ -1,5 +1,6 @@
 package com.firesoftitan.play.titanbox.libs.tools;
 
+import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.minecraft.core.BlockPosition;
@@ -130,7 +131,20 @@ public class LibsSkullTool {
     public void placeSkull(Block block, String skulltexture) {
         placeSkull(block, skulltexture, "");
     }
+    public void placeSkull(Block block, ItemStack itemStack) {
+        try {
+            String skullTexture = getSkullTexture(itemStack);
+            String skullTitanID = getSkullTitanID(itemStack);
+            if (skullTitanID == null || skullTitanID.isEmpty() || skullTitanID.isBlank())
+            {
+                skullTitanID = TitanBoxLibs.tools.getItemStackTool().getTitanItemID(itemStack);
+            }
+            placeSkull(block, skullTexture, skullTitanID);
+        } catch (Exception ignored) {
 
+        }
+
+    }
     public void placeSkull(Block block, String skulltexture, String TitanID) {
         try {
             if (block.getType() != Material.PLAYER_HEAD) {
@@ -141,7 +155,6 @@ public class LibsSkullTool {
             if (skullTile == null) return;
             skullTile.a(profile);
             block.getState().update(true);
-
 
         } catch (Exception ignored) {
 

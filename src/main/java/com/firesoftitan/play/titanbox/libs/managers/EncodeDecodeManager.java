@@ -395,13 +395,13 @@ public class EncodeDecodeManager {
         return Base64.getEncoder().encodeToString(config.saveToString().getBytes(StandardCharsets.UTF_8));
     }
 
-    static String encode(YamlConfiguration config)
+    public static String encode(YamlConfiguration config)
     {
         if (config == null) return null;
         return Base64.getEncoder().encodeToString(config.saveToString().getBytes(StandardCharsets.UTF_8));
     }
 
-    static YamlConfiguration decodeYaml(String data)
+    public static YamlConfiguration decodeYaml(String data)
     {
         if (data == null || data.length() <1) return null;
         YamlConfiguration config = new YamlConfiguration();

@@ -8,7 +8,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class LibsVaultTool {
-    private Tools parent;
+    private final Tools parent;
 
     public LibsVaultTool(Tools parent) {
         this.parent = parent;

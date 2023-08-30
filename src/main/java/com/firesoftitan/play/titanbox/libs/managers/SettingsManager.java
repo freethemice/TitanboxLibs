@@ -1,32 +1,83 @@
 package com.firesoftitan.play.titanbox.libs.managers;
 
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
-import com.firesoftitan.play.titanbox.libs.tools.Tools;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
+/**
+ * Manages saving and loading YAML configuration files for config/setting files.
+ * Every thing will be in a format easy to read be the user.
+ */
 public class SettingsManager extends SaveManager{
-    public SettingsManager(String pluginname, String folder, String fileName) {
-        super(pluginname, folder, fileName);
+    /**
+     * Constructs a SaveManager for a YAML file in the plugin data folder.
+     *
+     * @param pluginName The name of the plugin.
+     * @param fileName The name of the YAML file.
+     * @param folder The name of the subfolder.
+     */
+    public SettingsManager(String pluginName, String folder, String fileName) {
+        super(pluginName, folder, fileName);
+    }
+    /**
+     * Constructs a SaveManager for a YAML file in the plugin data folder.
+     *
+     * @param pluginName The name of the plugin.
+     * @param fileName The name of the YAML file.
+     */
+    public SettingsManager(String pluginName, String fileName) {
+        super(pluginName, fileName);
     }
 
-    public SettingsManager(String pluginname, String fileName) {
-        super(pluginname, fileName);
-    }
-
+    /**
+     * Constructs a SaveManager for a YAML file in the plugin data folder.
+     *
+     * @param file The File of the File.
+     */
     public SettingsManager(File file) {
         super(file);
     }
-
+    /**
+     * Constructs a SaveManager from an InputStream.
+     *
+     * @param inputStream The InputStream to load the YAML data from.
+     */
+    public SettingsManager(InputStream inputStream) {
+        super(inputStream);
+    }
+    /**
+     * Constructs a SaveManager from a Reader.
+     *
+     * @param reader The Reader to load the YAML data from.
+     */
+    public SettingsManager(Reader reader) {
+        super(reader);
+    }
+    /**
+     * Constructs a SaveManager for a YAML file in the plugin data folder.
+     *
+     * @param fileName file name of the File in the data-storage folder.
+     */
     public SettingsManager(String fileName) {
         super(fileName);
     }
 
+    /**
+     * Constructs a blank SaveManager with no YAML file associated.
+     * Use convertToFile(file) to save it
+     *
+     */
     public SettingsManager() {
+        super();
     }
     @Override
     public void set(String key, @SuppressWarnings("rawtypes") List list)
@@ -47,6 +98,7 @@ public class SettingsManager extends SaveManager{
         }
 
     }
+
     @Override
     public void set(String key, ItemStack itemStack)
     {
@@ -72,6 +124,9 @@ public class SettingsManager extends SaveManager{
             return null;
         }
     }
+    /**
+     * Clones the SettingManager
+     */
     @Override
     public SettingsManager clone()
     {

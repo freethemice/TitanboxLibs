@@ -1,20 +1,32 @@
 package com.firesoftitan.play.titanbox.libs.managers;
 
+import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
+import com.firesoftitan.play.titanbox.libs.blocks.TitanBlock;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
-@SuppressWarnings({"ResultOfMethodCallIgnored", "unchecked"})
+/**
+ * Manages saving and loading YAML configuration files for data files.
+ * some stuff will be encoded and user will not be-able to read.
+ */
 public class SaveManager {
     protected YamlConfiguration config;
     protected File file;
+    /**
+     * Constructs a SaveManager for a YAML file in the plugin data folder.
+     *
+     * @param pluginname The name of the plugin.
+     * @param fileName The name of the YAML file.
+     * @param folder The name of the subfolder.
+     */
     public SaveManager(String pluginname, String folder, String fileName) {
         try {
             config = new YamlConfiguration();
@@ -39,11 +51,18 @@ public class SaveManager {
             {
                 this.file.createNewFile();
             }
+
             config.load(this.file);
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
     }
+    /**
+     * Constructs a SaveManager for a YAML file in the plugin data folder.
+     *
+     * @param pluginname The name of the plugin.
+     * @param fileName The name of the YAML file.
+     */
     public SaveManager(String pluginname, String fileName) {
         try {
             config = new YamlConfiguration();
@@ -67,11 +86,49 @@ public class SaveManager {
             e.printStackTrace();
         }
     }
-
+    /**
+     * Gets the File object representing the YAML file.
+     *
+     * @return The File.
+     */
     public File getFile() {
         return new File(file.getAbsolutePath());
     }
 
+    /**
+     * Constructs a SaveManager from an InputStream.
+     *
+     * @param inputStream The InputStream to load the YAML data from.
+     */
+    public SaveManager(InputStream inputStream) {
+        try {
+            Reader reader = new InputStreamReader(inputStream);
+            config = new YamlConfiguration();
+            config.load(reader);
+            reader.close();
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * Constructs a SaveManager from a Reader.
+     *
+     * @param reader The Reader to load the YAML data from.
+     */
+    public SaveManager(Reader reader) {
+        try {
+            config = new YamlConfiguration();
+            config.load(reader);
+            reader.close();
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
+    /**
+     * Constructs a SaveManager for a YAML file in the plugin data folder.
+     *
+     * @param file The File of the File.
+     */
     public SaveManager(File file) {
         try {
             this.file = file;
@@ -82,6 +139,11 @@ public class SaveManager {
             e.printStackTrace();
         }
     }
+    /**
+     * Constructs a SaveManager for a YAML file in the plugin data folder.
+     *
+     * @param fileName file name of the File in the data-storage folder.
+     */
     public SaveManager(String fileName) {
         try {
             config = new YamlConfiguration();
@@ -105,6 +167,11 @@ public class SaveManager {
             e.printStackTrace();
         }
     }
+    /**
+     * Associates a SaveManager to YAML file.
+     * You must use save() to write the config to file.
+     *
+     */
     public void convertToFile(File file)
     {
         try {
@@ -117,6 +184,11 @@ public class SaveManager {
             e.printStackTrace();
         }
     }
+    /**
+     * Associates a SaveManager to YAML file in the data-storage folder.
+     * You must use save() to write the config to file.
+     *
+     */
     public void convertToFile(String fileName)
     {
         try {
@@ -139,6 +211,11 @@ public class SaveManager {
             e.printStackTrace();
         }
     }
+    /**
+     * Constructs a blank SaveManager with no YAML file associated.
+     * Use convertToFile(file) to save it
+     *
+     */
     public SaveManager() {
         config = new YamlConfiguration();
         this.file = null;
@@ -203,7 +280,9 @@ public class SaveManager {
     {
         return config.contains(key);
     }
-
+    /**
+     * Clones the saveManager
+     */
     public SaveManager clone()
     {
         SaveManager managerClone = new SaveManager();
@@ -259,7 +338,7 @@ public class SaveManager {
             return new HashSet<>();
         }
     }
-    private YamlConfiguration getConfig() {
+    protected YamlConfiguration getConfig() {
         return config;
     }
     public SaveManager getSaveManager(String key) {
@@ -268,8 +347,9 @@ public class SaveManager {
         if (configuration == null) return new SaveManager();
         return new SaveManager(configuration);
     }
-
-
+    /**
+     * Saves the configuration to the YAML file.
+     */
     public void save()
     {
         try {
@@ -281,6 +361,17 @@ public class SaveManager {
         }
 
     }
+    /**
+     * Reloads the configuration from the YAML file.
+     */
+    public void reload() {
+        try {
+            config.load(file);
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
+
     public ItemStack getItem(String path) {
         try {
             if (config.contains(path)){

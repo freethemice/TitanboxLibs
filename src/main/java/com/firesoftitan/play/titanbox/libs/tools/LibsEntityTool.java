@@ -130,18 +130,23 @@ public class LibsEntityTool {
         WorldServer worldServer = ((CraftWorld) world).getHandle();
         worldServer.tryAddFreshEntityWithPassengers(((CraftEntity)entity).getHandle(), CreatureSpawnEvent.SpawnReason.COMMAND);
     }
-    public Entity summonEntity(World world, EntityType type, String nbtString)
+    public String getNBTasString(Entity entity)
     {
+        return "" + ((CraftEntity)entity).getHandle().f(new NBTTagCompound());
+    }
 
+    public Entity summonEntity(World world, EntityType type, String nbtString, Location location)
+    {
         try {
             WorldServer worldServer = ((CraftWorld) world).getHandle();
-            ParseResults commandListenerWrapperParseResults = parseCommand("summon " + type.name().toLowerCase() + " 1 100 1 " + nbtString);
+            nbtString = "{Pos:[" + location.getX() + "d," + location.getY() + "d," + location.getZ() + "d],Rotation:[" + location.getYaw() + "f," + location.getPitch() + "f]," + nbtString.substring(1);
+
+            ParseResults commandListenerWrapperParseResults = parseCommand("summon " + type.name().toLowerCase() + " " + location.getBlockX() + " " + location.getBlockY() + " " + location.getBlockZ() + " " + nbtString);
             String string = commandListenerWrapperParseResults.getReader().getString();
             CommandContext build = commandListenerWrapperParseResults.getContext().build(string);
             NBTTagCompound nbt = ArgumentNBTTag.a(build, "nbt");
-            NBTTagCompound nbttagcompound  = nbt.h(); //copy
-            nbttagcompound.a("id", type.getKey().toString()); //ResourceKey.MinecraftKey.toString()
-            net.minecraft.world.entity.Entity entity = EntityTypes.a(nbttagcompound, worldServer, (entity1) -> entity1);
+            nbt.a("id", type.getKey().toString()); //ResourceKey.MinecraftKey.toString()
+            net.minecraft.world.entity.Entity entity = EntityTypes.a(nbt, worldServer, (entity1) -> entity1);
             worldServer.tryAddFreshEntityWithPassengers(entity, CreatureSpawnEvent.SpawnReason.COMMAND);
             return entity.getBukkitEntity();
 
@@ -150,7 +155,25 @@ public class LibsEntityTool {
             e.printStackTrace();
         }
         return null;
+    }
+    public Entity summonEntity(World world, EntityType type, String nbtString)
+    {
+        try {
+            WorldServer worldServer = ((CraftWorld) world).getHandle();
+            ParseResults commandListenerWrapperParseResults = parseCommand("summon " + type.name().toLowerCase() + " 1 100 1 " + nbtString);
+            String string = commandListenerWrapperParseResults.getReader().getString();
+            CommandContext build = commandListenerWrapperParseResults.getContext().build(string);
+            NBTTagCompound nbt = ArgumentNBTTag.a(build, "nbt");
+            nbt.a("id", type.getKey().toString()); //ResourceKey.MinecraftKey.toString()
+            net.minecraft.world.entity.Entity entity = EntityTypes.a(nbt, worldServer, (entity1) -> entity1);
+            worldServer.tryAddFreshEntityWithPassengers(entity, CreatureSpawnEvent.SpawnReason.COMMAND);
+            return entity.getBukkitEntity();
 
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
     public boolean isTileEntity(Block block)
     {

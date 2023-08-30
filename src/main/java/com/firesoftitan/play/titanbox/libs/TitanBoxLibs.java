@@ -3,13 +3,14 @@ package com.firesoftitan.play.titanbox.libs;
 import com.firesoftitan.play.titanbox.libs.interfaces.CommandInterface;
 import com.firesoftitan.play.titanbox.libs.listeners.MainListener;
 import com.firesoftitan.play.titanbox.libs.listeners.PluginListener;
+import com.firesoftitan.play.titanbox.libs.listeners.TabCompleteListener;
 import com.firesoftitan.play.titanbox.libs.managers.*;
 import com.firesoftitan.play.titanbox.libs.runnables.MySaveRunnable;
 import com.firesoftitan.play.titanbox.libs.runnables.WildTeleportRunnable;
+import com.firesoftitan.play.titanbox.libs.tools.LibsProtectionTool;
 import com.firesoftitan.play.titanbox.libs.tools.Tools;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.commons.io.IOUtils;
 import org.bukkit.Bukkit;
@@ -19,6 +20,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -27,10 +29,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
-import org.json.simple.JSONObject;
 
-import java.io.*;
-import java.net.MalformedURLException;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
@@ -45,8 +45,11 @@ public class TitanBoxLibs extends JavaPlugin {
     public static BarcodeManager barcodeManager;
     public static WorkerManager workerManager;
     public static AutoUpdateManager autoUpdateManager;
+
+
     public void onEnable() {
         TitanBoxLibs.instants = this;
+
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -70,6 +73,7 @@ public class TitanBoxLibs extends JavaPlugin {
                     try {
                         String texture =  TitanBoxLibs.tools.getPlayerTool().getPlayersTexture(player1);
                     } catch (IOException e) {
+                        //noinspection CallToPrintStackTrace
                         e.printStackTrace();
                     }
                 }
@@ -90,7 +94,6 @@ public class TitanBoxLibs extends JavaPlugin {
         autoUpdateManager = new AutoUpdateManager();
 
 
-
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -106,8 +109,15 @@ public class TitanBoxLibs extends JavaPlugin {
             config.set("wild.z", 10000);
             config.save();
         }
+        PluginCommand tb = this.getCommand("tb");
+        if (tb != null) tb.setTabCompleter(new TabCompleteListener());
+        PluginCommand titanbox = this.getCommand("titanbox");
+        if (titanbox != null) titanbox.setTabCompleter(new TabCompleteListener());
 
     }
+
+
+
     private void checkUpdate()
     {
         String gitURL = "https://api.github.com/repos/freethemice/TitanboxLibs/releases";
@@ -125,6 +135,7 @@ public class TitanBoxLibs extends JavaPlugin {
             }
 
         } catch (IOException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
     }
@@ -133,8 +144,7 @@ public class TitanBoxLibs extends JavaPlugin {
 
         String jsonText =  IOUtils.toString(new URL(url), Charset.defaultCharset());
         JsonElement jsonElement = JsonParser.parseString(jsonText);
-        JsonArray asJsonArray = jsonElement.getAsJsonArray();
-        return asJsonArray;
+        return jsonElement.getAsJsonArray();
     }
     private void addCraftingBook() {
         ItemStack[] matrix = new ItemStack[9];
@@ -177,7 +187,7 @@ public class TitanBoxLibs extends JavaPlugin {
                     {
                         String name  = args[0];
                         Player player2 = Bukkit.getPlayer(name);
-                        if (player == null) sender.sendMessage(name + " doesn't exist.");
+                        if (player2 == null) sender.sendMessage(name + " doesn't exist.");
                         else player2.getInventory().addItem(getCraftingBook().clone());
                     }
                     else
@@ -236,38 +246,63 @@ public class TitanBoxLibs extends JavaPlugin {
         if (label.equalsIgnoreCase("titanbox") || label.equalsIgnoreCase("tb")) {
             if (args.length > 0) {
                 String name  = args[0];
-                if (name.toLowerCase().equalsIgnoreCase("wild"))
+                if (name.equalsIgnoreCase("wild"))
                 {
-                    if (sender instanceof  Player) {
-                        Player player = (Player) sender;
+                    if (sender instanceof Player player) {
                         WildTeleportRunnable wildTeleportRunnable = new WildTeleportRunnable(player, TitanBoxLibs.tools);
                         wildTeleportRunnable.runTaskTimer(this, 1, 10);
                         return true;
                     }
 
                 }
-                if (name.equalsIgnoreCase("kill"))
+                if (name.equalsIgnoreCase("protection"))
                 {
-/*                    if (args.length > 2)
+                    if (args.length == 1)
                     {
-                        try {
-                            int BR = Integer.parseInt(args[1]);
-                            Player player = Bukkit.getPlayer(args[2]);
-                            if (BR > 0 && player != null && player.isOnline())
-                            {
-                                List<Entity> nearbyEntities = player.getNearbyEntities(BR, BR, BR);
-                                for(Entity entity: nearbyEntities)
-                                {
-                                    EntityDamageEvent entityDamageEvent = new EntityDamageEvent(entity, EntityDamageEvent.DamageCause.FALL, 100000000);
-                                    Bukkit.getPluginManager().callEvent(entityDamageEvent);
-                                }
+                        tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.GREEN + "You can add plugins by: ");
+                        tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.GRAY + "     /tb protection " + ChatColor.WHITE + "add " + ChatColor.AQUA + "plugin_name");
+                        tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.GREEN + "Please remove plugins by: ");
+                        tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.GRAY + "     /tb protection " + ChatColor.WHITE + "remove " + ChatColor.AQUA + "plugin_name");
+                        tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.GREEN + "You can list available plugins: ");
+                        tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.GRAY + "     /tb protection " + ChatColor.WHITE + "list ");
+                        tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.GREEN + "You can list enabled plugins: ");
+                        tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.GRAY + "     /tb protection " + ChatColor.WHITE + "enabled ");
+                    }
+                    if (args.length > 1)
+                    {
+                        if (args[1].equalsIgnoreCase("list"))
+                        {
+                            List<String> listingProtectionPlugins = LibsProtectionTool.getListingProtectionPlugins((Player) sender);
+                            tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.UNDERLINE + "-------------------");
+                            for (String plugin : listingProtectionPlugins) {
+                                tools.getMessageTool().sendMessagePlayer((Player) sender, "Plugin: " + plugin);
                             }
-                            return true;
-                        } catch (NumberFormatException e) {
-                            //e.printStackTrace();
+                            tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.UNDERLINE + "-------------------");
                         }
-
-                    }*/
+                        if (args[1].equalsIgnoreCase("enabled"))
+                        {
+                            List<String> listingProtectionPlugins = LibsProtectionTool.getEnabledProtectionPlugins((Player) sender);
+                            tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.UNDERLINE + "-------------------");
+                            for (String plugin : listingProtectionPlugins) {
+                                tools.getMessageTool().sendMessagePlayer((Player) sender, "Plugin: " + plugin);
+                            }
+                            tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.UNDERLINE + "-------------------");
+                        }
+                    }
+                    if (args.length > 2)
+                    {
+                        if (args[1].equalsIgnoreCase("add"))
+                        {
+                            LibsProtectionTool.addPlugin((Player) sender, args[2]);
+                            tools.getMessageTool().sendMessagePlayer((Player) sender, "plugin added to the protection plugin list.");
+                        }
+                        if (args[1].equalsIgnoreCase("remove"))
+                        {
+                            LibsProtectionTool.removePlugin((Player) sender, args[2]);
+                            tools.getMessageTool().sendMessagePlayer((Player) sender, "plugin was removed from protection plugin list.");
+                        }
+                    }
+                    return true;
                 }
 
                 if (TitanBoxLibs.tools.getMiscTool().commandInterfaces.containsKey(name))
