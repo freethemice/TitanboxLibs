@@ -1,17 +1,15 @@
 package com.firesoftitan.play.titanbox.libs.blocks;
 
-import com.firesoftitan.play.titanbox.libs.managers.EncodeDecodeManager;
 import com.firesoftitan.play.titanbox.libs.managers.SaveManager;
 import com.firesoftitan.play.titanbox.libs.managers.TitanBlockManager;
 import org.bukkit.Location;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 public class TitanBlock {
 
     public static void updateBlock(TitanBlock titanBlock)
     {
-        TitanBlockManager.getTitanBlockManager(titanBlock.getTitanID()).setTitanBlock(titanBlock.getLocation(), titanBlock);
+        TitanBlockManager.setTitanBlock(titanBlock, titanBlock.getLocation());
     }
 
     protected final SaveManager saveManager;
