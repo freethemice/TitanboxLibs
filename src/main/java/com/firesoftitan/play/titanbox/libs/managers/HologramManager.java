@@ -14,23 +14,26 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class HologramManager {
 
-    private ArmorStand armorStand;
-    private JavaPlugin plugin;
+    private final ArmorStand armorStand;
+    private final JavaPlugin plugin;
     private boolean deleting = false;
-    public HologramManager(JavaPlugin plugin, Location location) {
+    public HologramManager(JavaPlugin plugin, @NotNull Location location) {
         this.plugin = plugin;
-        armorStand = location.getWorld().spawn(location, ArmorStand.class);
+        armorStand = Objects.requireNonNull(location.getWorld()).spawn(location, ArmorStand.class);
         armorStand.setVisible(false);
         armorStand.setCustomNameVisible(false);
         armorStand.setCollidable(false);
         armorStand.setMarker(true);
+        armorStand.setFireTicks(1000000);
         armorStand.setGravity(false);
         addID();
     }
@@ -43,13 +46,13 @@ public class HologramManager {
         addID();
     }
     private void addID() {
-        String strLocation = TitanBoxLibs.tools.getSerializeTool(TitanBoxLibs.instants).serializeLocation(this.armorStand.getLocation());
+        String strLocation = Tools.getSerializeTool(TitanBoxLibs.instants).serializeLocation(this.armorStand.getLocation());
         String strPlugin = this.plugin.getName();
-        TitanBoxLibs.tools.getEntityTool(TitanBoxLibs.instants).setTag(armorStand, "tblHG", strPlugin, strLocation, System.currentTimeMillis() +"");
+        Tools.getEntityTool(TitanBoxLibs.instants).setTag(armorStand, "tblHG", strPlugin, strLocation, System.currentTimeMillis() +"");
     }
     public long getTimeStamp()
     {
-        List<String> tags = TitanBoxLibs.tools.getNBTTool(TitanBoxLibs.instants).getListString(armorStand, "Tags");
+        List<String> tags = Tools.getNBTTool(TitanBoxLibs.instants).getListString(armorStand, "Tags");
         String strPlugin = plugin.getName();
         for(String tag: tags)
         {
@@ -59,7 +62,7 @@ public class HologramManager {
     }
     public List<String> getTags()
     {
-        List<String> tags = TitanBoxLibs.tools.getNBTTool(TitanBoxLibs.instants).getListString(armorStand, "Tags");
+        List<String> tags = Tools.getNBTTool(TitanBoxLibs.instants).getListString(armorStand, "Tags");
         return tags;
     }
     public JavaPlugin getPlugin() {
@@ -78,7 +81,7 @@ public class HologramManager {
                 if (entity.getType() == EntityType.ARMOR_STAND)
                 {
                     ArmorStand armor = (ArmorStand) entity;
-                    List<String> tags = TitanBoxLibs.tools.getNBTTool(TitanBoxLibs.instants).getListString(entity, "Tags");
+                    List<String> tags = Tools.getNBTTool(TitanBoxLibs.instants).getListString(entity, "Tags");
                     String strPlugin = plugin.getName();
                     if (tags.contains("tblHG"))
                     {
