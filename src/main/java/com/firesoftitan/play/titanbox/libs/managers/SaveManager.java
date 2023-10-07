@@ -1,14 +1,11 @@
 package com.firesoftitan.play.titanbox.libs.managers;
 
-import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
-import com.firesoftitan.play.titanbox.libs.blocks.TitanBlock;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 import java.io.*;
 import java.util.*;
@@ -23,33 +20,33 @@ public class SaveManager {
     /**
      * Constructs a SaveManager for a YAML file in the plugin data folder.
      *
-     * @param pluginname The name of the plugin.
+     * @param pluginName The name of the plugin.
      * @param fileName The name of the YAML file.
      * @param folder The name of the subfolder.
      */
-    public SaveManager(String pluginname, String folder, String fileName) {
+    public SaveManager(String pluginName, String folder, String fileName) {
         try {
             config = new YamlConfiguration();
             File dataStorageDIR = new File("plugins");
             if (!dataStorageDIR.exists())
             {
-                dataStorageDIR.mkdir();
+                boolean mkdir = dataStorageDIR.mkdir();
             }
-            File TitanBoxDIR = new File("plugins" + File.separator + pluginname );
+            File TitanBoxDIR = new File("plugins" + File.separator + pluginName );
             if (!TitanBoxDIR.exists())
             {
-                TitanBoxDIR.mkdir();
+                boolean mkdir = TitanBoxDIR.mkdir();
             }
-            File TitanBoxDIRF = new File("plugins" + File.separator + pluginname + File.separator + folder );
+            File TitanBoxDIRF = new File("plugins" + File.separator + pluginName + File.separator + folder );
             if (!TitanBoxDIRF.exists())
             {
-                TitanBoxDIRF.mkdir();
+                boolean mkdir = TitanBoxDIRF.mkdir();
             }
 
-            this.file = new File("plugins" + File.separator + pluginname + File.separator + folder + File.separator  + fileName + ".yml");
+            this.file = new File("plugins" + File.separator + pluginName + File.separator + folder + File.separator  + fileName + ".yml");
             if (!this.file.exists())
             {
-                this.file.createNewFile();
+                boolean newFile = this.file.createNewFile();
             }
 
             config.load(this.file);
@@ -60,26 +57,26 @@ public class SaveManager {
     /**
      * Constructs a SaveManager for a YAML file in the plugin data folder.
      *
-     * @param pluginname The name of the plugin.
+     * @param pluginName The name of the plugin.
      * @param fileName The name of the YAML file.
      */
-    public SaveManager(String pluginname, String fileName) {
+    public SaveManager(String pluginName, String fileName) {
         try {
             config = new YamlConfiguration();
             File dataStorageDIR = new File("plugins");
             if (!dataStorageDIR.exists())
             {
-                dataStorageDIR.mkdir();
+                boolean mkdir = dataStorageDIR.mkdir();
             }
-            File TitanBoxDIR = new File("plugins" + File.separator + pluginname );
+            File TitanBoxDIR = new File("plugins" + File.separator + pluginName );
             if (!TitanBoxDIR.exists())
             {
-                TitanBoxDIR.mkdir();
+                boolean mkdir = TitanBoxDIR.mkdir();
             }
-            this.file = new File("plugins" + File.separator + pluginname + File.separator  + fileName + ".yml");
+            this.file = new File("plugins" + File.separator + pluginName + File.separator  + fileName + ".yml");
             if (!this.file.exists())
             {
-                this.file.createNewFile();
+                boolean newFile = this.file.createNewFile();
             }
             config.load(this.file);
         } catch (IOException | InvalidConfigurationException e) {
@@ -132,7 +129,9 @@ public class SaveManager {
     public SaveManager(File file) {
         try {
             this.file = file;
-            if (!this.file.exists()) this.file.createNewFile();
+            if (!this.file.exists()) {
+                boolean newFile = this.file.createNewFile();
+            }
             config = new YamlConfiguration();
             config.load(this.file);
         } catch (IOException | InvalidConfigurationException e) {
@@ -150,17 +149,17 @@ public class SaveManager {
             File dataStorageDIR = new File("data-storage");
             if (!dataStorageDIR.exists())
             {
-                dataStorageDIR.mkdir();
+                boolean mkdir = dataStorageDIR.mkdir();
             }
             File TitanBoxDIR = new File("data-storage" + File.separator + "TitanBox" );
             if (!TitanBoxDIR.exists())
             {
-                TitanBoxDIR.mkdir();
+                boolean mkdir = TitanBoxDIR.mkdir();
             }
             this.file = new File("data-storage" + File.separator + "TitanBox" + File.separator  + fileName + "_save.yml");
             if (!this.file.exists())
             {
-                this.file.createNewFile();
+                boolean newFile = this.file.createNewFile();
             }
             config.load(this.file);
         } catch (IOException | InvalidConfigurationException e) {
@@ -178,7 +177,7 @@ public class SaveManager {
             this.file = file;
             if (!this.file.exists())
             {
-                this.file.createNewFile();
+                boolean newFile = this.file.createNewFile();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -195,17 +194,17 @@ public class SaveManager {
             File dataStorageDIR = new File("data-storage");
             if (!dataStorageDIR.exists())
             {
-                dataStorageDIR.mkdir();
+                boolean mkdir = dataStorageDIR.mkdir();
             }
             File TitanBoxDIR = new File("data-storage" + File.separator + "TitanBox" );
             if (!TitanBoxDIR.exists())
             {
-                TitanBoxDIR.mkdir();
+                boolean mkdir = TitanBoxDIR.mkdir();
             }
             this.file = new File("data-storage" + File.separator + "TitanBox" + File.separator  + fileName + "_save.yml");
             if (!this.file.exists())
             {
-                this.file.createNewFile();
+                boolean newFile = this.file.createNewFile();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -283,6 +282,7 @@ public class SaveManager {
     /**
      * Clones the saveManager
      */
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     public SaveManager clone()
     {
         SaveManager managerClone = new SaveManager();
@@ -353,8 +353,8 @@ public class SaveManager {
     public void save()
     {
         try {
-            this.file.delete();
-            this.file.createNewFile();
+            boolean delete = this.file.delete();
+            boolean newFile = this.file.createNewFile();
             config.save(this.file);
         } catch (IOException e) {
             e.printStackTrace();
@@ -453,6 +453,7 @@ public class SaveManager {
         try {
             if (config.contains(path)){
                 if (config.getString(path) != null) {
+                    //noinspection unchecked
                     return (ArrayList<String>)config.getList(path);
                 }
             }

@@ -16,10 +16,10 @@ import net.minecraft.world.level.block.entity.TileEntity;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_20_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_20_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -47,9 +47,9 @@ public class LibsNBTTool {
     {
         String string = "not set";
         try {
-            ParseResults commandListenerWrapperParseResults = parseCommand("give @a " +  material.getKey() + NBTString + " " + amount);
+            var commandListenerWrapperParseResults = parseCommand("give @a " +  material.getKey() + NBTString + " " + amount);
             string = commandListenerWrapperParseResults.getReader().getString();
-            CommandContext build = commandListenerWrapperParseResults.getContext().build(string);
+            var build = commandListenerWrapperParseResults.getContext().build(string);
             ArgumentPredicateItemStack item = ArgumentItemStack.a(build, "item");
             net.minecraft.world.item.ItemStack itemStack = item.a(1, false);
             ItemStack itemStack1 = CraftItemStack.asBukkitCopy(itemStack);
@@ -225,7 +225,8 @@ public class LibsNBTTool {
      */
     public ItemStack set(ItemStack itemStack, String key, List value)
     {
-        if (value == null || key == null || itemStack == null) return itemStack.clone();
+        if (itemStack == null) return null;
+        if (value == null || key == null) return itemStack.clone();
         NBTTagCompound nbtTagCompound = this.getNBT(itemStack);
         nbtTagCompound.a(key, EncodeDecodeManager.encode(value));
         ItemStack itemStack1= this.setNBT(itemStack, nbtTagCompound);
@@ -345,9 +346,8 @@ public class LibsNBTTool {
         NBTTagCompound nbt = getNBT(entity);
         NBTTagList c = nbt.c(key, 8);
         List<String> outWords = new ArrayList<String>();
-        for (int i = 0; i < c.size(); i++)
-        {
-            outWords.add(c.get(i).m_()); //f_()
+        for (net.minecraft.nbt.NBTBase nbtBase : c) {
+            outWords.add(nbtBase.r_()); //f_(), m_()
         }
         return outWords;
     }
@@ -383,7 +383,7 @@ public class LibsNBTTool {
         for(String key: nbtTagCompound.e())
         {
             NBTTagCompound compound = nbtTagCompound.p(key);
-            if (pre.length() < 1) {
+            if (pre.isEmpty()) {
                 pass.add(key);
                 if (compound != null) getNBTKeyTree(compound, pass, key);
             } else {
@@ -445,11 +445,13 @@ public class LibsNBTTool {
     {
 
         WorldServer w = ((CraftWorld) block.getWorld()).getHandle();
-        NBTTagCompound nbt = new NBTTagCompound();
-        TileEntity tile = w.c_(new BlockPosition(block.getX(), block.getY(), block.getZ()));
+        TileEntity tile = w.getBlockEntity(new BlockPosition(block.getX(), block.getY(), block.getZ()), true);
         if (tile == null) return null;
-        tile.a(nbt);
-        return nbt;
+        //System.out.println("m:" + tile.m());
+        //System.out.println("n:" + tile.n());
+        //System.out.println("o:" + tile.o());
+        //System.out.println("ao:" + tile.ao_());
+        return tile.m();
     }
     protected NBTTagCompound getNBT(ItemStack itemStack)
     {
@@ -499,7 +501,7 @@ public class LibsNBTTool {
             else
             {
 
-                String S = "" + nbtTagCompound.l(s);
+                String S = nbtTagCompound.l(s);
 
                 data.add(pass + "=" + S);
 

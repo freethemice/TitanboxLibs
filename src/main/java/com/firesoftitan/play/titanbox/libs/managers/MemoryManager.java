@@ -3,7 +3,6 @@ package com.firesoftitan.play.titanbox.libs.managers;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
-import java.lang.instrument.Instrumentation;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +14,9 @@ public class MemoryManager {
         ClassLoader classLoader = plugin.getClass().getClassLoader();
 
         // Get the memory usage of the class loader
-        long memoryUsage = ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage().getUsed();
 
         // Return the memory usage
-        return memoryUsage;
+        return ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage().getUsed();
     }
 
     public static Thread[] getPluginThreads(Plugin plugin) {
@@ -55,13 +53,11 @@ public class MemoryManager {
         }
 
         // Calculate the execution time
-        long executionTime = System.currentTimeMillis() - startTime;
 
-        return executionTime;
+        return System.currentTimeMillis() - startTime;
     }
     public static Plugin[] getPlugins()
     {
-        Plugin[] plugins = Bukkit.getServer().getPluginManager().getPlugins();
-        return plugins;
+        return Bukkit.getServer().getPluginManager().getPlugins();
     }
 }

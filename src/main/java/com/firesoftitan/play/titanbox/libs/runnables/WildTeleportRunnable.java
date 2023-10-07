@@ -14,12 +14,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.*;
 
 public class WildTeleportRunnable extends BukkitRunnable {
-    private static List<UUID> runningPlayers = new ArrayList<UUID>();
+    private static final List<UUID> runningPlayers = new ArrayList<UUID>();
     private HashSet<Material> bad_blocks;
     private int attempts;
-    private Player player;
+    private final Player player;
     protected Tools tools;
-    private static SettingsManager config = new SettingsManager(TitanBoxLibs.instants.getName(), "wild_config");
+    private static final SettingsManager config = new SettingsManager(TitanBoxLibs.instants.getName(), "wild_config");
     public WildTeleportRunnable(Player player, Tools tools) {
         this.player = player;
         this.tools = tools;
@@ -30,7 +30,7 @@ public class WildTeleportRunnable extends BukkitRunnable {
         }
         if (player.getWorld().getEnvironment() != World.Environment.NORMAL)
         {
-            tools.getMessageTool().sendMessagePlayer( (Player) player, ChatColor.AQUA + "Can't use in this world.");
+            tools.getMessageTool().sendMessagePlayer(player, ChatColor.AQUA + "Can't use in this world.");
             attempts = -1;
             return;
         }
@@ -62,13 +62,13 @@ public class WildTeleportRunnable extends BukkitRunnable {
         bad_blocks.add(Material.BEDROCK);
         attempts = 0;
         double size = player.getWorld().getWorldBorder().getSize();
-        tools.getMessageTool().sendMessagePlayer( (Player) player, ChatColor.AQUA + "Looking for safe place to teleport, please wait...");
+        tools.getMessageTool().sendMessagePlayer(player, ChatColor.AQUA + "Looking for safe place to teleport, please wait...");
         if (config.getBoolean("wild.use_worldborder")) {
-            tools.getMessageTool().sendMessagePlayer((Player) player, ChatColor.GRAY + "World Boarder Size: " + tools.getFormattingTool().formatCommas(size));
+            tools.getMessageTool().sendMessagePlayer(player, ChatColor.GRAY + "World Boarder Size: " + tools.getFormattingTool().formatCommas(size));
         }
         else
         {
-            tools.getMessageTool().sendMessagePlayer((Player) player, ChatColor.GRAY + "Region Size: -+" + tools.getFormattingTool().formatCommas(config.getInt("wild.x")) + " by -+" + tools.getFormattingTool().formatCommas(config.getInt("wild.z")));
+            tools.getMessageTool().sendMessagePlayer(player, ChatColor.GRAY + "Region Size: -+" + tools.getFormattingTool().formatCommas(config.getInt("wild.x")) + " by -+" + tools.getFormattingTool().formatCommas(config.getInt("wild.z")));
         }
 
     }
@@ -93,20 +93,21 @@ public class WildTeleportRunnable extends BukkitRunnable {
             y = 150;
         }
         else {
-            x = (int) (random.nextInt((int) (config.getInt("wild.x") * 2)) - config.getInt("wild.x"));
-            z = (int) (random.nextInt((int) (config.getInt("wild.z") * 2)) - config.getInt("wild.z"));
+            x = random.nextInt(config.getInt("wild.x") * 2) - config.getInt("wild.x");
+            z = random.nextInt(config.getInt("wild.z") * 2) - config.getInt("wild.z");
             y = 150;
         }
 
 
         Location randomLocation = new Location(player.getWorld(), x, y, z);
+        if (randomLocation.getWorld() == null) return;
         y = randomLocation.getWorld().getHighestBlockYAt(randomLocation);
         randomLocation.setX(x + 0.5D);
         randomLocation.setY((y + 1));
         randomLocation.setZ(z + 0.5D);
         if (isLocationSafe(randomLocation))
         {
-            tools.getMessageTool().sendMessagePlayer( (Player) player, ChatColor.AQUA + "Safe place found... (" + ChatColor.WHITE + randomLocation.getBlockX() + ", " + randomLocation.getBlockZ() + ChatColor.AQUA + ")");
+            tools.getMessageTool().sendMessagePlayer(player, ChatColor.AQUA + "Safe place found... (" + ChatColor.WHITE + randomLocation.getBlockX() + ", " + randomLocation.getBlockZ() + ChatColor.AQUA + ")");
             this.cancel();
             player.teleport(randomLocation);
             runningPlayers.remove(player.getUniqueId());
@@ -115,12 +116,12 @@ public class WildTeleportRunnable extends BukkitRunnable {
         {
             if (attempts > 10)
             {
-                tools.getMessageTool().sendMessagePlayer( (Player) player, ChatColor.AQUA + "Couldn't find safe place to teleport, please try again...");
+                tools.getMessageTool().sendMessagePlayer(player, ChatColor.AQUA + "Couldn't find safe place to teleport, please try again...");
                 this.cancel();
                 runningPlayers.remove(player.getUniqueId());
             }
             else {
-                tools.getMessageTool().sendMessagePlayer( (Player) player, ChatColor.AQUA + "Looking, please wait...");
+                tools.getMessageTool().sendMessagePlayer(player, ChatColor.AQUA + "Looking, please wait...");
             }
 
         }
@@ -130,6 +131,7 @@ public class WildTeleportRunnable extends BukkitRunnable {
         int x = location.getBlockX();
         int y = location.getBlockY();
         int z = location.getBlockZ();
+        if (location.getWorld() == null) return false;
         if (location.getWorld().getEnvironment().equals(World.Environment.NETHER)) {
             Block block1 = location.getWorld().getBlockAt(x, y, z);
             Block block2 = location.getWorld().getBlockAt(x, y - 1, z);

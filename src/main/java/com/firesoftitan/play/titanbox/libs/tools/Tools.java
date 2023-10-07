@@ -9,7 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.HashMap;
 
 public class Tools {
-    private  static HashMap<JavaPlugin, Tools> allTools = new HashMap<JavaPlugin, Tools>();
+    private  static final HashMap<JavaPlugin, Tools> allTools = new HashMap<JavaPlugin, Tools>();
     public static Tools getTools(JavaPlugin plugin)
     {
         return allTools.get(plugin);
@@ -56,24 +56,24 @@ public class Tools {
     public static LibsAdvancedRecipeTool getRecipeTool(JavaPlugin plugin) {
         return allTools.get(plugin).RecipeTool;
     }
-    private JavaPlugin plugin;
-    private int spigotID;
-    private LibsFormattingTool FormattingTool;
-    private LibsEntityTool EntityTool;
-    private LibsBlockTool BlockTool;
-    private LibsStructureTool structureTool;
-    private LibsMiscTool MiscTool;
-    private LibsItemStackTool ItemStackTool;
-    private LibsLocationTool LocationTool;
-    private LibsMessageTool MessageTool;
-    private LibsNBTTool NBTTool;
-    private LibsSerializeTool SerializeTool;
-    private LibsSkullTool SkullTool;
-    private LibsVaultTool VaultTool;
-    private LibsPlayerTool PlayerTool;
-    private LibsHologramTool hologramTool;
-    private LibsAdvancedRecipeTool RecipeTool;
-    private static SaveRunnable saver = new SaveRunnable();
+    private final JavaPlugin plugin;
+    private final int spigotID;
+    private final LibsFormattingTool FormattingTool;
+    private final LibsEntityTool EntityTool;
+    private final LibsBlockTool BlockTool;
+    private final LibsStructureTool structureTool;
+    private final LibsMiscTool MiscTool;
+    private final LibsItemStackTool ItemStackTool;
+    private final LibsLocationTool LocationTool;
+    private final LibsMessageTool MessageTool;
+    private final LibsNBTTool NBTTool;
+    private final LibsSerializeTool SerializeTool;
+    private final LibsSkullTool SkullTool;
+    private final LibsVaultTool VaultTool;
+    private final LibsPlayerTool PlayerTool;
+    private final LibsHologramTool hologramTool;
+    private final LibsAdvancedRecipeTool RecipeTool;
+    private static final SaveRunnable saver = new SaveRunnable();
     protected static Tools tools;
 
     public Tools(JavaPlugin plugin, TitanSaverRunnable titanSaverRunnable, int spigotID) {
@@ -100,11 +100,16 @@ public class Tools {
         if (tools == null && plugin.getName().equals(TitanBoxLibs.instants.getName()))
         {
             tools = this;
-            Bukkit.getScheduler().scheduleSyncRepeatingTask(TitanBoxLibs.instants,  saver, TitanBoxLibs.instants.configManager.getSave_frequancy(), TitanBoxLibs.instants.configManager.getSave_frequancy());
+            Bukkit.getScheduler().scheduleSyncRepeatingTask(TitanBoxLibs.instants,  saver, TitanBoxLibs.instants.configManager.getSave_frequency(), TitanBoxLibs.instants.configManager.getSave_frequency());
         }
         if (spigotID > 0) TitanBoxLibs.autoUpdateManager.addPlugin(spigotID, plugin);
 
     }
+
+    public int getSpigotID() {
+        return spigotID;
+    }
+
     public static void disablePlugin()
     {
         saver.run();

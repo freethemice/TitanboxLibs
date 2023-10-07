@@ -29,7 +29,11 @@ public class LibsFormattingTool
         suffixes.put(1_000_000_000_000_000_000L, "E");
 
     }
+    @Deprecated
     public String formatSuffixe(long value) {
+        return formatSuffix(value);
+    }
+    public String formatSuffix(long value) {
         //Long.MIN_VALUE == -Long.MIN_VALUE so we need an adjustment here
         if (value == Long.MIN_VALUE) return formatSuffixe(Long.MIN_VALUE + 1);
         if (value < 0) return "-" + formatSuffixe(-value);
@@ -115,7 +119,7 @@ public class LibsFormattingTool
     }
     public String fixCapitalization(String Namespace)
     {
-        if (Namespace.length() > 0) {
+        if (!Namespace.isEmpty()) {
             String fixing = Namespace.replace("_", " ").toLowerCase();
             return WordUtils.capitalize(fixing);
         }

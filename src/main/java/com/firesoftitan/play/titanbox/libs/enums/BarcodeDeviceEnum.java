@@ -3,7 +3,7 @@ package com.firesoftitan.play.titanbox.libs.enums;
 public enum BarcodeDeviceEnum {
     NONE(0, "", false),
     INVALID(1, "Invalid", false),
-    DUPPED(2, "Dupped", false),
+    DUPED(2, "Duped", false),
     VALID(3, "Valid", true);
 
     private final String name;

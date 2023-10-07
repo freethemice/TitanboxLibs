@@ -99,8 +99,8 @@ public class MainListener  implements Listener {
                 }
             }
         } else {
-            for (int i = 0; i < current.length; i++) {
-                if (tools.getRecipeTool().isAdvancedRecipe(current[i])) {
+            for (ItemStack itemStack : current) {
+                if (tools.getRecipeTool().isAdvancedRecipe(itemStack)) {
                     inventory.setResult(null);
                     return;
                 }

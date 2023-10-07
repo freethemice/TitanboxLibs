@@ -8,7 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
@@ -153,8 +153,8 @@ public class EncodeDecodeManager {
             {
                 return tmp;
             }
-            ItemStack itsub = config.getItemStack(key);
-            tmp.add(itsub);
+            ItemStack itSub = config.getItemStack(key);
+            tmp.add(itSub);
         }
 
         return tmp;
@@ -173,6 +173,7 @@ public class EncodeDecodeManager {
             e.printStackTrace();
             return null;
         }
+        //noinspection unchecked
         return (List<String>) config.getList("i", new ArrayList<String>());
     }
 
@@ -189,6 +190,7 @@ public class EncodeDecodeManager {
             e.printStackTrace();
             return null;
         }
+        //noinspection unchecked
         return (List<Long>) config.getList("i", new ArrayList<Integer>());
     }
 
@@ -205,6 +207,7 @@ public class EncodeDecodeManager {
             e.printStackTrace();
             return null;
         }
+        //noinspection unchecked
         return (List<Byte>) config.getList("i", new ArrayList<Integer>());
     }
 
@@ -221,6 +224,7 @@ public class EncodeDecodeManager {
             e.printStackTrace();
             return null;
         }
+        //noinspection unchecked
         return (List<Integer>) config.getList("i", new ArrayList<Integer>());
     }
 
@@ -247,9 +251,9 @@ public class EncodeDecodeManager {
         if (stringYaw != null) yaw = Float.parseFloat(stringYaw);
         if (stringPitch != null) pitch = Float.parseFloat(stringPitch);
 
-        String worldname = config.getString("i.world");
-        if (worldname == null) return null;
-        World world = Bukkit.getWorld(worldname);
+        String worldName = config.getString("i.world");
+        if (worldName == null) return null;
+        World world = Bukkit.getWorld(worldName);
         Location location = new Location(world, x, y, z, yaw, pitch);
         return  location.clone();
     }
@@ -276,7 +280,7 @@ public class EncodeDecodeManager {
         NBTTagCompound item = CraftItemStack.asNMSCopy(itemStack).b(new NBTTagCompound());
         config = new YamlConfiguration();
         //String??
-        config.set("x", item.m_());
+        config.set("x", item.r_());
         configString = config.saveToString();
         byte[] configBytes = configString.getBytes(StandardCharsets.UTF_8);
             return Base64.getEncoder().encodeToString(configBytes);
@@ -316,11 +320,12 @@ public class EncodeDecodeManager {
      */
     public static String encode(@SuppressWarnings("rawtypes") List list) {
         YamlConfiguration config = new YamlConfiguration();
-        if (list.size() > 0)
+        if (!list.isEmpty())
         {
             if (list.get(0) instanceof  Byte)
             {
                 int i = 0;
+                //noinspection unchecked
                 for (Byte is: (List<Byte>)list)
                 {
                     config.set("i" + i, is);
@@ -341,6 +346,7 @@ public class EncodeDecodeManager {
             if (list.get(0) instanceof  Integer)
             {
                 int i = 0;
+                //noinspection unchecked
                 for (Integer is: (List<Integer>)list)
                 {
                     config.set("i" + i, is);
@@ -351,6 +357,7 @@ public class EncodeDecodeManager {
             if (list.get(0) instanceof  ItemStack)
             {
                 int i = 0;
+                //noinspection unchecked
                 for (ItemStack is: (List<ItemStack>)list)
                 {
                     config.set("i" + i, is);
@@ -361,6 +368,7 @@ public class EncodeDecodeManager {
             if (list.get(0) instanceof  Location)
             {
                 int i = 0;
+                //noinspection unchecked
                 for (Location is: (List<Location>)list)
                 {
                     config.set("i" + i, is.clone());
@@ -371,6 +379,7 @@ public class EncodeDecodeManager {
             if (list.get(0) instanceof  UUID)
             {
                 int i = 0;
+                //noinspection unchecked
                 for (UUID is: (List<UUID>)list)
                 {
                     config.set("i" + i, is.toString());
@@ -381,6 +390,7 @@ public class EncodeDecodeManager {
             if (list.get(0) instanceof  EntityType)
             {
                 int i = 0;
+                //noinspection unchecked
                 for (EntityType is: (List<EntityType>)list)
                 {
                     config.set("i" + i, is.name());
@@ -403,7 +413,7 @@ public class EncodeDecodeManager {
 
     public static YamlConfiguration decodeYaml(String data)
     {
-        if (data == null || data.length() <1) return null;
+        if (data == null || data.isEmpty()) return null;
         YamlConfiguration config = new YamlConfiguration();
         try {
             config.loadFromString(new String(Base64.getDecoder().decode(data), StandardCharsets.UTF_8));

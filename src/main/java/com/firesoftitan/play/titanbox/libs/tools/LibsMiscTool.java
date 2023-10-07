@@ -145,7 +145,7 @@ public class LibsMiscTool {
     }
     public boolean runCommandListener(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (cmd.getLabel().length() > 0) {
+        if (!cmd.getLabel().isEmpty()) {
             if (Tools.tools.getMiscTool().commandInterfaces.containsKey(cmd.getLabel())) {
                 CommandInterface commandInterface = Tools.tools.getMiscTool().commandInterfaces.get(cmd.getLabel());
                 boolean ranCommand = commandInterface.onCommand(sender, cmd, args);
@@ -184,7 +184,7 @@ public class LibsMiscTool {
     {
         if (item != null) {
             String titanID = Tools.tools.getSkullTool().getSkullTitanID(item);
-            if (titanID != null && titanID.length() > 0) {
+            if (titanID != null && !titanID.isEmpty()) {
                 if (titanID.equals("player_heart_quarter")) {
                     if (!TitanBoxLibs.barcodeManager.hasBarcode(item))
                     {
@@ -200,9 +200,9 @@ public class LibsMiscTool {
                     boolean barcodeTrue = Boolean.parseBoolean(barcode);
                     if (barcodeTrue)
                     {
-                        //TitanBox.duppedAlert(player, item);
-                        //add dupped alert later
-                        return BarcodeDeviceEnum.DUPPED;
+                        //TitanBox.dupedAlert(player, item);
+                        //add duped alert later
+                        return BarcodeDeviceEnum.DUPED;
                     }
                     return BarcodeDeviceEnum.VALID;
                 }
@@ -247,9 +247,9 @@ public class LibsMiscTool {
                         boolean barcodeTrue = Boolean.parseBoolean(barcode);
                         if (barcodeTrue)
                         {
-                            //TitanBox.duppedAlert(player, item);
-                            //add dupped alert later
-                            return BarcodeDeviceEnum.DUPPED;
+                            //TitanBox.dupedAlert(player, item);
+                            //add duped alert later
+                            return BarcodeDeviceEnum.DUPED;
                         }
                         return BarcodeDeviceEnum.VALID;
                     }

@@ -5,7 +5,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.DoubleChest;
-import org.bukkit.craftbukkit.v1_20_R1.block.CraftBlockState;
+import org.bukkit.craftbukkit.v1_20_R2.block.CraftBlockState;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -94,14 +94,16 @@ public class LibsBlockTool {
             int amountHave = 0;
             for (int slot = 0; slot < inventory.getSize(); slot++) {
                 ItemStack slotItemStack = inventory.getItem(slot);
-                if (! Tools.tools.getItemStackTool().isEmpty(slotItemStack)) {
+                if (!Tools.tools.getItemStackTool().isEmpty(slotItemStack)) {
                     if( Tools.tools.getItemStackTool().isItemEqual(itemStack, slotItemStack))
                     {
-                        if (amountNeeded > 0 && amountNeeded == slotItemStack.getAmount())
-                        {
-                            inventory.setItem(slot, null);
-                            amountNeeded = 0;
-                            amountHave =  amountHave + slotItemStack.getAmount();
+                        if (amountNeeded > 0) {
+                            assert slotItemStack != null;
+                            if (amountNeeded == slotItemStack.getAmount()) {
+                                inventory.setItem(slot, null);
+                                amountNeeded = 0;
+                                amountHave = amountHave + slotItemStack.getAmount();
+                            }
                         }
                         if (amountNeeded > 0 && amountNeeded  < slotItemStack.getAmount())
                         {

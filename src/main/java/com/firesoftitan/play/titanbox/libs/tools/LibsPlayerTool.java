@@ -6,12 +6,16 @@ import com.mojang.authlib.properties.Property;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.protocol.EnumProtocolDirection;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.server.level.WorldServer;
+import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.network.PlayerConnection;
+import net.minecraft.world.entity.EnumMainHand;
+import net.minecraft.world.entity.player.EnumChatVisibility;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_20_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_20_R2.CraftWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -22,10 +26,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class LibsPlayerTool {
     private Tools parent;
@@ -327,8 +328,10 @@ public class LibsPlayerTool {
         WorldServer nmsWorld = ((CraftWorld)world).getHandle();
         if (name.length() > 16) name = name.substring(0, 16);
         GameProfile gameProfile = new GameProfile(uuid, name);
-        EntityPlayer entityPlayer = new EntityPlayer(nmsServer, nmsWorld, gameProfile);
-        entityPlayer.c = new PlayerConnection(nmsServer, new NetworkManager(EnumProtocolDirection.a), entityPlayer);
+        ClientInformation clientinformation = new ClientInformation("English", 0, EnumChatVisibility.c, true, 0, EnumMainHand.b, false, true);//new 1.20.2
+        EntityPlayer entityPlayer = new EntityPlayer(nmsServer, nmsWorld, gameProfile, clientinformation);
+        CommonListenerCookie commonListenerCookie = new CommonListenerCookie(gameProfile, 0, clientinformation); //new 1.20.2
+        entityPlayer.c = new PlayerConnection(nmsServer, new NetworkManager(EnumProtocolDirection.a), entityPlayer, commonListenerCookie);
     }
     public Player loadOfflinePlayer(OfflinePlayer offline)
     {
@@ -340,12 +343,13 @@ public class LibsPlayerTool {
             return null;
         }
 
-        GameProfile profile = new GameProfile(offline.getUniqueId(), offline.getName());
+        GameProfile profile = new GameProfile(offline.getUniqueId(), Objects.requireNonNull(offline.getName()));
         MinecraftServer server = ((CraftServer)Bukkit.getServer()).getServer();
 
         WorldServer worldServer = server.a(net.minecraft.world.level.World.h);
         if (worldServer == null) return null;
-        EntityPlayer entity = new EntityPlayer(server, worldServer, profile);
+        ClientInformation clientinformation = new ClientInformation("English", 0, EnumChatVisibility.c, true, 0, EnumMainHand.b, false, true);//new 1.20.2
+        EntityPlayer entity = new EntityPlayer(server, worldServer, profile, clientinformation);
         Player target = entity.getBukkitEntity();
         if (target != null)
         {

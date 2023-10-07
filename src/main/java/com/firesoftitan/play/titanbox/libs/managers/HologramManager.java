@@ -56,14 +56,13 @@ public class HologramManager {
         String strPlugin = plugin.getName();
         for(String tag: tags)
         {
-            try{ return Long.parseLong( tag ) ; }catch(Exception e){}
+            try{ return Long.parseLong( tag ) ; }catch(Exception ignored){}
         }
         return 0;
     }
     public List<String> getTags()
     {
-        List<String> tags = Tools.getNBTTool(TitanBoxLibs.instants).getListString(armorStand, "Tags");
-        return tags;
+        return Tools.getNBTTool(TitanBoxLibs.instants).getListString(armorStand, "Tags");
     }
     public JavaPlugin getPlugin() {
         return plugin;
@@ -93,9 +92,7 @@ public class HologramManager {
                 @Override
                 public void run() {
                     armorStand.remove();
-                    for(int i = 0; i < armorStands.size(); i++)
-                    {
-                        ArmorStand armorStand = armorStands.get(i);
+                    for (ArmorStand armorStand : armorStands) {
                         armorStand.remove();
                     }
                 }
@@ -130,6 +127,7 @@ public class HologramManager {
     public void setEquipment(EquipmentSlot equipmentSlot, ItemStack itemStack)
     {
         EntityEquipment equipment = armorStand.getEquipment();
+        if (equipment == null) return;
         equipment.setItem(equipmentSlot, itemStack.clone());
     }
     public String getText()

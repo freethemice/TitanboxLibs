@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class AutoUpdateManager {
-    private HashMap<Integer, JavaPlugin> pluginHashMap = new HashMap<Integer, JavaPlugin>();
+    private final HashMap<Integer, JavaPlugin> pluginHashMap = new HashMap<Integer, JavaPlugin>();
     public AutoUpdateManager() {
         new BukkitRunnable() {
             @Override

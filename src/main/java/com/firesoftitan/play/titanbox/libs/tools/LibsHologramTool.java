@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class LibsHologramTool {
-    private Tools parent;
+    private final Tools parent;
     private static final SaveManager holoConfig = new SaveManager(  "holograms");
     public static void save()
     {
@@ -39,8 +39,7 @@ public class LibsHologramTool {
     }
     public HologramManager addHologram(Location location)
     {
-        HologramManager e = new HologramManager(this.parent.getPlugin(), location);
-        return e;
+        return new HologramManager(this.parent.getPlugin(), location);
     }
 
 
@@ -72,14 +71,14 @@ public class LibsHologramTool {
         for (HologramManager hologramManager: hologramsAll)
         {
             ArmorStand entity = hologramManager.getArmorStand();
-            List<String> tags = TitanBoxLibs.tools.getNBTTool(TitanBoxLibs.instants).getListString(entity, "Tags");
-            String serializeLocation = TitanBoxLibs.tools.getSerializeTool(TitanBoxLibs.instants).serializeLocation(location);
+            List<String> tags = Tools.getNBTTool(TitanBoxLibs.instants).getListString(entity, "Tags");
+            String serializeLocation = Tools.getSerializeTool(TitanBoxLibs.instants).serializeLocation(location);
             if (tags.contains(serializeLocation))
             {
                 returnList.add(hologramManager);
             }
         }
-        if (returnList.size() == 0)
+        if (returnList.isEmpty())
         {
             returnList.add(getHologram(location));
         }
@@ -92,7 +91,7 @@ public class LibsHologramTool {
         for (HologramManager hologramManager: hologramsAll)
         {
             ArmorStand entity = hologramManager.getArmorStand();
-            List<String> tags = TitanBoxLibs.tools.getNBTTool(TitanBoxLibs.instants).getListString(entity, "Tags");
+            List<String> tags = Tools.getNBTTool(TitanBoxLibs.instants).getListString(entity, "Tags");
             if (tags.contains(timeMilliseconds+""))
             {
                 returnList.add(hologramManager);
@@ -110,7 +109,7 @@ public class LibsHologramTool {
             Collection<Entity> nearbyEntities = world.getEntities();
             for (Entity entity : nearbyEntities) {
                 if (entity.getType() == EntityType.ARMOR_STAND) {
-                    List<String> tags = TitanBoxLibs.tools.getNBTTool(TitanBoxLibs.instants).getListString(entity, "Tags");
+                    List<String> tags = Tools.getNBTTool(TitanBoxLibs.instants).getListString(entity, "Tags");
                     if (tags.contains("tblHG"))
                     {
                         if (tags.contains(strPlugin)) returnList.add(getHologram(entity.getUniqueId()));
@@ -123,22 +122,19 @@ public class LibsHologramTool {
     public boolean isHologram(Entity entity)
     {
         if (entity.getType() == EntityType.ARMOR_STAND) {
-            List<String> tags = TitanBoxLibs.tools.getNBTTool(TitanBoxLibs.instants).getListString(entity, "Tags");
-            if (tags.contains("tblHG"))
-            {
-                return true;
-            }
+            List<String> tags = Tools.getNBTTool(TitanBoxLibs.instants).getListString(entity, "Tags");
+            return tags.contains("tblHG");
         }
         return false;
     }
     public boolean isMyHologram(Entity entity)
     {
         if (entity.getType() == EntityType.ARMOR_STAND) {
-            List<String> tags = TitanBoxLibs.tools.getNBTTool(TitanBoxLibs.instants).getListString(entity, "Tags");
+            List<String> tags = Tools.getNBTTool(TitanBoxLibs.instants).getListString(entity, "Tags");
             if (tags.contains("tblHG"))
             {
                 String strPlugin = parent.getPlugin().getName();
-                if (tags.contains(strPlugin)) return true;
+                return tags.contains(strPlugin);
             }
         }
         return false;
@@ -157,15 +153,11 @@ public class LibsHologramTool {
     private HologramManager getHologram(Location location)
     {
         HologramManager closes = null;
-        if (closes == null)
-        {
-            for(int i = 1; i< 4;i++) {
-                List<Entity> entities = TitanBoxLibs.tools.getEntityTool(TitanBoxLibs.instants).findEntities(location, i);
-                for (Entity entity : entities) {
-                    if (entity.getType() == EntityType.ARMOR_STAND) {
-                        HologramManager hologramManager = new HologramManager(parent.getPlugin(), (ArmorStand) entity);
-                        return hologramManager;
-                    }
+        for (int i = 1; i < 4; i++) {
+            List<Entity> entities = Tools.getEntityTool(TitanBoxLibs.instants).findEntities(location, i);
+            for (Entity entity : entities) {
+                if (entity.getType() == EntityType.ARMOR_STAND) {
+                    return new HologramManager(parent.getPlugin(), (ArmorStand) entity);
                 }
             }
         }
@@ -181,11 +173,9 @@ public class LibsHologramTool {
                 stand.setVisible(false);
                 List<Entity> nearbyEntities = stand.getNearbyEntities(1, 1, 1);
                 stand.remove();
-                for(int i = 0; i < nearbyEntities.size(); i++)
-                {
-                    if (nearbyEntities.get(i).getType() == EntityType.ARMOR_STAND)
-                    {
-                        nearbyEntities.get(i).remove();
+                for (Entity nearbyEntity : nearbyEntities) {
+                    if (nearbyEntity.getType() == EntityType.ARMOR_STAND) {
+                        nearbyEntity.remove();
                     }
                 }
             }

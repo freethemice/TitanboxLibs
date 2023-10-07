@@ -18,9 +18,9 @@ import net.minecraft.world.level.block.entity.TileEntity;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_20_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_20_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_20_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R2.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -72,7 +72,7 @@ public class LibsEntityTool {
         if (entityType != null)
         {
             type = "type=" + entityType.getKey();
-            if (s.length() > 0) type = type + ",";
+            if (!s.isEmpty()) type = type + ",";
         }
         ArgumentEntity argumentEntity = ArgumentEntity.b();
         try {
@@ -141,13 +141,14 @@ public class LibsEntityTool {
             WorldServer worldServer = ((CraftWorld) world).getHandle();
             nbtString = "{Pos:[" + location.getX() + "d," + location.getY() + "d," + location.getZ() + "d],Rotation:[" + location.getYaw() + "f," + location.getPitch() + "f]," + nbtString.substring(1);
 
-            ParseResults commandListenerWrapperParseResults = parseCommand("summon " + type.name().toLowerCase() + " " + location.getBlockX() + " " + location.getBlockY() + " " + location.getBlockZ() + " " + nbtString);
+            var commandListenerWrapperParseResults = parseCommand("summon " + type.name().toLowerCase() + " " + location.getBlockX() + " " + location.getBlockY() + " " + location.getBlockZ() + " " + nbtString);
             String string = commandListenerWrapperParseResults.getReader().getString();
-            CommandContext build = commandListenerWrapperParseResults.getContext().build(string);
+            var build = commandListenerWrapperParseResults.getContext().build(string);
             NBTTagCompound nbt = ArgumentNBTTag.a(build, "nbt");
             nbt.a("id", type.getKey().toString()); //ResourceKey.MinecraftKey.toString()
             net.minecraft.world.entity.Entity entity = EntityTypes.a(nbt, worldServer, (entity1) -> entity1);
             worldServer.tryAddFreshEntityWithPassengers(entity, CreatureSpawnEvent.SpawnReason.COMMAND);
+            if (entity == null) return null;
             return entity.getBukkitEntity();
 
 
@@ -160,13 +161,14 @@ public class LibsEntityTool {
     {
         try {
             WorldServer worldServer = ((CraftWorld) world).getHandle();
-            ParseResults commandListenerWrapperParseResults = parseCommand("summon " + type.name().toLowerCase() + " 1 100 1 " + nbtString);
+            var commandListenerWrapperParseResults = parseCommand("summon " + type.name().toLowerCase() + " 1 100 1 " + nbtString);
             String string = commandListenerWrapperParseResults.getReader().getString();
-            CommandContext build = commandListenerWrapperParseResults.getContext().build(string);
+            var build = commandListenerWrapperParseResults.getContext().build(string);
             NBTTagCompound nbt = ArgumentNBTTag.a(build, "nbt");
             nbt.a("id", type.getKey().toString()); //ResourceKey.MinecraftKey.toString()
             net.minecraft.world.entity.Entity entity = EntityTypes.a(nbt, worldServer, (entity1) -> entity1);
             worldServer.tryAddFreshEntityWithPassengers(entity, CreatureSpawnEvent.SpawnReason.COMMAND);
+            if (entity == null) return null;
             return entity.getBukkitEntity();
 
 

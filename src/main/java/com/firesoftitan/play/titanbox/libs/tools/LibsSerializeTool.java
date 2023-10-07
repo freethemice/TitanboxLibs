@@ -49,6 +49,7 @@ public class LibsSerializeTool {
     {
         return serializeItemStack(itemStackA, false);
     }
+    @SuppressWarnings("UnnecessaryUnicodeEscape")
     public String serializeItemStack(ItemStack itemStackA, boolean complete)
     {
         String xml10pattern = "[^"
@@ -90,6 +91,7 @@ public class LibsSerializeTool {
         //TitanBoxCore.sendMessageSystem(TitanBox.instants, key);
         return new String(key.getBytes(), StandardCharsets.UTF_8);
     }
+    @SuppressWarnings("UnnecessaryUnicodeEscape")
     public String serializeString(String key) {
         String xml10pattern = "[^"
                 + "\u0009\r\n"

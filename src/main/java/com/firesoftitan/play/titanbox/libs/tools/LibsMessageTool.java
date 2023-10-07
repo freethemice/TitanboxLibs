@@ -29,7 +29,7 @@ public class LibsMessageTool {
     {
         String subName = this.parent.getPlugin().getName().replaceFirst("TitanBox", "");
         subName = subName.replaceFirst("Titan", "");
-        String messageHeaderFooter = ChatColor.GRAY + "" + ChatColor.BOLD + ChatColor.STRIKETHROUGH + "-------------" + ChatColor.RESET + ChatColor.GREEN + "[" + ChatColor.BLUE + "TitanBox" + ChatColor.GREEN + "](" + ChatColor.AQUA + subName + ChatColor.GREEN + ")" + ChatColor.GRAY + "" + ChatColor.BOLD + ChatColor.STRIKETHROUGH + "-------------";
+        String messageHeaderFooter = ChatColor.GRAY + "" + ChatColor.BOLD + ChatColor.STRIKETHROUGH + "-------------" + ChatColor.RESET + ChatColor.GREEN + "[" + ChatColor.BLUE + "TitanBox" + ChatColor.GREEN + "](" + ChatColor.AQUA + subName + ChatColor.GREEN + ")" + ChatColor.GRAY + ChatColor.BOLD + ChatColor.STRIKETHROUGH + "-------------";
         if (player == null || !player.isOnline())
         {
             this.sendMessageSystem(messageHeaderFooter);

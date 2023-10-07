@@ -19,14 +19,13 @@ import java.util.UUID;
 
 public class CraftingBookGui {
 
-    private static HashMap<UUID, CraftingBookGui> activeGuis = new HashMap<UUID, CraftingBookGui>();
+    private static final HashMap<UUID, CraftingBookGui> activeGuis = new HashMap<UUID, CraftingBookGui>();
     public static String guiName = "Titan Crafting Book";
     public static int size = 54;
     public static CraftingBookGui getGui(Player player)
     {
         if (activeGuis.containsKey(player.getUniqueId())) {
-            CraftingBookGui plainFillerGUI = activeGuis.get(player.getUniqueId());
-            return plainFillerGUI;
+            return activeGuis.get(player.getUniqueId());
         }
         return null;
     }
@@ -35,11 +34,11 @@ public class CraftingBookGui {
         return size;
     }
 
-    private Player viewer;
-    private LibsAdvancedRecipeTool advancedRecipeTool;
-    private LibsNBTTool nbtTool;
-    private LibsItemStackTool itemStackTool;
-    private Inventory inventory;
+    private final Player viewer;
+    private final LibsAdvancedRecipeTool advancedRecipeTool;
+    private final LibsNBTTool nbtTool;
+    private final LibsItemStackTool itemStackTool;
+    private final Inventory inventory;
     private String showing = null;
     private int scrolling = 0;
     public CraftingBookGui(Player viewer) {
@@ -86,11 +85,12 @@ public class CraftingBookGui {
         button = nbtTool.set(button, "buttonaction", "down");
         inventory.setItem(45, button);
     }
+    @SuppressWarnings("SpellCheckingInspection")
     public void mainDraw()
     {
         int[] slots = {9, 18, 27, 36};
         int[] slots_crafting = {20, 21, 22, 29, 30 ,31, 38, 39, 40};
-        int intcrafted = 33;
+        int intCrafted = 33;
 
         ItemStack button;
 
@@ -110,13 +110,13 @@ public class CraftingBookGui {
                 for (int x = 0; x < 9; x++) {
                     button = list[x].clone();
                     String ttID = itemStackTool.getTitanItemID(button);
-                    if (ttID == null || ttID.length() < 1) ttID = "none";
+                    if (ttID == null || ttID.isEmpty()) ttID = "none";
                     button = nbtTool.set(button, "buttonaction", ttID);
                     inventory.setItem(slots_crafting[x], button);
                 }
                 button = recipeManager.getResult();
                 button = nbtTool.set(button, "buttonaction", "none");
-                inventory.setItem(intcrafted, button);
+                inventory.setItem(intCrafted, button);
             }
             if (i - scrolling > -1 && i - scrolling < slots.length) {
                 button = recipeManager.getResult();
@@ -134,18 +134,13 @@ public class CraftingBookGui {
     public boolean isGuiOpen()
     {
         if (viewer != null) {
-            if (viewer.getOpenInventory().getTitle().equals(guiName)) {
-                return true;
-            }
+            return viewer.getOpenInventory().getTitle().equals(guiName);
         }
         return false;
     }
     public Player getViewer()
     {
-        if (viewer != null) {
-            return viewer;
-        }
-        return null;
+        return viewer;
     }
 
 }

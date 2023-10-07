@@ -23,7 +23,7 @@ import static com.firesoftitan.play.titanbox.libs.TitanBoxLibs.instants;
 
 public class PluginListener implements PluginMessageListener {
 
-    private Tools tools;
+    private final Tools tools;
     public PluginListener(){
         tools = Tools.getTools(instants);
         if (isBungee())
@@ -38,7 +38,7 @@ public class PluginListener implements PluginMessageListener {
         pm.registerOutgoingPluginChannel( TitanBoxLibs.instants, channel);
     }
     @Override
-    public void onPluginMessageReceived(@NotNull String channel, @NotNull Player player, @NotNull byte[] message) {
+    public void onPluginMessageReceived(@NotNull String channel, @NotNull Player player, byte @NotNull [] message) {
         if ( !channel.equalsIgnoreCase( "titanbox:1" ) ) return;
 
         ByteArrayDataInput in = ByteStreams.newDataInput( message );
@@ -48,6 +48,7 @@ public class PluginListener implements PluginMessageListener {
             UUID uuid  = UUID.fromString(in.readUTF());
             String chatMessage = in.readUTF();
             Player playerTarget = Bukkit.getPlayer(uuid);
+            if (playerTarget == null) return;
             Set<Player> set = new HashSet<Player>();
             set.add(playerTarget);
             AsyncPlayerChatEvent chatEvent = new AsyncPlayerChatEvent(false, playerTarget, chatMessage, set);
@@ -71,7 +72,6 @@ public class PluginListener implements PluginMessageListener {
     public boolean isBungee()
     {
         ConfigurationSection settings = TitanBoxLibs.instants.getServer().spigot().getConfig();
-        boolean bungeecord = settings.getBoolean("settings.bungeecord");
-        return bungeecord;
+        return settings.getBoolean("settings.bungeecord");
     }
 }

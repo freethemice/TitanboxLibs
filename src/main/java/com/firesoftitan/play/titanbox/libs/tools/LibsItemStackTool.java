@@ -244,7 +244,7 @@ public class LibsItemStackTool {
         button = this.changeName(button, " ");
         ItemMeta itemMeta;
         itemMeta = button.getItemMeta();
-        itemMeta.setCustomModelData(id);
+        if (itemMeta != null) itemMeta.setCustomModelData(id);
         button.setItemMeta(itemMeta);
         return button.clone();
     }
@@ -415,12 +415,11 @@ public class LibsItemStackTool {
         if (type == Material.CHEST || type == Material.TRAPPED_CHEST || type == Material.BARREL || type == Material.FURNACE || type == Material.DROPPER
                 || type == Material.DISPENSER || type == Material.BLAST_FURNACE || type == Material.SMOKER || type == Material.HOPPER
                 || type == Material.BREWING_STAND) return true;
-        if  (type == Material.SHULKER_BOX || type == Material.BLACK_SHULKER_BOX || type == Material.BLUE_SHULKER_BOX || type == Material.BROWN_SHULKER_BOX
+        return type == Material.SHULKER_BOX || type == Material.BLACK_SHULKER_BOX || type == Material.BLUE_SHULKER_BOX || type == Material.BROWN_SHULKER_BOX
                 || type == Material.CYAN_SHULKER_BOX || type == Material.GRAY_SHULKER_BOX || type == Material.GREEN_SHULKER_BOX
                 || type == Material.LIGHT_BLUE_SHULKER_BOX || type == Material.LIGHT_GRAY_SHULKER_BOX || type == Material.LIME_SHULKER_BOX
                 || type == Material.ORANGE_SHULKER_BOX || type == Material.PINK_SHULKER_BOX || type == Material.PURPLE_SHULKER_BOX
-                || type == Material.RED_SHULKER_BOX || type == Material.WHITE_SHULKER_BOX || type == Material.YELLOW_SHULKER_BOX) return  true;
-        return false;
+                || type == Material.RED_SHULKER_BOX || type == Material.WHITE_SHULKER_BOX || type == Material.YELLOW_SHULKER_BOX;
     }
     public boolean isVanillaResource(ItemStack itemStack)
     {
@@ -670,7 +669,7 @@ public class LibsItemStackTool {
             {
                 String test = toName.getItemMeta().getDisplayName();
                 if (stripcolor) test = ChatColor.stripColor(test);
-                if (test.length() > 0)
+                if (!test.isEmpty())
                 {
                     return test;
                 }

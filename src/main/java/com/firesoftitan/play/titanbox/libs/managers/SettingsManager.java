@@ -2,15 +2,12 @@ package com.firesoftitan.play.titanbox.libs.managers;
 
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.io.InputStream;
 import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 /**
@@ -114,7 +111,8 @@ public class SettingsManager extends SaveManager{
                 String mat = config.getString(path + ".material");
                 int amount = config.getInt(path + ".amount");
                 String nbt = config.getString(path + ".nbt");
-                Material material = Material.getMaterial(mat.toLowerCase().replace("minecraft:", "").toUpperCase());
+                Material material = Material.GRASS_BLOCK;
+                if (mat != null) material = Material.getMaterial(mat.toLowerCase().replace("minecraft:", "").toUpperCase());
                 ItemStack itemStack = TitanBoxLibs.tools.getNBTTool().getItemStack(material, amount , nbt);
                 return itemStack.clone();
             }
@@ -127,6 +125,7 @@ public class SettingsManager extends SaveManager{
     /**
      * Clones the SettingManager
      */
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public SettingsManager clone()
     {

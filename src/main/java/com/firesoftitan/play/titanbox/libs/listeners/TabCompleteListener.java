@@ -49,20 +49,6 @@ public class TabCompleteListener implements TabCompleter {
                 if (!stringListFromText.isEmpty()) commands.addAll(stringListFromText);
             }
         }
-        if (args.length == 4)
-        {
-
-        }
-        if (args.length == 5)
-        {
-
-        }
-        if (args.length == 6) {
-
-        }
-        if (args.length == 7) {
-
-        }
         //create a new array
         final List<String> completions = new ArrayList<>();
         //copy matches of first argument from list (ex: if first arg is 'm' will return just 'minecraft')

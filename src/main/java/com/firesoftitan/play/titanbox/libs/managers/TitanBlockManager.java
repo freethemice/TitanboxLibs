@@ -38,7 +38,7 @@ public class TitanBlockManager  {
         File TitanBoxDIR = new File("data-storage" + File.separator + "TitanBox" + File.separator + name);
         if (!TitanBoxDIR.exists())
         {
-            TitanBoxDIR.mkdir();
+            boolean mkdir = TitanBoxDIR.mkdir();
         }
         saveManager  = new SaveManager(  name + File.separator  +"tbm_" + titanID.toLowerCase());
         allItemStacksByTitanID.put(titanID, titanItem.clone());

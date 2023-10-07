@@ -2,14 +2,12 @@ package com.firesoftitan.play.titanbox.libs.tools;
 
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
 import com.firesoftitan.play.titanbox.libs.managers.RecipeManager;
-import net.minecraft.nbt.NBTTagCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +16,7 @@ import java.util.logging.Level;
 
 public class LibsAdvancedRecipeTool {
     private Tools parent;
-    private static HashMap<String, RecipeManager> recipeChecks = new HashMap<String, RecipeManager>();
+    private static final HashMap<String, RecipeManager> recipeChecks = new HashMap<String, RecipeManager>();
     public LibsAdvancedRecipeTool(Tools parent) {
         this.parent = parent;
     }
@@ -44,12 +42,10 @@ public class LibsAdvancedRecipeTool {
         String id = Tools.tools.getNBTTool().getString(itemStack,"TitanItemID");
         return recipeChecks.containsKey(id);
     }
-    @NotNull
     public void addAdvancedRecipe(String titanItemID, ItemStack itemStack, ItemStack[] matrix) {
         ItemStack titanItem = Tools.tools.getItemStackTool().setTitanItemID(itemStack, titanItemID);
         addAdvancedRecipe(titanItem, matrix);
     }
-    @NotNull
     public void addAdvancedRecipe(ItemStack titanItem, ItemStack[] matrix) {
         new BukkitRunnable() {
             @Override
@@ -60,7 +56,7 @@ public class LibsAdvancedRecipeTool {
                     return;
                 }
                 String titanItemID = Tools.tools.getItemStackTool().getTitanItemID(titanItem);
-                if (titanItemID == null || titanItemID.length() < 1)
+                if (titanItemID == null || titanItemID.isEmpty())
                 {
                     Tools.tools.getMessageTool().sendMessageSystem(titanItem.getType().name() + ": Recipe not added, no TitanItemID found!", Level.WARNING);
                     return;
