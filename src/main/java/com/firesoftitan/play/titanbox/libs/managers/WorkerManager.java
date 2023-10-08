@@ -59,6 +59,7 @@ public class WorkerManager {
         addWorker(world, UUID.randomUUID());
     }
     private void addWorker(World world, UUID uuid) {
+        if (world == null) return;
         addWorker(world, uuid, "TB_NPC_" + world.getName());
     }
     private void addWorker(World world, UUID uuid, String name) {
@@ -101,8 +102,10 @@ public class WorkerManager {
         for(String key: npcSaves.getKeys("worker"))
         {
             World world = Bukkit.getWorld(key);
-            UUID uuid = npcSaves.getUUID("worker." + key + ".uuid");
-            addWorker(world, uuid);
+            if (world != null) {
+                UUID uuid = npcSaves.getUUID("worker." + key + ".uuid");
+                addWorker(world, uuid);
+            }
         }
         if (npcWorkers.isEmpty()) createWorker();
     }
