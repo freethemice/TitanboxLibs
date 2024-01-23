@@ -12,9 +12,9 @@ import net.minecraft.world.entity.EnumMainHand;
 import net.minecraft.world.entity.player.EnumChatVisibility;
 import net.minecraft.world.level.EnumGamemode;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_20_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -44,12 +44,21 @@ public class WorkerManager {
     }
     public void hideWorker(Player player)
     {
+        int count = 0;
         for(String key: npcWorkers.keySet())
         {
             EntityPlayer worker = npcWorkers.get(key);
             //c = PlayerConnection
-            ((CraftPlayer)player).getHandle().c.a(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.a.e  ,worker)); //ADD_PLAYER
+            if (((CraftPlayer)player).getHandle().c != null && worker != null) {
+                try {
+                    ((CraftPlayer) player).getHandle().c.a(new ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.a.e, worker)); //ADD_PLAYER
+                    count++;
+                } catch (Exception e) {
+                    Tools.getMessageTool(TitanBoxLibs.instants).sendMessageSystem("Failed to load NPC Player");
+                }
+            }
         }
+        Tools.getMessageTool(TitanBoxLibs.instants).sendMessageSystem("Loaded " + count + " NPC");
 
     }
     private void addWorker(World world, String name) {

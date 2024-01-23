@@ -3,24 +3,32 @@ package com.firesoftitan.play.titanbox.libs.tools;
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
-import net.minecraft.core.BlockPosition;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.level.block.entity.TileEntitySkull;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_20_R2.CraftWorld;
+import org.bukkit.block.Skull;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.profile.PlayerProfile;
+import org.bukkit.profile.PlayerTextures;
+import org.json.JSONObject;
 
-import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.UUID;
 
 public class LibsSkullTool {
-    private Tools parent;
+    private final Tools parent;
 
     public LibsSkullTool(Tools parent) {
         this.parent = parent;
+    }
+
+    public Tools getParent() {
+        return parent;
     }
 
     public String getSkullTexture(ItemStack item)
@@ -88,31 +96,31 @@ public class LibsSkullTool {
 
     public ItemStack getSkull(String texture, String TitanID, boolean placeable) {
         try {
+
+            // Create the PlayerProfile using UUID and name
+            PlayerProfile profile = getPlayerProfile(texture, TitanID, placeable);
             ItemStack head = new ItemStack(Material.PLAYER_HEAD);
-
-            ItemMeta headMeta = head.getItemMeta();
-
-            GameProfile profile = getProfile(texture, TitanID, placeable);
-            Field profileField = null;
-            try {
-                //noinspection ConstantConditions
-                profileField = headMeta.getClass().getDeclaredField("profile");
-            } catch (NoSuchFieldException | SecurityException e) {
-                e.printStackTrace();
+            SkullMeta meta = (SkullMeta) head.getItemMeta();
+            if (meta != null) {
+                meta.setOwnerProfile(profile);
             }
-            if (profileField == null) return null;
-            profileField.setAccessible(true);
-            try {
-                profileField.set(headMeta, profile);
-            } catch (IllegalArgumentException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            head.setItemMeta(headMeta);
+            head.setItemMeta(meta);
             return head;
+
         } catch (Exception e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
         return null;
+    }
+
+    private static String convertBase64ToURL(String texture) {
+        String jsonString = new String(Base64.getDecoder().decode(texture), StandardCharsets.UTF_8);
+
+        JSONObject jsonObject = new JSONObject(jsonString);
+        JSONObject jsTextures = jsonObject.getJSONObject("textures");
+        JSONObject skin = jsTextures.getJSONObject("SKIN");
+        return skin.getString("url");
     }
 
     public String getSkullTexture(Block block) {
@@ -121,15 +129,31 @@ public class LibsSkullTool {
         return nbtTagCompound.p("SkullOwner").p("Properties").c("textures", 10).a(0).l("Value");
     }
 
-    private GameProfile getProfile(String skulltexture, String name, boolean placeable) {
-        GameProfile profile = new GameProfile(UUID.nameUUIDFromBytes(skulltexture.getBytes()), "TitanCore:" + name + ":" + placeable);
-        profile.getProperties().put("textures", new Property("textures", skulltexture));
+    private GameProfile getProfile(String skullTexture, String name, boolean placeable) {
+        GameProfile profile = new GameProfile(UUID.nameUUIDFromBytes(skullTexture.getBytes()), "TitanCore:" + name + ":" + placeable);
+        profile.getProperties().put("textures", new Property("textures", skullTexture));
         return profile;
+    }
+    private PlayerProfile getPlayerProfile(String texture, String TitanID, boolean placeable)
+    {
+        try {
+            PlayerProfile profile =  Bukkit.createPlayerProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "TitanCore:" + TitanID + ":" + placeable);
+            ItemStack head = new ItemStack(Material.PLAYER_HEAD);
+            SkullMeta meta = (SkullMeta) head.getItemMeta();
+            PlayerTextures textures = profile.getTextures();
+            String jsurl = convertBase64ToURL(texture);
+            URL url = new URL(jsurl);
+            textures.setSkin(url);
+            profile.setTextures(textures);
+            return profile;
+        } catch (MalformedURLException e) {
+            return null;
+        }
     }
 
     @Deprecated
-    public void placeSkull(Block block, String skulltexture) {
-        placeSkull(block, skulltexture, "");
+    public void placeSkull(Block block, String skullTexture) {
+        placeSkull(block, skullTexture, "");
     }
     public void placeSkull(Block block, ItemStack itemStack) {
         try {
@@ -145,17 +169,16 @@ public class LibsSkullTool {
         }
 
     }
-    public void placeSkull(Block block, String skulltexture, String TitanID) {
+    public void placeSkull(Block block, String skullTexture, String TitanID) {
         try {
             if (block.getType() != Material.PLAYER_HEAD) {
                 block.setType(Material.PLAYER_HEAD, false);
             }
-            GameProfile profile = getProfile(skulltexture, TitanID, true);
-            TileEntitySkull skullTile = (TileEntitySkull) ((CraftWorld) block.getWorld()).getHandle().c_(new BlockPosition(block.getX(), block.getY(), block.getZ()));
-            if (skullTile == null) return;
-            skullTile.a(profile);
-            block.getState().update(true);
-
+            PlayerProfile profile = getPlayerProfile(skullTexture, TitanID, true);
+            block.setType(Material.PLAYER_HEAD);
+            Skull skull = (Skull) block.getState();
+            skull.setOwnerProfile(profile);
+            skull.update(false);
         } catch (Exception ignored) {
 
         }

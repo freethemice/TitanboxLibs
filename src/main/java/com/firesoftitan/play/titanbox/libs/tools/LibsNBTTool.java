@@ -10,16 +10,17 @@ import net.minecraft.commands.arguments.item.ArgumentPredicateItemStack;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedPlayerList;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.level.block.entity.TileEntity;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_20_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_20_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_20_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -40,7 +41,7 @@ public class LibsNBTTool {
     private ParseResults<CommandListenerWrapper> parseCommand(String s) {
         DedicatedPlayerList server = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle();
         com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> commanddispatcher = server.b().vanillaCommandDispatcher.a();
-        CommandListenerWrapper commandlistenerwrapper = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().b().aD();
+        CommandListenerWrapper commandlistenerwrapper = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().c().aF(); //MinecraftServer.CommandListenerWrapper
         return commanddispatcher.parse(s, commandlistenerwrapper);
     }
     public ItemStack getItemStack(Material material, int amount, String NBTString)
@@ -347,7 +348,7 @@ public class LibsNBTTool {
         NBTTagList c = nbt.c(key, 8);
         List<String> outWords = new ArrayList<String>();
         for (net.minecraft.nbt.NBTBase nbtBase : c) {
-            outWords.add(nbtBase.r_()); //f_(), m_()
+            outWords.add(nbtBase.t_()); //String has _ in it
         }
         return outWords;
     }
@@ -451,7 +452,7 @@ public class LibsNBTTool {
         //System.out.println("n:" + tile.n());
         //System.out.println("o:" + tile.o());
         //System.out.println("ao:" + tile.ao_());
-        return tile.m();
+        return tile.o(); //One gets all 3, its looks simple no Long phrase
     }
     protected NBTTagCompound getNBT(ItemStack itemStack)
     {

@@ -63,6 +63,7 @@ public class TitanBoxLibs extends JavaPlugin {
         TitanBoxLibs.barcodeManager = new BarcodeManager();
         mainListener = new MainListener();
         pluginListener = new PluginListener();
+        TitanBlockManager.initialize();
         Timer getPlayers = new Timer();
         getPlayers.schedule(new TimerTask() {
             @Override
@@ -89,7 +90,7 @@ public class TitanBoxLibs extends JavaPlugin {
             public void run() {
                 TitanBoxLibs.workerManager.loadAll();
             }
-        }.runTaskLater(this, 1);
+        }.runTaskLater(this, 20);
 
         autoUpdateManager = new AutoUpdateManager();
 

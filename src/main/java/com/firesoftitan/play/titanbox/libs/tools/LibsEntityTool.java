@@ -18,9 +18,9 @@ import net.minecraft.world.level.block.entity.TileEntity;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_20_R2.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_20_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -77,7 +77,7 @@ public class LibsEntityTool {
         ArgumentEntity argumentEntity = ArgumentEntity.b();
         try {
             EntitySelector parse = argumentEntity.parse(new StringReader("@e[" + type + "" + s + "]"));
-            List<? extends net.minecraft.world.entity.Entity> entities = parse.b(((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().b().aD());
+            List<? extends net.minecraft.world.entity.Entity> entities = parse.b(((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().c().aF()); //MinecraftServer.CommandListenerWrapper
             for(net.minecraft.world.entity.Entity e: entities)
             {
                 CraftEntity bukkitEntity = e.getBukkitEntity();
@@ -122,7 +122,7 @@ public class LibsEntityTool {
     private ParseResults<CommandListenerWrapper> parseCommand(String s) {
         DedicatedPlayerList server = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle();
         com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> commandDispatcher = server.b().vanillaCommandDispatcher.a();
-        CommandListenerWrapper commandlistenerwrapper = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().b().aD();
+        CommandListenerWrapper commandlistenerwrapper = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().c().aF();
         return commandDispatcher.parse(s, commandlistenerwrapper);
     }
     public void summonEntity(World world, Entity entity)

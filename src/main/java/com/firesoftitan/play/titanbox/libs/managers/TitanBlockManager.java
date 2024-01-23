@@ -23,7 +23,10 @@ public class TitanBlockManager  {
         }
     }
 
-
+    public static void initialize()
+    {
+        //Stop error on disable
+    }
     private static final HashMap<String, ItemStack> allItemStacksByTitanID = new HashMap<String, ItemStack>();
     private static final HashMap<String, String> allPluginsByTitanID = new HashMap<String, String>();
     private static final HashMap<String, SaveManager> allSaveManagersByTitanID = new HashMap<String, SaveManager>();

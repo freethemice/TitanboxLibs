@@ -7,8 +7,8 @@ import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStructure;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_20_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R2.structure.CraftStructure;
+import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R3.structure.CraftStructure;
 import org.bukkit.structure.Structure;
 
 import java.io.File;
@@ -25,7 +25,7 @@ public class LibsStructureTool {
         try {
             DefinedStructure definedStructure = ((CraftStructure) structure).getHandle();
             NBTTagCompound tagCompound = definedStructure.a(new NBTTagCompound());
-            NBTCompressedStreamTools.a(tagCompound, file);
+            NBTCompressedStreamTools.a(tagCompound, file.toPath());
         } catch (IOException e) {
             e.printStackTrace();
         }
