@@ -21,6 +21,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -237,27 +238,18 @@ public class LibsPlayerTool {
             return new Property("textures", texture, signature);
         }
     }
-    public String getPlayersSignature(UUID player) throws IOException {
+    public String getPlayersSignature(UUID player) {
         String uuid = player.toString();
         if (uuid == null) {
             throw new NullPointerException("name is marked non-null but is null");
         } else {
-            uuid = uuid.replace("-", "");
-            URL url_1 = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false");
-            InputStreamReader reader_1 = new InputStreamReader(url_1.openStream());
-            BufferedReader in = new BufferedReader(reader_1);
-            String inputLine;
-            String allInput = "";
-            while ((inputLine = in.readLine()) != null)
-                //noinspection StringConcatenationInLoop
-                allInput = allInput + inputLine;
-            in.close();
-            String[] NotTheRightWay = allInput.split("value\" : \"");
+            String[] NotTheRightWay = getWebsitePlayerData(uuid);
+            if (NotTheRightWay == null) return null;
             NotTheRightWay =  NotTheRightWay[1].split("\",");
             return NotTheRightWay[0];
         }
     }
-    public String getPlayersTexture(Player player) throws IOException
+    public String getPlayersTexture(Player player)
     {
         return getPlayersTexture(player.getUniqueId());
     }
@@ -268,32 +260,19 @@ public class LibsPlayerTool {
         if (uuid == null) {
             return false;
         } else {
-            try {
-                if (players.containsKey(uuid))
-                {
-                    return true;
-                }
-                uuid = uuid.replace("-", "");
-                URL url_1 = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false");
-                InputStreamReader reader_1 = new InputStreamReader(url_1.openStream());
-                BufferedReader in = new BufferedReader(reader_1);
-                String inputLine;
-                String allInput = "";
-                while ((inputLine = in.readLine()) != null)
-                    //noinspection StringConcatenationInLoop
-                    allInput = allInput + inputLine;
-                in.close();
-                String[] NotTheRightWay = allInput.split("value\" : \"");
-                if (NotTheRightWay.length < 2) return false;
-                NotTheRightWay =  NotTheRightWay[1].split("\",");
-                players.put(fulluuid, NotTheRightWay[0]);
+            if (players.containsKey(uuid))
+            {
                 return true;
-            } catch (IOException e) {
-                return false;
             }
+            String[] NotTheRightWay = getWebsitePlayerData(uuid);
+            if (NotTheRightWay == null) return false;
+            if (NotTheRightWay.length < 2) return false;
+            NotTheRightWay =  NotTheRightWay[1].split("\",");
+            players.put(fulluuid, NotTheRightWay[0]);
+            return true;
         }
     }
-    public String getPlayersTexture(UUID player) throws IOException {
+    public String getPlayersTexture(UUID player) {
         String uuid = player.toString();
         String fulluuid = player.toString();
         if (uuid == null) {
@@ -303,6 +282,18 @@ public class LibsPlayerTool {
             {
                 return players.get(uuid);
             }
+
+            String[] NotTheRightWay = getWebsitePlayerData(uuid);
+            if (NotTheRightWay == null) return null;
+            NotTheRightWay =  NotTheRightWay[1].split("\",");
+            players.put(fulluuid, NotTheRightWay[0]);
+            return NotTheRightWay[0];
+        }
+    }
+
+    @NotNull
+    private static String[] getWebsitePlayerData(String uuid)  {
+        try {
             uuid = uuid.replace("-", "");
             URL url_1 = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false");
             InputStreamReader reader_1 = new InputStreamReader(url_1.openStream());
@@ -310,16 +301,19 @@ public class LibsPlayerTool {
             String inputLine;
             String allInput = "";
             while ((inputLine = in.readLine()) != null)
-                //noinspection StringConcatenationInLoop
                 allInput = allInput + inputLine;
             in.close();
             String[] NotTheRightWay = allInput.split("value\" : \"");
             if (NotTheRightWay.length < 2) throw new NullPointerException("UUID: " + uuid +"\n Index out of bounds");
-            NotTheRightWay =  NotTheRightWay[1].split("\",");
-            players.put(fulluuid, NotTheRightWay[0]);
-            return NotTheRightWay[0];
+            return NotTheRightWay;
+        } catch (IOException ignored) {
+
+        } catch (NullPointerException e) {
+            throw new RuntimeException(e);
         }
+        return null;
     }
+
     private void loadOffServerPlayer(UUID uuid)
     {
         String name = uuid.toString();

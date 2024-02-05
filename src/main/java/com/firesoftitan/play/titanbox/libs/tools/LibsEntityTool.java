@@ -3,7 +3,6 @@ package com.firesoftitan.play.titanbox.libs.tools;
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.commands.arguments.ArgumentEntity;
@@ -15,6 +14,7 @@ import net.minecraft.server.dedicated.DedicatedPlayerList;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.block.entity.TileEntity;
+import net.minecraft.world.phys.Vec3D;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -89,6 +89,11 @@ public class LibsEntityTool {
             e.printStackTrace();
             return null;
         }
+    }
+    public void setPosition(Entity entity, Location location)
+    {
+        Vec3D vLocation = new Vec3D(location.getX(), location.getY(), location.getZ());
+        ((CraftEntity)entity).getHandle().teleportTo(((CraftWorld)location.getWorld()).getHandle(), vLocation);
     }
     public void setTag(Entity entity, String... tags)
     {

@@ -5,6 +5,8 @@ import com.firesoftitan.play.titanbox.libs.listeners.MainListener;
 import com.firesoftitan.play.titanbox.libs.listeners.PluginListener;
 import com.firesoftitan.play.titanbox.libs.listeners.TabCompleteListener;
 import com.firesoftitan.play.titanbox.libs.managers.*;
+import com.firesoftitan.play.titanbox.libs.runnables.HologramChunkRunnable;
+import com.firesoftitan.play.titanbox.libs.runnables.HologramSpawnerRunnable;
 import com.firesoftitan.play.titanbox.libs.runnables.MySaveRunnable;
 import com.firesoftitan.play.titanbox.libs.runnables.WildTeleportRunnable;
 import com.firesoftitan.play.titanbox.libs.tools.LibsProtectionTool;
@@ -13,10 +15,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.apache.commons.io.IOUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -114,7 +113,49 @@ public class TitanBoxLibs extends JavaPlugin {
         if (tb != null) tb.setTabCompleter(new TabCompleteListener());
         PluginCommand titanbox = this.getCommand("titanbox");
         if (titanbox != null) titanbox.setTabCompleter(new TabCompleteListener());
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                HologramManager.clearHolograms();
+                HologramManager.loadAll();
+                new HologramChunkRunnable().runTaskTimer(TitanBoxLibs.instants, 10, 10);
+                new HologramSpawnerRunnable().runTaskTimer(TitanBoxLibs.instants, 12, 10);
+            }
+        }.runTaskLater(this, 20);
 
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                int old_versions = 0;
+                int oops = 0;
+                for(World world: Bukkit.getWorlds())
+                {
+                    for(Entity e: world.getEntities())
+                    {
+                        if (TitanBoxLibs.tools.getHologramTool().isHologram(e))
+                        {
+                            String version = TitanBoxLibs.tools.getHologramTool().getVersion(e);
+                            if (version.equalsIgnoreCase("1.0.0"))
+                            {
+                                e.remove();
+                                old_versions++;
+                            }
+                            else
+                            {
+                                HologramManager hologramManager = HologramManager.getHologramManager(e);
+                                if (hologramManager == null)
+                                {
+                                    oops++;
+                                    e.remove();
+                                }
+                            }
+                        }
+                    }
+                }
+                if (old_versions> 0) TitanBoxLibs.tools.getMessageTool().sendMessageSystem("Old version holograms removed: " + old_versions);
+                if (oops > 0) TitanBoxLibs.tools.getMessageTool().sendMessageSystem("Glitched holograms removed: " + oops);
+            }
+        }.runTaskTimer(this,20,20);
     }
 
 
@@ -135,9 +176,9 @@ public class TitanBoxLibs extends JavaPlugin {
                 this.getLogger().log(Level.WARNING,   ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', ">>>>>>>>>>>>-------------<<<<<<<<<<<<"));
             }
 
-        } catch (IOException e) {
+        } catch (IOException ignore) {
             //noinspection CallToPrintStackTrace
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
     public static JsonArray readJsonFromUrl(String url) throws IOException {
@@ -326,6 +367,7 @@ public class TitanBoxLibs extends JavaPlugin {
     public void onDisable()
     {
         this.saveALL();
+        HologramManager.clearHolograms();
     }
     public void saveALL()
     {

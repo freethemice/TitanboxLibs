@@ -44,7 +44,7 @@ public class WorkerManager {
     }
     public void hideWorker(Player player)
     {
-        int count = 0;
+/*        int count = 0;
         for(String key: npcWorkers.keySet())
         {
             EntityPlayer worker = npcWorkers.get(key);
@@ -58,7 +58,7 @@ public class WorkerManager {
                 }
             }
         }
-        Tools.getMessageTool(TitanBoxLibs.instants).sendMessageSystem("Loaded " + count + " NPC");
+        Tools.getMessageTool(TitanBoxLibs.instants).sendMessageSystem("Loaded " + count + " NPC");*/
 
     }
     private void addWorker(World world, String name) {

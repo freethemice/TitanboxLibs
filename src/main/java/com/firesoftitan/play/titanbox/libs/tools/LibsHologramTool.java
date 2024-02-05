@@ -2,14 +2,12 @@ package com.firesoftitan.play.titanbox.libs.tools;
 
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
 import com.firesoftitan.play.titanbox.libs.managers.HologramManager;
-import com.firesoftitan.play.titanbox.libs.managers.SaveManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -19,11 +17,6 @@ import java.util.UUID;
 
 public class LibsHologramTool {
     private final Tools parent;
-    private static final SaveManager holoConfig = new SaveManager(  "holograms");
-    public static void save()
-    {
-        holoConfig.save();
-    }
     public LibsHologramTool(Tools parent) {
         this.parent = parent;
     }
@@ -66,58 +59,64 @@ public class LibsHologramTool {
     }
     public List<HologramManager> getHolograms(Location location)
     {
-        List<HologramManager> hologramsAll = getHolograms();
+        String strPlugin = parent.getPlugin().getName();
         List<HologramManager> returnList = new ArrayList<HologramManager>();
-        for (HologramManager hologramManager: hologramsAll)
-        {
-            ArmorStand entity = hologramManager.getArmorStand();
-            List<String> tags = Tools.getNBTTool(TitanBoxLibs.instants).getListString(entity, "Tags");
-            String serializeLocation = Tools.getSerializeTool(TitanBoxLibs.instants).serializeLocation(location);
-            if (tags.contains(serializeLocation))
-            {
-                returnList.add(hologramManager);
-            }
-        }
-        if (returnList.isEmpty())
-        {
-            returnList.add(getHologram(location));
-        }
-        return returnList;
-    }
-    public List<HologramManager> getHolograms(Long timeMilliseconds)
-    {
-        List<HologramManager> hologramsAll = getHolograms();
-        List<HologramManager> returnList = new ArrayList<HologramManager>();
-        for (HologramManager hologramManager: hologramsAll)
-        {
-            ArmorStand entity = hologramManager.getArmorStand();
-            List<String> tags = Tools.getNBTTool(TitanBoxLibs.instants).getListString(entity, "Tags");
-            if (tags.contains(timeMilliseconds+""))
-            {
-                returnList.add(hologramManager);
-            }
-        }
+        HologramManager hologramManager = HologramManager.getHologramManager(location);
+        if (hologramManager != null && strPlugin.equals(hologramManager.getPlugin().getName())) returnList.add(hologramManager);
         return returnList;
     }
     public List<HologramManager> getHolograms()
     {
         List<HologramManager> returnList = new ArrayList<HologramManager>();
+        List<HologramManager> rawList = HologramManager.getHologramManagers();
         String strPlugin = parent.getPlugin().getName();
-        List<World> worlds = Bukkit.getWorlds();
-        for(World world: worlds)
+        for (HologramManager manager: rawList)
         {
-            Collection<Entity> nearbyEntities = world.getEntities();
-            for (Entity entity : nearbyEntities) {
-                if (entity.getType() == EntityType.ARMOR_STAND) {
-                    List<String> tags = Tools.getNBTTool(TitanBoxLibs.instants).getListString(entity, "Tags");
-                    if (tags.contains("tblHG"))
-                    {
-                        if (tags.contains(strPlugin)) returnList.add(getHologram(entity.getUniqueId()));
-                    }
-                }
-            }
+            if (manager != null &&  manager.getPlugin().getName().equals(strPlugin)) returnList.add(manager);
         }
         return returnList;
+    }
+    private boolean isLong(String string)
+    {
+        try {
+            Long.parseLong(string);
+            return true;
+        } catch (NumberFormatException ignored) {
+
+        }
+        return false;
+    }
+    public long getTimeStamp(Entity entity)
+    {
+        if (entity.getType() == EntityType.ARMOR_STAND) {
+            List<String> tags = Tools.getNBTTool(TitanBoxLibs.instants).getListString(entity, "Tags");
+            if (tags.contains("tblHG"))
+            {
+                for (String t: tags)
+                {
+                    if (isLong(t))
+                    {
+                        return Long.parseLong(t);
+                    }
+                }
+
+            }
+        }
+        return -1;
+    }
+
+    public String getVersion(Entity entity)
+    {
+        if (isHologram(entity)) {
+            if (entity.getType() == EntityType.ARMOR_STAND) {
+                List<String> tags = Tools.getNBTTool(TitanBoxLibs.instants).getListString(entity, "Tags");
+                for (String tag : tags) {
+                    if (tag.startsWith("Version: ")) return tag.replace("Version: ", "");
+                }
+            }
+            return "1.0.0";
+        }
+        return null;
     }
     public boolean isHologram(Entity entity)
     {
@@ -142,26 +141,11 @@ public class LibsHologramTool {
     public HologramManager getHologram(UUID uuid)
     {
         if (uuid == null) return null;
-        ArmorStand entity = (ArmorStand) Bukkit.getEntity(uuid);
-        if (entity != null && entity.getType() == EntityType.ARMOR_STAND) {
-            HologramManager e = new HologramManager(this.parent.getPlugin(), entity);
-            return e;
-        }
-        return null;
+        return HologramManager.getHologramManager(uuid);
     }
-    @Deprecated
     private HologramManager getHologram(Location location)
     {
-        HologramManager closes = null;
-        for (int i = 1; i < 4; i++) {
-            List<Entity> entities = Tools.getEntityTool(TitanBoxLibs.instants).findEntities(location, i);
-            for (Entity entity : entities) {
-                if (entity.getType() == EntityType.ARMOR_STAND) {
-                    return new HologramManager(parent.getPlugin(), (ArmorStand) entity);
-                }
-            }
-        }
-        return closes;
+        return HologramManager.getHologramManager(location);
     }
     @Deprecated
     public  void deleteOldFloatingText(Location location)
