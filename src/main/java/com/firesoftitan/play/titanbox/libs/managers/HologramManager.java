@@ -43,12 +43,17 @@ public class HologramManager {
     }
     public static void saveAll()
     {
+
         SaveManager saveManager = new SaveManager("holograms");
+        saveManager.delete("hologram");// clear the old date
+        saveManager.save();// re-save empty
         for (String key: chunkKeySort.keySet())
         {
             List<HologramManager> tmp = chunkKeySort.get(key);
             for (HologramManager hologramManager: tmp) {
-                saveManager.set("hologram." + key + "." + hologramManager.getKey(), hologramManager.save());
+                SaveManager save = hologramManager.save();
+                if (save != null) saveManager.set("hologram." + key + "." + hologramManager.getKey(), save);
+                else saveManager.delete("hologram." + key + "." + hologramManager.getKey()); //doesn't work ????
             }
         }
         saveManager.save();
@@ -98,7 +103,18 @@ public class HologramManager {
     public static HologramManager getHologramManager(Location location)
     {
         String key = Tools.getSerializeTool(TitanBoxLibs.instants).serializeLocation(location);
-        return locationHolder.get(key);
+        HologramManager hologramManager = locationHolder.get(key);
+        if (hologramManager == null)
+        {
+            List<Entity> nearbyEntities = TitanBoxLibs.workerManager.getCraftWorker(location).getNearbyEntities(1, 1, 1);
+            for (Entity e: nearbyEntities)
+            {
+                if (TitanBoxLibs.tools.getHologramTool().isHologram(e)) {
+                    hologramManager = HologramManager.getHologramManager(e);
+                }
+            }
+        }
+        return hologramManager;
     }
     public static HologramManager getHologramManager(UUID uuid)
     {
@@ -134,6 +150,7 @@ public class HologramManager {
         uuidHolder.remove(hologramManager.getUUID());
         String key2 = Tools.getSerializeTool(TitanBoxLibs.instants).serializeLocation(hologramManager.getLocation());
         locationHolder.remove(key2);
+        hologramManager.deSpawn();
     }
     public static void processChunks()
     {
@@ -195,6 +212,7 @@ public class HologramManager {
     private Location location;
     private String customName;
     private final UUID uuid;
+    private boolean deleted = false;
 
     private final HashMap<EquipmentSlot, ItemStack> equipment = new HashMap<EquipmentSlot, ItemStack>();
     private final HashMap<ArmorStandPoseEnum, EulerAngle> equipmentAngles = new HashMap<ArmorStandPoseEnum, EulerAngle>();
@@ -255,6 +273,7 @@ public class HologramManager {
     }
     public SaveManager save()
     {
+        if (deleted || deleting) return null;
         SaveManager saveManager = new SaveManager();
         saveManager.set("plugin", plugin.getName());
         saveManager.set("uuid",this.uuid);
@@ -282,6 +301,18 @@ public class HologramManager {
     }
     protected void spawn()
     {
+        if (deleted || deleting)
+        {
+            System.out.println("Trying to delete again....");
+            HologramManager hologramManager = this;
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    hologramManager.delete();
+                }
+            }.runTaskLater(TitanBoxLibs.instants, 1);
+            return;
+        }
         if (this.armorStand == null || this.armorStand.isDead()) {
             armorStand = Objects.requireNonNull(location.getWorld()).spawn(location, ArmorStand.class);
             armorStand.setVisible(false);
@@ -333,35 +364,38 @@ public class HologramManager {
     public void delete()
     {
         if (!deleting) {
+            deleted =true;
             removeHologramManager(this);
             deleting = true;
             LibsHologramTool hologramTool = Tools.getHologramTool(plugin);
             if (hologramTool.getHologram(this.getUUID()) != null) hologramTool.removeHologram(this);
-            List<Entity> nearbyEntities = armorStand.getNearbyEntities(1, 1, 1);
-            List<ArmorStand> armorStands = new ArrayList<ArmorStand>();
-            for(Entity entity: nearbyEntities)
-            {
-                if (entity.getType() == EntityType.ARMOR_STAND)
-                {
-                    ArmorStand armor = (ArmorStand) entity;
-                    List<String> tags = Tools.getNBTTool(TitanBoxLibs.instants).getListString(entity, "Tags");
-                    String strPlugin = plugin.getName();
-                    if (tags.contains("tblHG"))
-                    {
-                        if (tags.contains(strPlugin)) armorStands.add(armor);
+            if (armorStand != null) {
+                List<Entity> nearbyEntities = armorStand.getNearbyEntities(1, 1, 1);
+                List<ArmorStand> armorStands = new ArrayList<ArmorStand>();
+                for (Entity entity : nearbyEntities) {
+                    if (entity.getType() == EntityType.ARMOR_STAND) {
+                        ArmorStand armor = (ArmorStand) entity;
+                        List<String> tags = Tools.getNBTTool(TitanBoxLibs.instants).getListString(entity, "Tags");
+                        String strPlugin = plugin.getName();
+                        if (tags.contains("tblHG")) {
+                            if (tags.contains(strPlugin)) armorStands.add(armor);
+                        }
                     }
                 }
-            }
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    armorStand.remove();
-                    for (ArmorStand armorStand : armorStands) {
+
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
                         armorStand.remove();
+                        for (ArmorStand armorStand : armorStands) {
+                            armorStand.remove();
+                        }
                     }
-                }
-            }.runTaskLater(this.getPlugin(), 1);
+                }.runTaskLater(this.getPlugin(), 1);
+            }
+            deleting = false;
         }
+
     }
 
     public void setLocation(Location location)
