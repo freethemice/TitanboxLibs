@@ -25,8 +25,11 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.scheduler.BukkitWorker;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -57,7 +60,6 @@ public class TitanBoxLibs extends JavaPlugin {
         }.runTaskLater(TitanBoxLibs.instants, 1200); //60 Seconds
         configManager = new ConfigManager();
         TitanBoxLibs.tools = new Tools(this, new MySaveRunnable(this), -1);
-
         TitanBoxLibs.workerManager = new WorkerManager();
         TitanBoxLibs.barcodeManager = new BarcodeManager();
         mainListener = new MainListener();
@@ -287,7 +289,56 @@ public class TitanBoxLibs extends JavaPlugin {
         }
         if (label.equalsIgnoreCase("titanbox") || label.equalsIgnoreCase("tb")) {
             if (args.length > 0) {
-                String name  = args[0];
+                String name = args[0];
+                if (name.equalsIgnoreCase("memory")) {
+                    Plugin[] plugins = MemoryManager.getPlugins();
+                    int itemsPerPage =  5; // Number of items per page
+                    int currentPage =  1; // Default current page
+                    if (args.length > 1) currentPage = Integer.parseInt(args[1]);
+                    int totalPages = (int) Math.ceil((double) plugins.length / itemsPerPage);
+
+                    // Command to navigate to the next page
+                    if (args.length >  1 && args[1].equalsIgnoreCase("next")) {
+                        currentPage = Math.min(currentPage +  1, totalPages);
+                    }
+                    // Command to navigate to the previous page
+                    else if (args.length >  1 && args[1].equalsIgnoreCase("previous")) {
+                        currentPage = Math.max(currentPage -  1,  1);
+                    }
+
+                    int startIndex = (currentPage -  1) * itemsPerPage;
+                    int endIndex = Math.min(startIndex + itemsPerPage, plugins.length);
+                    tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.GREEN + "------------------------------------");
+                    for (int i = startIndex; i < endIndex; i++) {
+                        Plugin plugin = plugins[i];
+                        long pluginMemoryUsage = MemoryManager.getPluginMemoryUsage(plugin);
+                        String s = MemoryManager.bytesToHumanReadable(pluginMemoryUsage);
+
+                        Thread[] pluginThreads = MemoryManager.getPluginThreads(plugin);
+                        int count = MemoryManager.getNumberBukkitThreads(plugin);
+                        List<BukkitTask> pluginPendingTask = MemoryManager.getPluginPendingTask(plugin);
+                        List<BukkitWorker> pluginRunningTask = MemoryManager.getPluginRunningTask(plugin);
+
+                        tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.GOLD + plugin.getName());
+                        tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.GREEN + "" + ChatColor.UNDERLINE + "------------------------------------");
+                        //tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.AQUA +"Memory : " + ChatColor.WHITE + s);
+                        tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.AQUA +"Threads : " + ChatColor.WHITE + pluginThreads.length);
+                        tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.AQUA +"Bukkit Threads : " + ChatColor.WHITE + count);
+                        tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.AQUA +"     Pending Threads : " + ChatColor.WHITE + pluginPendingTask.size());
+                        tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.AQUA +"     Working Threads : " + ChatColor.WHITE + pluginRunningTask.size());
+                        tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.GREEN + "------------------------------------");
+                    }
+
+                    // Inform the user about the current page and total pages
+                    tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.AQUA + "Page " + currentPage + " of " + totalPages);
+                    tools.getMessageTool().sendMessagePlayer((Player) sender, ChatColor.GREEN + "");
+                    return true;
+                }
+                if (name.equalsIgnoreCase("save"))
+                {
+                    Tools.saver.run();
+                    return true;
+                }
                 if (name.equalsIgnoreCase("wild"))
                 {
                     if (sender instanceof Player player) {

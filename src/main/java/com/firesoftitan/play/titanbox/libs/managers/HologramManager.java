@@ -26,11 +26,11 @@ public class HologramManager {
     private static final HashMap<String, HologramManager> locationHolder = new HashMap<String, HologramManager>();
     private static final HashMap<Entity, HologramManager> entityHolder = new HashMap<Entity, HologramManager>();
 
-
+    private static SaveManager saveManager = new SaveManager("holograms");
     public static void loadAll()
     {
         TitanBoxLibs.tools.getMessageTool().sendMessageSystem("Loading Holograms...");
-        SaveManager saveManager = new SaveManager("holograms");
+        /*SaveManager saveManager = new SaveManager("holograms");`*/
         for (String key: saveManager.getKeys("hologram"))
         {
             for (String subKey: saveManager.getKeys("hologram." + key))
@@ -43,19 +43,6 @@ public class HologramManager {
     }
     public static void saveAll()
     {
-
-        SaveManager saveManager = new SaveManager("holograms");
-        saveManager.delete("hologram");// clear the old date
-        saveManager.save();// re-save empty
-        for (String key: chunkKeySort.keySet())
-        {
-            List<HologramManager> tmp = chunkKeySort.get(key);
-            for (HologramManager hologramManager: tmp) {
-                SaveManager save = hologramManager.save();
-                if (save != null) saveManager.set("hologram." + key + "." + hologramManager.getKey(), save);
-                else saveManager.delete("hologram." + key + "." + hologramManager.getKey()); //doesn't work ????
-            }
-        }
         saveManager.save();
     }
     public static void clearHolograms()
@@ -103,18 +90,7 @@ public class HologramManager {
     public static HologramManager getHologramManager(Location location)
     {
         String key = Tools.getSerializeTool(TitanBoxLibs.instants).serializeLocation(location);
-        HologramManager hologramManager = locationHolder.get(key);
-        if (hologramManager == null)
-        {
-            List<Entity> nearbyEntities = TitanBoxLibs.workerManager.getCraftWorker(location).getNearbyEntities(1, 1, 1);
-            for (Entity e: nearbyEntities)
-            {
-                if (TitanBoxLibs.tools.getHologramTool().isHologram(e)) {
-                    hologramManager = HologramManager.getHologramManager(e);
-                }
-            }
-        }
-        return hologramManager;
+        return locationHolder.get(key);
     }
     public static HologramManager getHologramManager(UUID uuid)
     {
@@ -139,6 +115,8 @@ public class HologramManager {
         uuidHolder.put(hologramManager.getUUID(), hologramManager);
         String key2 = Tools.getSerializeTool(TitanBoxLibs.instants).serializeLocation(hologramManager.getLocation());
         locationHolder.put(key2, hologramManager);
+        SaveManager save = hologramManager.save();
+        if (save != null) saveManager.set("hologram." + key + "." + hologramManager.getKey(), save);
     }
     private static void removeHologramManager(HologramManager hologramManager)
     {
@@ -151,6 +129,7 @@ public class HologramManager {
         String key2 = Tools.getSerializeTool(TitanBoxLibs.instants).serializeLocation(hologramManager.getLocation());
         locationHolder.remove(key2);
         hologramManager.deSpawn();
+        saveManager.delete("hologram." + key + "." + hologramManager.getKey());
     }
     public static void processChunks()
     {
@@ -267,6 +246,7 @@ public class HologramManager {
         }
         addHologramManager(this);
     }
+
     public boolean isSpawned()
     {
         return armorStand != null;
@@ -427,11 +407,13 @@ public class HologramManager {
                 armorStand.setCustomNameVisible(true);
             }
         }
+        saveConfig();
     }
     public void setEquipmentAngles(ArmorStandPoseEnum standPoseEnum, EulerAngle eulerAngle)
     {
         this.equipmentAngles.put(standPoseEnum, eulerAngle);
         poseEquipment(standPoseEnum, eulerAngle);
+        saveConfig();
     }
 
     private void poseEquipment(ArmorStandPoseEnum standPoseEnum, EulerAngle eulerAngle) {
@@ -446,6 +428,7 @@ public class HologramManager {
                 case RIGHT_LEG -> this.armorStand.setRightLegPose(eulerAngle);
             }
         }
+        saveConfig();
     }
 
     public void setEquipment(EquipmentSlot equipmentSlot, ItemStack itemStack)
@@ -457,7 +440,15 @@ public class HologramManager {
             if (equipment == null) return;
             equipment.setItem(equipmentSlot, itemStack.clone());
         }
+        saveConfig();
     }
+
+    private void saveConfig() {
+        SaveManager save = this.save();
+        String key = HologramManager.getKey(this.location);
+        if (save != null) saveManager.set("hologram." + key + "." + this.getKey(), save);
+    }
+
     public String getText()
     {
         return customName;

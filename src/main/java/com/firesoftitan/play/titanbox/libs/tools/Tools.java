@@ -73,7 +73,7 @@ public class Tools {
     private final LibsPlayerTool PlayerTool;
     private final LibsHologramTool hologramTool;
     private final LibsAdvancedRecipeTool RecipeTool;
-    private static final SaveRunnable saver = new SaveRunnable();
+    public static final SaveRunnable saver = new SaveRunnable();
     protected static Tools tools;
 
     public Tools(JavaPlugin plugin, TitanSaverRunnable titanSaverRunnable, int spigotID) {

@@ -307,8 +307,7 @@ public class LibsItemStackTool {
                 if (a instanceof PotionMeta && b instanceof PotionMeta)
                 {
                     if(!((PotionMeta)a).getCustomEffects().equals(((PotionMeta)b).getCustomEffects())) return false;
-                    if(!((PotionMeta)a).getBasePotionData().equals(((PotionMeta)b).getBasePotionData())) return false;
-                    if(!((PotionMeta)a).getBasePotionData().getType().equals(((PotionMeta)b).getBasePotionData().getType())) return false;
+                    if(!((PotionMeta)a).getBasePotionType().equals(((PotionMeta)b).getBasePotionType())) return false;
                     if (((PotionMeta)a).getColor() !=null && ((PotionMeta)b).getColor() ==null) return false;
                     if (((PotionMeta)a).getColor() ==null && ((PotionMeta)b).getColor() !=null) return false;
                     if (((PotionMeta)a).getColor() !=null && ((PotionMeta)b).getColor() !=null) {
