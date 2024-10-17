@@ -1,6 +1,8 @@
 package com.firesoftitan.play.titanbox.libs.managers;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
+import net.minecraft.core.IRegistryCustom;
 import net.minecraft.nbt.MojangsonParser;
 import net.minecraft.nbt.NBTTagCompound;
 import org.bukkit.Bukkit;
@@ -8,7 +10,8 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_21_R1.CraftRegistry;
+import org.bukkit.craftbukkit.v1_21_R1.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
@@ -55,7 +58,8 @@ public class EncodeDecodeManager {
             try {
                 String item = config.getString("x");
                 NBTTagCompound item2 = MojangsonParser.a(item); //parse
-                outItem = CraftItemStack.asBukkitCopy(net.minecraft.world.item.ItemStack.a(item2));
+                IRegistryCustom minecraftRegistry = CraftRegistry.getMinecraftRegistry();
+                outItem = CraftItemStack.asBukkitCopy(net.minecraft.world.item.ItemStack.a(minecraftRegistry, item2));
             } catch (CommandSyntaxException e) {
 //            e.printStackTrace();
             }
@@ -277,10 +281,11 @@ public class EncodeDecodeManager {
     public static String encode(ItemStack itemStack) {
         String configString;
         YamlConfiguration config;
-        NBTTagCompound item = CraftItemStack.asNMSCopy(itemStack).b(new NBTTagCompound());
+        IRegistryCustom minecraftRegistry = CraftRegistry.getMinecraftRegistry();
+        NBTTagCompound item = (NBTTagCompound) CraftItemStack.asNMSCopy(itemStack).b(minecraftRegistry);
         config = new YamlConfiguration();
         //String??
-        config.set("x", item.t_());
+        config.set("x", item.s_());
         configString = config.saveToString();
         byte[] configBytes = configString.getBytes(StandardCharsets.UTF_8);
             return Base64.getEncoder().encodeToString(configBytes);

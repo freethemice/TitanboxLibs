@@ -14,8 +14,8 @@ import net.minecraft.server.network.PlayerConnection;
 import net.minecraft.world.entity.EnumMainHand;
 import net.minecraft.world.entity.player.EnumChatVisibility;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_20_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_21_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_21_R1.CraftWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -324,7 +324,7 @@ public class LibsPlayerTool {
         GameProfile gameProfile = new GameProfile(uuid, name);
         ClientInformation clientinformation = new ClientInformation("English", 0, EnumChatVisibility.c, true, 0, EnumMainHand.b, false, true);//new 1.20.2
         EntityPlayer entityPlayer = new EntityPlayer(nmsServer, nmsWorld, gameProfile, clientinformation);
-        CommonListenerCookie commonListenerCookie = new CommonListenerCookie(gameProfile, 0, clientinformation); //new 1.20.2
+        CommonListenerCookie commonListenerCookie = new CommonListenerCookie(gameProfile, 0, clientinformation, false); //new 1.20.2
         entityPlayer.c = new PlayerConnection(nmsServer, new NetworkManager(EnumProtocolDirection.a), entityPlayer, commonListenerCookie);
     }
     public Player loadOfflinePlayer(OfflinePlayer offline)

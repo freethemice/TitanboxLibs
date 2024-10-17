@@ -158,6 +158,7 @@ public class TitanBoxLibs extends JavaPlugin {
                 if (oops > 0) TitanBoxLibs.tools.getMessageTool().sendMessageSystem("Glitched holograms removed: " + oops);
             }
         }.runTaskTimer(this,20,20);
+
     }
 
 
@@ -223,6 +224,7 @@ public class TitanBoxLibs extends JavaPlugin {
         TitanBoxLibs.tools.getMessageTool().sendMessagePlayer( (Player) player, commandHelp);
     }
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, String label, String[] args) {
+
         if (label.equalsIgnoreCase("titan") || label.equalsIgnoreCase("titanguide") || label.equalsIgnoreCase("tguide")) {
             if (sender instanceof Player player)
             {

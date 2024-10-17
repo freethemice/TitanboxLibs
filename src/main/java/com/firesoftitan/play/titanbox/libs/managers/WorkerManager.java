@@ -3,7 +3,6 @@ package com.firesoftitan.play.titanbox.libs.managers;
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
 import com.firesoftitan.play.titanbox.libs.tools.Tools;
 import com.mojang.authlib.GameProfile;
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.EntityPlayer;
@@ -12,9 +11,9 @@ import net.minecraft.world.entity.EnumMainHand;
 import net.minecraft.world.entity.player.EnumChatVisibility;
 import net.minecraft.world.level.EnumGamemode;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_20_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_21_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_21_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_21_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -124,7 +123,7 @@ public class WorkerManager {
             List<Entity> listNear = this.getNearbyEntities(checkSapling, size);
             for (Entity e : listNear) {
                 if (!e.isDead()) {
-                    if (e.getType() == EntityType.DROPPED_ITEM) {
+                    if (e.getType() == EntityType.ITEM) { //DROPPED_ITEM
                         ItemStack dropped = ((Item) e).getItemStack().clone();
                         String check =  Tools.getItemStackTool(TitanBoxLibs.instants).getName(dropped,true);
                         if (check.toLowerCase().startsWith("altar probe")) return null; //slimefun item ignore it

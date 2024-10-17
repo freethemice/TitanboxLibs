@@ -3,24 +3,25 @@ package com.firesoftitan.play.titanbox.libs.listeners;
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
 import com.firesoftitan.play.titanbox.libs.enums.BarcodeDeviceEnum;
 import com.firesoftitan.play.titanbox.libs.guis.CraftingBookGui;
+import com.firesoftitan.play.titanbox.libs.guis.YesNoGui;
 import com.firesoftitan.play.titanbox.libs.managers.RecipeManager;
-import com.firesoftitan.play.titanbox.libs.tools.*;
-import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
+import com.firesoftitan.play.titanbox.libs.tools.LibsItemStackTool;
+import com.firesoftitan.play.titanbox.libs.tools.LibsNBTTool;
+import com.firesoftitan.play.titanbox.libs.tools.LibsProtectionTool;
+import com.firesoftitan.play.titanbox.libs.tools.Tools;
+import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
-import org.bukkit.entity.*;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.inventory.CraftingInventory;
@@ -30,9 +31,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Random;
-
-import static com.firesoftitan.play.titanbox.libs.TitanBoxLibs.*;
+import static com.firesoftitan.play.titanbox.libs.TitanBoxLibs.instants;
+import static com.firesoftitan.play.titanbox.libs.TitanBoxLibs.workerManager;
 
 public class MainListener  implements Listener {
 
@@ -112,7 +112,9 @@ public class MainListener  implements Listener {
         HumanEntity whoClicked = event.getWhoClicked();
         InventoryView openInventory = whoClicked.getOpenInventory();
         Inventory clickedInventory = event.getClickedInventory();
-        CraftBookGuiClicked(event, whoClicked, openInventory, clickedInventory);
+        if (openInventory.getTitle().equals(CraftingBookGui.guiName)) CraftBookGuiClicked(event, whoClicked, openInventory, clickedInventory);
+        if (openInventory.getTitle().equals(YesNoGui.guiName)) YesNoGui.onClick(event, whoClicked, openInventory, clickedInventory);
+
     }
     private void CraftBookGuiClicked(InventoryClickEvent event, HumanEntity whoClicked, InventoryView openInventory, Inventory clickedInventory) {
 

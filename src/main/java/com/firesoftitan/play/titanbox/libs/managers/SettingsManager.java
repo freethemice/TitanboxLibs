@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Manages saving and loading YAML configuration files for config/setting files.
@@ -79,7 +80,36 @@ public class SettingsManager extends SaveManager{
     @Override
     public void set(String key, @SuppressWarnings("rawtypes") List list)
     {
+        if (list.get(0) instanceof UUID)
+        {
+            List<String> convert = new ArrayList<String>();
+            for (Object uuid: list)
+            {
+               convert.add(uuid.toString());
+            }
+            config.set(key, convert);
+            return;
+        }
         config.set(key, list);
+    }
+    @Override
+    public List<UUID> getUUIDList(String path) {
+        try {
+            if (config.contains(path)){
+                if (config.getString(path) != null) {
+                    List<String> list = (ArrayList<String>) config.getList(path);
+                    List<UUID> convert = new ArrayList<UUID>();
+                    for(String string: list)
+                    {
+                        convert.add(UUID.fromString(string));
+                    }
+                    return convert;
+                }
+            }
+            return new ArrayList<>();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
     }
     @Override
     public List<String> getStringList(String path) {

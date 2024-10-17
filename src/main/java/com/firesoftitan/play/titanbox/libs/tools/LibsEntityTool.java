@@ -18,15 +18,17 @@ import net.minecraft.world.phys.Vec3D;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_20_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_21_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_21_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_21_R1.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class LibsEntityTool {
@@ -77,7 +79,7 @@ public class LibsEntityTool {
         ArgumentEntity argumentEntity = ArgumentEntity.b();
         try {
             EntitySelector parse = argumentEntity.parse(new StringReader("@e[" + type + "" + s + "]"));
-            List<? extends net.minecraft.world.entity.Entity> entities = parse.b(((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().c().aF()); //MinecraftServer.CommandListenerWrapper
+            List<? extends net.minecraft.world.entity.Entity> entities = parse.b(((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().c().aI()); //MinecraftServer.CommandListenerWrapper
             for(net.minecraft.world.entity.Entity e: entities)
             {
                 CraftEntity bukkitEntity = e.getBukkitEntity();
@@ -92,8 +94,7 @@ public class LibsEntityTool {
     }
     public void setPosition(Entity entity, Location location)
     {
-        Vec3D vLocation = new Vec3D(location.getX(), location.getY(), location.getZ());
-        ((CraftEntity)entity).getHandle().teleportTo(((CraftWorld)location.getWorld()).getHandle(), vLocation);
+        ((CraftEntity)entity).getHandle().teleportTo(((CraftWorld)location.getWorld()).getHandle(), location.getX(), location.getY(), location.getZ(), Collections.emptySet(), 0, 0, PlayerTeleportEvent.TeleportCause.PLUGIN);
     }
     public void setTag(Entity entity, String... tags)
     {
@@ -127,7 +128,7 @@ public class LibsEntityTool {
     private ParseResults<CommandListenerWrapper> parseCommand(String s) {
         DedicatedPlayerList server = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle();
         com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> commandDispatcher = server.b().vanillaCommandDispatcher.a();
-        CommandListenerWrapper commandlistenerwrapper = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().c().aF();
+        CommandListenerWrapper commandlistenerwrapper = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().c().aI();
         return commandDispatcher.parse(s, commandlistenerwrapper);
     }
     public void summonEntity(World world, Entity entity)

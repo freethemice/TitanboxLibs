@@ -1,14 +1,16 @@
 package com.firesoftitan.play.titanbox.libs.tools;
 
 import net.minecraft.core.BlockPosition;
+import net.minecraft.core.IRegistryCustom;
 import net.minecraft.nbt.NBTCompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.templatesystem.DefinedStructure;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R3.structure.CraftStructure;
+import org.bukkit.craftbukkit.v1_21_R1.CraftRegistry;
+import org.bukkit.craftbukkit.v1_21_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_21_R1.structure.CraftStructure;
 import org.bukkit.structure.Structure;
 
 import java.io.File;
@@ -41,7 +43,8 @@ public class LibsStructureTool {
 
         WorldServer worldServer = ((CraftWorld) locationA.getWorld()).getHandle();
         structure.a(worldServer, blockPositionA, blockPositionB, true, Blocks.km);
-        return new CraftStructure(structure);
+        IRegistryCustom minecraftRegistry = CraftRegistry.getMinecraftRegistry();
+        return new CraftStructure(structure, minecraftRegistry);
 
     }
     private int[] getDimensions(Location[] corners) {

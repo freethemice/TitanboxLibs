@@ -8,6 +8,7 @@ import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.commands.arguments.item.ArgumentItemStack;
 import net.minecraft.commands.arguments.item.ArgumentPredicateItemStack;
 import net.minecraft.core.BlockPosition;
+import net.minecraft.core.IRegistryCustom;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
@@ -17,10 +18,11 @@ import net.minecraft.world.level.block.entity.TileEntity;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_20_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_21_R1.CraftRegistry;
+import org.bukkit.craftbukkit.v1_21_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_21_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_21_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_21_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -41,7 +43,7 @@ public class LibsNBTTool {
     private ParseResults<CommandListenerWrapper> parseCommand(String s) {
         DedicatedPlayerList server = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle();
         com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> commanddispatcher = server.b().vanillaCommandDispatcher.a();
-        CommandListenerWrapper commandlistenerwrapper = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().c().aF(); //MinecraftServer.CommandListenerWrapper
+        CommandListenerWrapper commandlistenerwrapper = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().c().aI(); //MinecraftServer.CommandListenerWrapper
         return commanddispatcher.parse(s, commandlistenerwrapper);
     }
     public ItemStack getItemStack(Material material, int amount, String NBTString)
@@ -348,7 +350,7 @@ public class LibsNBTTool {
         NBTTagList c = nbt.c(key, 8);
         List<String> outWords = new ArrayList<String>();
         for (net.minecraft.nbt.NBTBase nbtBase : c) {
-            outWords.add(nbtBase.t_()); //String has _ in it
+            outWords.add(nbtBase.s_()); //String has _ in it
         }
         return outWords;
     }
@@ -414,7 +416,8 @@ public class LibsNBTTool {
         try {
 
             net.minecraft.world.item.ItemStack itemStack1 = CraftItemStack.asNMSCopy(itemStack);
-            itemStack1.c((NBTTagCompound) null);
+            IRegistryCustom minecraftRegistry = CraftRegistry.getMinecraftRegistry();
+            itemStack1.b(minecraftRegistry,(NBTTagCompound) null);
             return CraftItemStack.asBukkitCopy(itemStack1);
         }
         catch (Exception E)
@@ -427,8 +430,8 @@ public class LibsNBTTool {
     {
         try {
             net.minecraft.world.item.ItemStack itemStack1 = CraftItemStack.asNMSCopy(itemStack);
-
-            itemStack1.c(nbtTagCompound);
+            IRegistryCustom minecraftRegistry = CraftRegistry.getMinecraftRegistry();
+            itemStack1.b(minecraftRegistry,(NBTTagCompound) nbtTagCompound);
             return CraftItemStack.asBukkitCopy(itemStack1);
         }
         catch (Exception E)
@@ -452,18 +455,20 @@ public class LibsNBTTool {
         //System.out.println("n:" + tile.n());
         //System.out.println("o:" + tile.o());
         //System.out.println("ao:" + tile.ao_());
-        return tile.o(); //One gets all 3, its looks simple no Long phrase
+        IRegistryCustom minecraftRegistry = CraftRegistry.getMinecraftRegistry();
+        return tile.d(minecraftRegistry); //One gets all 3, its looks simple no Long phrase
     }
     protected NBTTagCompound getNBT(ItemStack itemStack)
     {
         try {
 
             net.minecraft.world.item.ItemStack itemStack1 = CraftItemStack.asNMSCopy(itemStack);
-            if (itemStack1.v() == null)
+            IRegistryCustom minecraftRegistry = CraftRegistry.getMinecraftRegistry();
+            if (itemStack1.b(minecraftRegistry) == null)
             {
                 return new NBTTagCompound();
             }
-            return itemStack1.v();
+            return (NBTTagCompound) itemStack1.b(minecraftRegistry);
         }
         catch (Exception E)
         {
