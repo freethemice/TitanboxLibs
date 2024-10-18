@@ -1,6 +1,7 @@
 package com.firesoftitan.play.titanbox.libs.managers;
 
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
+import net.minecraft.nbt.NBTTagCompound;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -111,6 +112,8 @@ public class SettingsManager extends SaveManager{
             return new ArrayList<>();
         }
     }
+
+
     @Override
     public List<String> getStringList(String path) {
         try {

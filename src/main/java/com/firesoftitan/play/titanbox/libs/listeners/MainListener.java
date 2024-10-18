@@ -1,12 +1,10 @@
 package com.firesoftitan.play.titanbox.libs.listeners;
 
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
-import com.firesoftitan.play.titanbox.libs.enums.BarcodeDeviceEnum;
 import com.firesoftitan.play.titanbox.libs.guis.CraftingBookGui;
 import com.firesoftitan.play.titanbox.libs.guis.YesNoGui;
 import com.firesoftitan.play.titanbox.libs.managers.RecipeManager;
 import com.firesoftitan.play.titanbox.libs.tools.LibsItemStackTool;
-import com.firesoftitan.play.titanbox.libs.tools.LibsNBTTool;
 import com.firesoftitan.play.titanbox.libs.tools.LibsProtectionTool;
 import com.firesoftitan.play.titanbox.libs.tools.Tools;
 import org.bukkit.ChatColor;
@@ -39,7 +37,7 @@ public class MainListener  implements Listener {
 
     private final Tools tools;
     private final LibsItemStackTool itemStackTool = Tools.getItemStackTool(instants);
-    private final LibsNBTTool nbtTool = Tools.getNBTTool(instants);
+    //private final LibsNBTTool nbtTool = Tools.getNBTTool(instants);
     public MainListener(){
         registerEvents();
         tools = Tools.getTools(instants);
@@ -124,7 +122,7 @@ public class MainListener  implements Listener {
                 if (event.getSlot() > -1 && event.getSlot() < CraftingBookGui.getSize()) {
                     ItemStack clicked = clickedInventory.getItem(event.getSlot());
                     if (!itemStackTool.isEmpty(clicked)) {
-                        String action = nbtTool.getString(clicked, "buttonaction");
+                        String action ="none"; //nbtTool.getString(clicked, "buttonaction");
                         if (action != null && action.length() > 1) {
                             event.setCancelled(true);
                             switch (action.toLowerCase()) {
@@ -156,8 +154,7 @@ public class MainListener  implements Listener {
         String id = tools.getSkullTool().getSkullTitanID(placed);
         ItemStack item = event.getItemInHand();
         boolean placeable = tools.getSkullTool().isSkullPlaceable(item);
-        BarcodeDeviceEnum deviceEnum = tools.getMiscTool().isUpgradeDevice(item);
-        if ((deviceEnum != BarcodeDeviceEnum.NONE) || (id != null && id.equals("upgrade_device")) || !placeable) {
+        if ((id != null && id.equals("upgrade_device")) || !placeable) {
             event.setCancelled(true);
             tools.getMessageTool().sendMessagePlayer(event.getPlayer(), ChatColor.RED + "Can't place this block!");
         }

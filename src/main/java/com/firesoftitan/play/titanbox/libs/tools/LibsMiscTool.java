@@ -1,7 +1,5 @@
 package com.firesoftitan.play.titanbox.libs.tools;
 
-import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
-import com.firesoftitan.play.titanbox.libs.enums.BarcodeDeviceEnum;
 import com.firesoftitan.play.titanbox.libs.interfaces.CommandInterface;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -10,7 +8,6 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.List;
@@ -161,103 +158,6 @@ public class LibsMiscTool {
     }
 
 
-
-
-
-    public ItemStack getHeartPart()
-    {
-        String Texture = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmM4ZmI2MzdkNmUxYTdiYThmYTk3ZWU5ZDI5MTVlODQzZThlYzc5MGQ4YjdiZjYwNDhiZTYyMWVlNGQ1OWZiYSJ9fX0=";
-        ItemStack placeMe =  Tools.tools.getSkullTool().getSkull(Texture, "player_heart_quarter", false);
-        placeMe =  Tools.tools.getItemStackTool().changeName(placeMe, ChatColor.RED + "Player Heart Quarter");
-        placeMe =  Tools.tools.getItemStackTool().addLore(placeMe,  ChatColor.AQUA + "Collect four and get 1 heart added to your health!", ChatColor.AQUA + "Hold in main hand and right-click to use.");
-        placeMe =  TitanBoxLibs.barcodeManager.getNewBarcode(placeMe);
-        return  placeMe.clone();
-
-    }
-    public void markHeartPartUsed(Player player, ItemStack item )
-    {
-        if (isHeartPart(item).isGood()) {
-            TitanBoxLibs.barcodeManager.setBarcodeTrue(item, player);
-        }
-    }
-    public BarcodeDeviceEnum isHeartPart(ItemStack item )
-    {
-        if (item != null) {
-            String titanID = Tools.tools.getSkullTool().getSkullTitanID(item);
-            if (titanID != null && !titanID.isEmpty()) {
-                if (titanID.equals("player_heart_quarter")) {
-                    if (!TitanBoxLibs.barcodeManager.hasBarcode(item))
-                    {
-                        //"This is an invalid device! Most likely an old one.");
-                        return BarcodeDeviceEnum.INVALID;
-                    }
-                    String barcode = TitanBoxLibs.barcodeManager.scanBarcode(item);
-                    if (barcode == null)
-                    {
-                        // "This is an invalid device! Most likely an old one.");
-                        return BarcodeDeviceEnum.INVALID;
-                    }
-                    boolean barcodeTrue = Boolean.parseBoolean(barcode);
-                    if (barcodeTrue)
-                    {
-                        //TitanBox.dupedAlert(player, item);
-                        //add duped alert later
-                        return BarcodeDeviceEnum.DUPED;
-                    }
-                    return BarcodeDeviceEnum.VALID;
-                }
-            }
-        }
-        return BarcodeDeviceEnum.NONE;
-    }
-    public ItemStack getUpgradeDevice(Player player)
-    {
-        String Texture = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTc4MzQ3NzUzMzZhMmY1Mzg2NzM5OTFiZTA3NmM4NzRjN2ZhZDExYjdiN2Y0ZjMyMTQzYjYzM2UwNDMxMjEifX19";
-        ItemStack placeMe = Tools.tools.getSkullTool().getSkull(Texture, "upgrade_device", false);
-        placeMe = Tools.tools.getItemStackTool().changeName(placeMe, ChatColor.YELLOW + "Upgrade Device");
-        placeMe = Tools.tools.getItemStackTool().addLore(placeMe,  "Used On: " + ChatColor.WHITE + "Storage Unit, and Routers", ChatColor.WHITE + "Hold in main hand and click block thats placed!");
-        placeMe =  TitanBoxLibs.barcodeManager.getNewBarcode(placeMe);
-        placeMe = Tools.tools.getItemStackTool().addLore(placeMe, ChatColor.YELLOW  + "Made By: " + ChatColor.WHITE + player.getName());
-        return  placeMe.clone();
-
-    }
-    public void markUpgradeDeviceUsed(Player player, ItemStack item )
-    {
-        if (isUpgradeDevice(item).isGood()) {
-             TitanBoxLibs.barcodeManager.setBarcodeTrue(item, player);
-        }
-    }
-    public BarcodeDeviceEnum isUpgradeDevice(ItemStack item )
-    {
-        if (item != null) {
-            if (item.hasItemMeta()) {
-                if (item.getItemMeta() != null && item.getItemMeta().hasDisplayName()) {
-                    if (item.getItemMeta().getDisplayName().startsWith(ChatColor.YELLOW + "Upgrade Device")) {
-                        if (!  TitanBoxLibs.barcodeManager.hasBarcode(item))
-                        {
-                            //"This is an invalid device! Most likely an old one.");
-                            return BarcodeDeviceEnum.INVALID;
-                        }
-                        String barcode =   TitanBoxLibs.barcodeManager.scanBarcode(item);
-                        if (barcode == null)
-                        {
-                            // "This is an invalid device! Most likely an old one.");
-                            return BarcodeDeviceEnum.INVALID;
-                        }
-                        boolean barcodeTrue = Boolean.parseBoolean(barcode);
-                        if (barcodeTrue)
-                        {
-                            //TitanBox.dupedAlert(player, item);
-                            //add duped alert later
-                            return BarcodeDeviceEnum.DUPED;
-                        }
-                        return BarcodeDeviceEnum.VALID;
-                    }
-                }
-            }
-        }
-        return BarcodeDeviceEnum.NONE;
-    }
 
     public boolean rollDice(float percent)
     {

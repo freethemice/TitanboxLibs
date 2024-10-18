@@ -44,7 +44,6 @@ public class TitanBoxLibs extends JavaPlugin {
     public PluginListener pluginListener;
     public ConfigManager configManager;
     public static Tools tools;
-    public static BarcodeManager barcodeManager;
     public static WorkerManager workerManager;
     public static AutoUpdateManager autoUpdateManager;
 
@@ -61,7 +60,6 @@ public class TitanBoxLibs extends JavaPlugin {
         configManager = new ConfigManager();
         TitanBoxLibs.tools = new Tools(this, new MySaveRunnable(this), -1);
         TitanBoxLibs.workerManager = new WorkerManager();
-        TitanBoxLibs.barcodeManager = new BarcodeManager();
         mainListener = new MainListener();
         pluginListener = new PluginListener();
         TitanBlockManager.initialize();

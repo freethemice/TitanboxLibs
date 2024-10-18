@@ -15,7 +15,6 @@ public class MySaveRunnable extends TitanSaverRunnable{
 
     @Override
     public void run() {
-        TitanBoxLibs.barcodeManager.save();
         TitanBoxLibs.workerManager.saveAll();
 
         HologramManager.saveAll();

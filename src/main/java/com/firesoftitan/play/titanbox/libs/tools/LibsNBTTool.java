@@ -4,17 +4,20 @@ import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
 import com.firesoftitan.play.titanbox.libs.managers.EncodeDecodeManager;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandListenerWrapper;
 import net.minecraft.commands.arguments.item.ArgumentItemStack;
 import net.minecraft.commands.arguments.item.ArgumentPredicateItemStack;
 import net.minecraft.core.BlockPosition;
 import net.minecraft.core.IRegistryCustom;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.PatchedDataComponentMap;
+import net.minecraft.nbt.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedPlayerList;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.level.block.entity.TileEntity;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -27,6 +30,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.*;
 import java.util.*;
 
 public class LibsNBTTool {
@@ -41,14 +45,17 @@ public class LibsNBTTool {
         return nbtTagCompound.toString();
     }
     private ParseResults<CommandListenerWrapper> parseCommand(String s) {
+
         DedicatedPlayerList server = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle();
-        com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> commanddispatcher = server.b().vanillaCommandDispatcher.a();
+        com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> commanddispatcher = server.b().az.b().e.a();//server.b().vanillaCommandDispatcher.a(); // vanillaCommandDispatcher
         CommandListenerWrapper commandlistenerwrapper = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().c().aI(); //MinecraftServer.CommandListenerWrapper
         return commanddispatcher.parse(s, commandlistenerwrapper);
     }
     public ItemStack getItemStack(Material material, int amount, String NBTString)
     {
-        String string = "not set";
+        ItemStack item1 = getItem(NBTString);
+        return item1;
+/*        String string = "not set";
         try {
             var commandListenerWrapperParseResults = parseCommand("give @a " +  material.getKey() + NBTString + " " + amount);
             string = commandListenerWrapperParseResults.getReader().getString();
@@ -63,7 +70,7 @@ public class LibsNBTTool {
             Tools.tools.getMessageTool().sendMessageSystem("Command: " + string);
             e.printStackTrace();
         }
-        return null;
+        return null;*/
     }
     public ItemStack set(ItemStack itemStack, String key, byte value)
     {
@@ -457,6 +464,17 @@ public class LibsNBTTool {
         //System.out.println("ao:" + tile.ao_());
         IRegistryCustom minecraftRegistry = CraftRegistry.getMinecraftRegistry();
         return tile.d(minecraftRegistry); //One gets all 3, its looks simple no Long phrase
+    }
+    protected ItemStack getItem(String NBT)
+    {
+        try {
+            NBTTagCompound nbtTagCompound = MojangsonParser.a(NBT);
+            IRegistryCustom minecraftRegistry = CraftRegistry.getMinecraftRegistry();
+            net.minecraft.world.item.ItemStack a = net.minecraft.world.item.ItemStack.a(minecraftRegistry, nbtTagCompound);
+            return CraftItemStack.asBukkitCopy(a);
+        } catch (CommandSyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
     protected NBTTagCompound getNBT(ItemStack itemStack)
     {
