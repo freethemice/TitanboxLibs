@@ -21,14 +21,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_21_R1.CraftRegistry;
-import org.bukkit.craftbukkit.v1_21_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_21_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_21_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_21_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_21_R2.CraftRegistry;
+import org.bukkit.craftbukkit.v1_21_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_21_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_21_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_21_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
+import org.sonatype.inject.Description;
 
 import java.io.*;
 import java.util.*;
@@ -47,10 +48,16 @@ public class LibsNBTTool {
     private ParseResults<CommandListenerWrapper> parseCommand(String s) {
 
         DedicatedPlayerList server = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle();
-        com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> commanddispatcher = server.b().az.b().e.a();//server.b().vanillaCommandDispatcher.a(); // vanillaCommandDispatcher
-        CommandListenerWrapper commandlistenerwrapper = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().c().aI(); //MinecraftServer.CommandListenerWrapper
+        com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> commanddispatcher = server.b().vanillaCommandDispatcher.a(); //az.b().e.a();//server.b().vanillaCommandDispatcher.a(); // vanillaCommandDispatcher
+        CommandListenerWrapper commandlistenerwrapper = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().c().aH(); //MinecraftServer.CommandListenerWrapper
         return commanddispatcher.parse(s, commandlistenerwrapper);
     }
+    public ItemStack getItemStack(String NBTString)
+    {
+        ItemStack item1 = getItem(NBTString);
+        return item1;
+    }
+    @Deprecated
     public ItemStack getItemStack(Material material, int amount, String NBTString)
     {
         ItemStack item1 = getItem(NBTString);
@@ -357,7 +364,7 @@ public class LibsNBTTool {
         NBTTagList c = nbt.c(key, 8);
         List<String> outWords = new ArrayList<String>();
         for (net.minecraft.nbt.NBTBase nbtBase : c) {
-            outWords.add(nbtBase.s_()); //String has _ in it
+            outWords.add(nbtBase.u_()); //String has _ in it
         }
         return outWords;
     }

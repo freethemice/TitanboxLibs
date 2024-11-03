@@ -2,6 +2,7 @@ package com.firesoftitan.play.titanbox.libs.managers;
 
 import com.firesoftitan.play.titanbox.libs.TitanBoxLibs;
 import net.minecraft.nbt.NBTTagCompound;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -81,7 +82,8 @@ public class SettingsManager extends SaveManager{
     @Override
     public void set(String key, @SuppressWarnings("rawtypes") List list)
     {
-        if (list.get(0) instanceof UUID)
+        if (list.isEmpty()) return;
+        if (list.getFirst() instanceof UUID)
         {
             List<String> convert = new ArrayList<String>();
             for (Object uuid: list)
@@ -91,8 +93,70 @@ public class SettingsManager extends SaveManager{
             config.set(key, convert);
             return;
         }
+        if (list.getFirst() instanceof  ItemStack)
+        {
+            List<String> convert = new ArrayList<String>();
+            for (Object item: list)
+            {
+                if (item != null) convert.add(TitanBoxLibs.tools.getNBTTool().getNBTString((ItemStack) item));
+            }
+            config.set(key, convert);
+            return;
+        }
+        if (list.getFirst() instanceof Location)
+        {
+            List<String> convert = new ArrayList<String>();
+            for (Object location: list)
+            {
+                if (location != null)  convert.add(TitanBoxLibs.tools.getSerializeTool().serializeLocation((Location) location));
+            }
+            config.set(key, convert);
+            return;
+        }
         config.set(key, list);
     }
+    @Override
+    public List<Location> getLocationList(String path) {
+        try {
+            if (config.contains(path)){
+                if (config.getString(path) != null) {
+                    List<String> list = (ArrayList<String>) config.getList(path);
+                    List<Location> convert = new ArrayList<Location>();
+                    for(String string: list)
+                    {
+                        Location location = TitanBoxLibs.tools.getSerializeTool().deserializeLocation(string);
+                        convert.add(location);
+                    }
+                    return convert;
+                }
+            }
+            return new ArrayList<>();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<ItemStack> getItemList(String path) {
+        try {
+            if (config.contains(path)){
+                if (config.getString(path) != null) {
+                    List<String> list = (ArrayList<String>) config.getList(path);
+                    List<ItemStack> convert = new ArrayList<ItemStack>();
+                    for(String string: list)
+                    {
+                        ItemStack itemStack = TitanBoxLibs.tools.getNBTTool().getItemStack(string);
+                        convert.add(itemStack);
+                    }
+                    return convert;
+                }
+            }
+            return new ArrayList<>();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
+
     @Override
     public List<UUID> getUUIDList(String path) {
         try {
@@ -132,8 +196,6 @@ public class SettingsManager extends SaveManager{
     @Override
     public void set(String key, ItemStack itemStack)
     {
-        config.set(key+ ".material", itemStack.getType().name());
-        config.set(key + ".amount", itemStack.getAmount());
         String nbtString = TitanBoxLibs.tools.getNBTTool().getNBTString(itemStack.clone());
         config.set(key + ".nbt", nbtString);
     }
@@ -141,12 +203,8 @@ public class SettingsManager extends SaveManager{
     public ItemStack getItem(String path) {
         try {
             if (config.contains(path)){
-                String mat = config.getString(path + ".material");
-                int amount = config.getInt(path + ".amount");
                 String nbt = config.getString(path + ".nbt");
-                Material material = Material.GRASS_BLOCK;
-                if (mat != null) material = Material.getMaterial(mat.toLowerCase().replace("minecraft:", "").toUpperCase());
-                ItemStack itemStack = TitanBoxLibs.tools.getNBTTool().getItemStack(material, amount , nbt);
+                ItemStack itemStack = TitanBoxLibs.tools.getNBTTool().getItemStack(nbt);
                 return itemStack.clone();
             }
             return null;

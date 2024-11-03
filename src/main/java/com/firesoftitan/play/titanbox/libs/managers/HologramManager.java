@@ -107,6 +107,7 @@ public class HologramManager {
 
     private static void addHologramManager(HologramManager hologramManager)
     {
+
         String key = getKey(hologramManager.getLocation());
         List<HologramManager> tmp = chunkKeySort.get(key);
         if (tmp == null) tmp = new ArrayList<HologramManager>();

@@ -12,15 +12,17 @@ import net.minecraft.core.BlockPosition;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.dedicated.DedicatedPlayerList;
 import net.minecraft.server.level.WorldServer;
+import net.minecraft.world.entity.EntityInsentient;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.block.entity.TileEntity;
 import net.minecraft.world.phys.Vec3D;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_21_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_21_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_21_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_21_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_21_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_21_R2.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -79,7 +81,7 @@ public class LibsEntityTool {
         ArgumentEntity argumentEntity = ArgumentEntity.b();
         try {
             EntitySelector parse = argumentEntity.parse(new StringReader("@e[" + type + "" + s + "]"));
-            List<? extends net.minecraft.world.entity.Entity> entities = parse.b(((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().c().aI()); //MinecraftServer.CommandListenerWrapper
+            List<? extends net.minecraft.world.entity.Entity> entities = parse.b(((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().b().aH()); //MinecraftServer.CommandListenerWrapper
             for(net.minecraft.world.entity.Entity e: entities)
             {
                 CraftEntity bukkitEntity = e.getBukkitEntity();
@@ -94,7 +96,7 @@ public class LibsEntityTool {
     }
     public void setPosition(Entity entity, Location location)
     {
-        ((CraftEntity)entity).getHandle().teleportTo(((CraftWorld)location.getWorld()).getHandle(), location.getX(), location.getY(), location.getZ(), Collections.emptySet(), 0, 0, PlayerTeleportEvent.TeleportCause.PLUGIN);
+        ((CraftEntity)entity).getHandle().teleportTo(((CraftWorld)location.getWorld()).getHandle(), location.getX(), location.getY(), location.getZ(), Collections.emptySet(), 0, 0, false, PlayerTeleportEvent.TeleportCause.PLUGIN);
     }
     public void setTag(Entity entity, String... tags)
     {
@@ -128,19 +130,27 @@ public class LibsEntityTool {
     private ParseResults<CommandListenerWrapper> parseCommand(String s) {
         DedicatedPlayerList server = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle();
         com.mojang.brigadier.CommandDispatcher<CommandListenerWrapper> commandDispatcher = server.b().vanillaCommandDispatcher.a();
-        CommandListenerWrapper commandlistenerwrapper = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().c().aI();
+        CommandListenerWrapper commandlistenerwrapper = ((CraftServer) TitanBoxLibs.instants.getServer()).getHandle().c().aH();
         return commandDispatcher.parse(s, commandlistenerwrapper);
     }
     public void summonEntity(World world, Entity entity)
     {
         WorldServer worldServer = ((CraftWorld) world).getHandle();
         worldServer.tryAddFreshEntityWithPassengers(((CraftEntity)entity).getHandle(), CreatureSpawnEvent.SpawnReason.COMMAND);
+
     }
     public String getNBTasString(Entity entity)
     {
         return "" + ((CraftEntity)entity).getHandle().f(new NBTTagCompound());
     }
-
+    public void setNoAI(Entity entity)
+    {
+        net.minecraft.world.entity.Entity handle = ((CraftEntity) entity).getHandle();
+        if (handle instanceof EntityInsentient entityInsentient)
+        {
+            entityInsentient.u(true);
+        }
+    }
     public Entity summonEntity(World world, EntityType type, String nbtString, Location location)
     {
         try {
@@ -152,7 +162,7 @@ public class LibsEntityTool {
             var build = commandListenerWrapperParseResults.getContext().build(string);
             NBTTagCompound nbt = ArgumentNBTTag.a(build, "nbt");
             nbt.a("id", type.getKey().toString()); //ResourceKey.MinecraftKey.toString()
-            net.minecraft.world.entity.Entity entity = EntityTypes.a(nbt, worldServer, (entity1) -> entity1);
+            net.minecraft.world.entity.Entity entity = EntityTypes.a(nbt, worldServer, EntitySpawnReason.a, (entity1) -> entity1);
             worldServer.tryAddFreshEntityWithPassengers(entity, CreatureSpawnEvent.SpawnReason.COMMAND);
             if (entity == null) return null;
             return entity.getBukkitEntity();
@@ -172,7 +182,8 @@ public class LibsEntityTool {
             var build = commandListenerWrapperParseResults.getContext().build(string);
             NBTTagCompound nbt = ArgumentNBTTag.a(build, "nbt");
             nbt.a("id", type.getKey().toString()); //ResourceKey.MinecraftKey.toString()
-            net.minecraft.world.entity.Entity entity = EntityTypes.a(nbt, worldServer, (entity1) -> entity1);
+            net.minecraft.world.entity.Entity entity = EntityTypes.a(nbt, worldServer, EntitySpawnReason.a, (entity1) -> entity1);
+            //EntitySpawnReason.a is new don't know what it means
             worldServer.tryAddFreshEntityWithPassengers(entity, CreatureSpawnEvent.SpawnReason.COMMAND);
             if (entity == null) return null;
             return entity.getBukkitEntity();

@@ -6,14 +6,15 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.server.level.ParticleStatus;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.world.entity.EnumMainHand;
 import net.minecraft.world.entity.player.EnumChatVisibility;
 import net.minecraft.world.level.EnumGamemode;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_21_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_21_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_21_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_21_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_21_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_21_R2.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -76,7 +77,7 @@ public class WorkerManager {
             CraftPlayer opCr = npc.getBukkitEntity();
             opCr.setGameMode(GameMode.SURVIVAL);
             if (opCr.getPlayer() != null) opCr.getPlayer().setGameMode(GameMode.SURVIVAL);
-            opCr.getHandle().d.a(EnumGamemode.a);
+            opCr.getHandle().h.a(EnumGamemode.a);
             opCr.setOp(true);
             //noinspection SpellCheckingInspection
             Bukkit.dispatchCommand(opCr, "ignoreclaims");
@@ -89,7 +90,7 @@ public class WorkerManager {
         MinecraftServer nmsServer = ((CraftServer) Bukkit.getServer()).getServer();
         WorldServer nmsWorld = ((CraftWorld) world).getHandle();
         GameProfile gameProfile = new GameProfile(uuid, name);
-        ClientInformation clientinformation = new ClientInformation("English", 0, EnumChatVisibility.c, true, 0, EnumMainHand.b, false, true);
+        ClientInformation clientinformation = new ClientInformation("English", 0, EnumChatVisibility.c, true, 0, EnumMainHand.b, false, true, ParticleStatus.a);
         //ClientInformation is new for 1.20.2 and is untested.
         EntityPlayer npc = new EntityPlayer(nmsServer, nmsWorld, gameProfile, clientinformation);
         npc.a(world.getSpawnLocation().getX(), world.getSpawnLocation().getY(), world.getSpawnLocation().getZ(), 0, 0);
